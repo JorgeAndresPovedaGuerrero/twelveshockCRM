@@ -1,0 +1,62 @@
+<div *ngIf="successMessage" class="success-message">
+  {{ successMessage }}
+  <button (click)="successMessage = null">×</button>
+</div>
+<div>
+  <h1>Order List</h1>
+  <table>
+    <thead>
+      <tr>
+        <th>Order ID</th>
+        <th>Status</th>
+        <th>Total</th>
+        <th>Date Created</th>
+        <th>Date Modified</th>
+        <th>Billing</th>
+        <th>Shipping</th>
+        <th>Line Items</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let order of orders">
+        <td>{{ order.id }}</td>
+        <td>{{ order.status }}</td>
+        <td>{{ order.total }} {{ order.currency }}</td>
+        <td>{{ order.date_created | date: 'dd-MM-yyyy' }}</td>
+        <td>{{ order.date_modified | date: 'dd-MM-yyyy' }}</td>
+        <td>
+          {{ order.billing.first_name }} {{ order.billing.last_name }}<br/>
+          {{ order.billing.address_1 }}<br/>
+          {{ order.billing.city }}, {{ order.billing.state }} {{ order.billing.postcode }}<br/>
+          {{ order.billing.country }}<br/>
+          {{ order.billing.email }}<br/>
+          {{ order.billing.phone }}
+        </td>
+        <td>
+          {{ order.shipping.first_name }} {{ order.shipping.last_name }}<br/>
+          {{ order.shipping.address_1 }}<br/>
+          {{ order.shipping.city }}, {{ order.shipping.state }} {{ order.shipping.postcode }}<br/>
+          {{ order.shipping.country }}
+        </td>
+        <td>
+          <table>
+            <thead>
+              <tr>
+                <th>Product Name</th>
+                <th>Quantity</th>
+                <th>Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of order.line_items">
+                <td>{{ item.name }}</td>
+                <td>{{ item.quantity }}</td>
+                <td>{{ item.total }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

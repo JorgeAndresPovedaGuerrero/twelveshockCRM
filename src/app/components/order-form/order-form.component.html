@@ -1,0 +1,61 @@
+<form [formGroup]="orderForm" (ngSubmit)="onSubmit()" class="order-form">
+  <h1>Create Order</h1>
+  <label>
+    Order ID:
+    <input type="number" formControlName="id" />
+  </label>
+  <label>
+    Date Created:
+    <input type="datetime-local" formControlName="date_created" />
+  </label>
+  <label>
+    Date Modified:
+    <input type="datetime-local" formControlName="date_modified" />
+  </label>
+  <label>
+    Total:
+    <input type="text" formControlName="total" />
+  </label>
+  <label>
+    Status:
+    <input type="text" formControlName="status" />
+  </label>
+  <label>
+    Currency:
+    <input type="text" formControlName="currency" />
+  </label>
+  <label>
+    Total Tax:
+    <input type="text" formControlName="total_tax" />
+  </label>
+
+  <div formArrayName="line_items">
+    <div *ngFor="let item of lineItems.controls; let i = index" [formGroupName]="i" class="line-item">
+      <h3>Line Item {{ i + 1 }}</h3>
+      <label>
+        Product Name:
+        <input type="text" formControlName="name" />
+      </label>
+      <label>
+        Product ID:
+        <input type="number" formControlName="product_id" />
+      </label>
+      <label>
+        Quantity:
+        <input type="number" formControlName="quantity" />
+      </label>
+      <label>
+        Subtotal:
+        <input type="text" formControlName="subtotal" />
+      </label>
+      <label>
+        Total:
+        <input type="text" formControlName="total" />
+      </label>
+      <button type="button" (click)="removeLineItem(i)">Remove Line Item</button>
+    </div>
+    <button type="button" (click)="addLineItem()">Add Line Item</button>
+  </div>
+
+  <button type="submit">Create Order</button>
+</form>
