@@ -5,6 +5,8 @@ import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
 import { MessageService } from '../../services/message.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { OrderEditModalComponent } from '../../order-edit-modal/order-edit-modal.component';
 
 @Component({
   selector: 'app-order-list',
@@ -26,7 +28,8 @@ export class OrderListComponent implements OnInit, OnDestroy {
     private toastr: ToastrService,
     private messageService: MessageService,
     private cdr: ChangeDetectorRef,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private modalService: NgbModal
   ) {}
 
   ngOnInit(): void {
@@ -96,5 +99,18 @@ export class OrderListComponent implements OnInit, OnDestroy {
       default:
         return '';
     }
+  }
+
+  editOrder(order: Order): void {
+    const modalRef = this.modalService.open(OrderEditModalComponent);
+    modalRef.componentInstance.order = order;
+    modalRef.result.then((result) => {
+      if (result === 'Order updated successfully') {
+        this.toastr.success(result, 'Éxito');
+        this.loadOrders(); // Recargar órdenes para reflejar los cambios
+      }
+    }).catch((error) => {
+      console.error('Error closing modal:', error);
+    });
   }
 }

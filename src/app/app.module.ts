@@ -13,6 +13,8 @@ import { MessageService } from './services/message.service'; // <--- Asegúrate 
 import { HeaderComponent } from './header/header.component';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { FormsModule } from '@angular/forms';
+import { OrderEditModalComponent } from './order-edit-modal/order-edit-modal.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   declarations: [
@@ -20,6 +22,7 @@ import { FormsModule } from '@angular/forms';
     OrderFormComponent,
     OrderListComponent,
     HeaderComponent,
+    OrderEditModalComponent,
   ],
   imports: [
     FormsModule,
@@ -29,6 +32,7 @@ import { FormsModule } from '@angular/forms';
     HttpClientModule,
     BrowserAnimationsModule, // Agrega este módulo
     TooltipModule.forRoot(),
+    NgbModule,
     ToastrModule.forRoot()
   ],
   providers: [ApiService, MessageService], // <--- Asegúrate de incluirlo en los providers

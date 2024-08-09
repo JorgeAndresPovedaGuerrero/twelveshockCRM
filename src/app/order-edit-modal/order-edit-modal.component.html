@@ -1,0 +1,29 @@
+<div class="modal fade" id="editOrderModal" tabindex="-1" role="dialog" aria-labelledby="editOrderModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="editOrderModalLabel">Editar Pedido</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form [formGroup]="orderForm" (ngSubmit)="saveOrder()">
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="orderStatus">Estado</label>
+            <input id="orderStatus" formControlName="status" class="form-control">
+          </div>
+          <div class="form-group">
+            <label for="orderTotal">Total</label>
+            <input id="orderTotal" formControlName="total" type="number" class="form-control">
+          </div>
+          <!-- Agrega más campos según sea necesario -->
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+          <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
