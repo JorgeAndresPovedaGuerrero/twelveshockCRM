@@ -11,20 +11,24 @@ import { OrderListComponent } from './components/order-list/order-list.component
 import { ApiService } from './services/api.service';
 import { MessageService } from './services/message.service'; // <--- Asegúrate de importar el servicio
 import { HeaderComponent } from './header/header.component';
+import { TooltipModule } from 'ngx-bootstrap/tooltip';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
     AppComponent,
     OrderFormComponent,
     OrderListComponent,
-    HeaderComponent
+    HeaderComponent,
   ],
   imports: [
+    FormsModule,
     BrowserModule,
     AppRoutingModule,
     ReactiveFormsModule,
     HttpClientModule,
     BrowserAnimationsModule, // Agrega este módulo
+    TooltipModule.forRoot(),
     ToastrModule.forRoot()
   ],
   providers: [ApiService, MessageService], // <--- Asegúrate de incluirlo en los providers

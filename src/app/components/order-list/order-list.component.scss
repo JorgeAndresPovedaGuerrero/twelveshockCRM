@@ -7,10 +7,10 @@ table {
   thead {
     tr {
       th {
-        background-color: #f2f2f2;
+        background-color: #f6de86;
         padding: 8px;
         text-align: left;
-        border: 1px solid #ddd;
+        border: 2px solid #ddd;
       }
     }
   }
@@ -37,7 +37,7 @@ table table {
       th {
         background-color: #f2f2f2;
         padding: 4px;
-        border: 1px solid #ddd;
+        border: 1px solid #68a7e5;
       }
     }
   }
@@ -83,4 +83,87 @@ table table {
 
 .success-message button:hover {
   color: #0c6c38; /* Color de texto más oscuro al pasar el ratón */
+}
+
+/* order-list.component.scss Cuadrados estados*/
+.status-container {
+  display: flex;
+  align-items: center;
+
+}
+
+.status {
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
+  margin-right: 8px;
+}
+
+.status-confirmar {
+  background-color: #f5d268; /* Amarillo para "Por confirmar" */
+}
+
+.status-procesando {
+  background-color: #007bff; /* Azul para "En proceso" */
+}
+
+.status-saldo {
+  background-color: #17a2b8; /* Azul claro para "Pendiente Saldo" */
+}
+
+.status-cancelado {
+  background-color: #dc3545; /* Rojo para "Cancelado" */
+}
+
+.status-enviado {
+  background-color: #6c757d; /* Gris para "Enviado" */
+}
+
+.status-finalizado {
+  background-color: #28a745; /* Verde para "Finalizado" */
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  padding: 10px;
+  text-align: left;
+}
+
+/* Estilos para los filtros */
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.filters label {
+  display: flex;
+  align-items: center;
+  font-weight: bold;
+}
+
+.filters select,
+.filters input[type="date"] {
+  margin-left: 5px;
+  padding: 5px;
+  font-size: 16px;
+}
+
+.filters button {
+  padding: 8px 12px;
+  font-size: 16px;
+  cursor: pointer;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+}
+
+.filters button:hover {
+  background-color: #0056b3;
 }

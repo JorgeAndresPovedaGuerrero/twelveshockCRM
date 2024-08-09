@@ -1,4 +1,50 @@
-<header class="app-header">
-  <button (click)="navigateTo('list')">List Orders</button>
-  <button (click)="navigateTo('create')">Create Order</button>
+<header class="app-header app-header-container">
+  <h2>TwelveShock</h2>
+  <div class="button-group">
+    <button (click)="navigateTo('list')">Pedidos</button>
+    <button (click)="navigateTo('create')">Crear Pedido</button>
+  </div>
 </header>
+
+<style>
+  .app-header {
+    display: flex;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #f8f8f8;
+    justify-content: flex-start; /* Alinea todos los elementos hacia la izquierda */
+  }
+
+  .app-header h2 {
+    color: #245283;
+    margin: 0;
+    font-size: 24px;
+    white-space: nowrap; /* Evita que el texto se divida en varias líneas */
+  }
+
+  .app-header .button-group {
+    display: flex;
+    gap: 10px; /* Espacio entre los botones */
+    margin-left: 15px; /* Espacio entre el texto y los botones */
+  }
+
+  .app-header button {
+    padding: 8px 12px; /* Ajusta el tamaño de los botones */
+    font-size: 14px; /* Tamaño del texto en los botones */
+    cursor: pointer;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+  }
+
+  .app-header button:hover {
+    background-color: #0056b3;
+  }
+
+  .app-header-container {
+    max-width: 100%; /* Limita el ancho del contenedor a la mitad de la pantalla */
+  }
+
+
+</style>

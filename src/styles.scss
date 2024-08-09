@@ -1,1 +1,17 @@
 @import 'ngx-toastr/toastr';
+
+.tooltip-inner {
+  background-color: #333; /* Fondo oscuro */
+  color: #fff; /* Texto blanco */
+  border-radius: 4px; /* Esquinas redondeadas */
+  padding: 10px; /* Relleno */
+  font-size: 14px; /* Tamaño de fuente */
+  max-width: 300px; /* Ancho máximo para el tooltip */
+  white-space: pre-line; /* Permite que el contenido del tooltip se divida en varias líneas */
+}
+
+.tooltip-arrow {
+  border-color: #333 transparent transparent transparent; /* Color de la flecha */
+}
+
+

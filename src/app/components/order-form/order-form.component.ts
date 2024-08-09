@@ -12,38 +12,7 @@ import { ToastrService } from 'ngx-toastr';
   styleUrls: ['./order-form.component.scss']
 })
 export class OrderFormComponent implements OnInit {
-  orderForm: FormGroup = this.fb.group({
-    id: [0, Validators.required],
-    date_created: ['', Validators.required],
-    date_modified: ['', Validators.required],
-    total: ['0', Validators.required],
-    status: ['processing', Validators.required],
-    currency: ['COP', Validators.required],
-    total_tax: ['0', Validators.required],
-    billing: this.fb.group({
-      first_name: [''],
-      last_name: [''],
-      address_1: [''],
-      address_2: [''],
-      city: [''],
-      state: [''],
-      postcode: [''],
-      country: ['CO'],
-      email: [''],
-      phone: ['']
-    }),
-    shipping: this.fb.group({
-      first_name: [''],
-      last_name: [''],
-      address_1: [''],
-      address_2: [''],
-      city: [''],
-      state: [''],
-      postcode: [''],
-      country: ['CO']
-    }),
-    line_items: this.fb.array([])
-  });
+  orderForm: FormGroup;
 
   constructor(
     private fb: FormBuilder,
@@ -51,7 +20,40 @@ export class OrderFormComponent implements OnInit {
     private messageService: MessageService,
     private router: Router,
     private toastr: ToastrService
-  ) {}
+  ) {
+    this.orderForm = this.fb.group({
+      id: [0],
+      date_created: [''],
+      date_modified: [''],
+      total: ['0', Validators.pattern('^[0-9]*$')],
+      status: ['processing'],
+      currency: ['COP'],
+      total_tax: ['0', Validators.pattern('^[0-9]*$')],
+      billing: this.fb.group({
+        first_name: [''],
+        last_name: [''],
+        address_1: [''],
+        address_2: [''],
+        city: [''],
+        state: [''],
+        postcode: [''],
+        country: ['CO'],
+        email: ['', Validators.email],
+        phone: ['']
+      }),
+      shipping: this.fb.group({
+        first_name: [''],
+        last_name: [''],
+        address_1: [''],
+        address_2: [''],
+        city: [''],
+        state: [''],
+        postcode: [''],
+        country: ['CO']
+      }),
+      line_items: this.fb.array([])
+    });
+  }
 
   ngOnInit(): void {}
 
@@ -64,9 +66,9 @@ export class OrderFormComponent implements OnInit {
       id: [0],
       name: [''],
       product_id: [0],
-      quantity: [0],
-      subtotal: ['0'],
-      total: ['0']
+      quantity: [0, Validators.min(1)],
+      subtotal: ['0', Validators.pattern('^[0-9]*$')],
+      total: ['0', Validators.pattern('^[0-9]*$')]
     });
     this.lineItems.push(lineItemGroup);
   }
@@ -93,7 +95,54 @@ export class OrderFormComponent implements OnInit {
       });
     } else {
       this.toastr.error('Formulario inválido', 'Error');
-      console.error('Form is invalid');
+      this.markAllAsTouched();
+      this.logValidationErrors();
+      console.error('Form is invalid', this.orderForm);
+    }
+  }
+
+  markAllAsTouched(): void {
+    this.orderForm.markAllAsTouched();
+    this.lineItems.controls.forEach(control => control.markAsTouched());
+  }
+
+  logValidationErrors(group: FormGroup = this.orderForm): void {
+    Object.keys(group.controls).forEach(key => {
+      const abstractControl = group.get(key);
+      if (abstractControl instanceof FormGroup) {
+        this.logValidationErrors(abstractControl); // Llamar recursivamente si es un FormGroup anidado
+      } else if (abstractControl instanceof FormArray) {
+        abstractControl.controls.forEach((control, index) => {
+          this.logValidationErrors(control as FormGroup); // Llamar recursivamente si es un FormArray
+        });
+      } else {
+        if (abstractControl && abstractControl.invalid) {
+          console.error(`Control: ${key}, Errors:`, abstractControl.errors);
+        }
+      }
+    });
+  }
+
+  copyBillingInfo(event: any): void {
+    const checked = event.target.checked;
+    const billingGroup = this.orderForm.get('billing') as FormGroup;
+    const shippingGroup = this.orderForm.get('shipping') as FormGroup;
+
+    if (billingGroup && shippingGroup) {
+      if (checked) {
+        shippingGroup.patchValue(billingGroup.value);
+      } else {
+        shippingGroup.reset({
+          first_name: '',
+          last_name: '',
+          address_1: '',
+          address_2: '',
+          city: '',
+          state: '',
+          postcode: '',
+          country: 'CO'
+        });
+      }
     }
   }
 }

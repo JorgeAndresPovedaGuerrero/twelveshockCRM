@@ -3,47 +3,80 @@
   <button (click)="successMessage = null">×</button>
 </div>
 <div>
-  <h1>Order List</h1>
+  <h3>Lista de pedidos</h3>
+  <!-- Filtros -->
+  <div class="filters">
+    <label for="status">Estado:</label>
+    <select id="status" [(ngModel)]="selectedStatus">
+      <option value="">Todos</option>
+      <option *ngFor="let status of statusOptions" [value]="status">{{ status }}</option>
+    </select>
+
+    <label for="startDate">Fecha de Inicio:</label>
+    <input id="startDate" type="date" [(ngModel)]="startDate">
+
+    <label for="endDate">Fecha de Fin:</label>
+    <input id="endDate" type="date" [(ngModel)]="endDate">
+
+    <button (click)="filterOrders()">Filtrar</button>
+  </div>
+  <br>
+
   <table>
     <thead>
       <tr>
-        <th>Order ID</th>
-        <th>Status</th>
+        <th translate="no">Id</th>
+        <th>Estado</th>
         <th>Total</th>
-        <th>Date Created</th>
-        <th>Date Modified</th>
-        <th>Billing</th>
-        <th>Shipping</th>
-        <th>Line Items</th>
+        <th>Fecha de creación</th>
+        <th>Fecha Modificacion</th>
+        <th>Datos Cliente</th>
+        <th>Datos de envío</th>
+        <th>Productos</th>
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let order of orders">
+      <tr *ngFor="let order of filteredOrders"> <!-- Cambiar orders por filteredOrders -->
         <td>{{ order.id }}</td>
-        <td>{{ order.status }}</td>
-        <td>{{ order.total }} {{ order.currency }}</td>
-        <td>{{ order.date_created | date: 'dd-MM-yyyy' }}</td>
-        <td>{{ order.date_modified | date: 'dd-MM-yyyy' }}</td>
         <td>
-          {{ order.billing.first_name }} {{ order.billing.last_name }}<br/>
-          {{ order.billing.address_1 }}<br/>
-          {{ order.billing.city }}, {{ order.billing.state }} {{ order.billing.postcode }}<br/>
-          {{ order.billing.country }}<br/>
-          {{ order.billing.email }}<br/>
-          {{ order.billing.phone }}
+          <div class="status-container">
+            <div [ngClass]="getStatusClass(order.status)" class="status"></div>
+            {{ order.status }}
+          </div>
+        </td>
+        <td>{{ order.total }} {{ order.currency }}</td>
+        <td>
+          <span tooltip="{{ order.date_created | date: 'yyyy-MM-ddTHH:mm:ss' }}">
+            {{ order.date_created | date: 'dd-MM-yyyy' }}
+          </span>
+        </td>
+        <td>
+          <span tooltip="{{ order.date_modified | date: 'yyyy-MM-ddTHH:mm:ss' }}">
+            {{ order.date_modified | date: 'dd-MM-yyyy' }}
+          </span>
+        </td>
+        <td>
+          <span tooltip="{{ order.billing.address_1 }}
+            {{ order.billing.city }}, {{ order.billing.state }} {{ order.billing.postcode }}
+            {{ order.billing.country }}
+            {{ order.billing.email }}
+            {{ order.billing.phone }}">
+            {{ order.billing.first_name }} {{ order.billing.last_name }}<br/>
+          </span>
         </td>
         <td>
           {{ order.shipping.first_name }} {{ order.shipping.last_name }}<br/>
           {{ order.shipping.address_1 }}<br/>
           {{ order.shipping.city }}, {{ order.shipping.state }} {{ order.shipping.postcode }}<br/>
           {{ order.shipping.country }}
+          {{ order.billing.phone}}
         </td>
         <td>
           <table>
             <thead>
               <tr>
-                <th>Product Name</th>
-                <th>Quantity</th>
+                <th>Nombre de Producto</th>
+                <th>Cantidad</th>
                 <th>Total</th>
               </tr>
             </thead>
@@ -60,3 +93,4 @@
     </tbody>
   </table>
 </div>
+
