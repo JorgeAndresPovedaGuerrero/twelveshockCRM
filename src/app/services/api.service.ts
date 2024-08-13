@@ -29,4 +29,16 @@ export class ApiService {
     return this.http.post<Order>(this.baseUrl, order);
   }
 
+  updateOrder(id: number, order: Order): Observable<Order> {  // Cambia a number
+    return this.http.put<Order>(`${this.baseUrl}/${id}`, order);
+  }
+
+  getOrderById(id: number): Observable<Order> {
+    return this.http.get<Order>(`${this.baseUrl}/${id}`);
+  }
+
+  deleteOrder(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.baseUrl}/${id}`);
+  }
+
 }

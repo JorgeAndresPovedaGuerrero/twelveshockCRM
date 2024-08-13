@@ -13,16 +13,24 @@
 
   label {
     display: block;
-    margin-bottom: 15px;
+    margin-bottom: 10px;
     font-weight: bold;
+    font-size: 16px; /* Tamaño de fuente para etiquetas */
 
-    input {
+    input,
+    select {
       display: block;
-      width: 100%;
-      padding: 8px;
+      width: 70%;
+      padding: 8px; /* Mayor padding para hacer el campo más grande */
       margin-top: 5px;
       border: 1px solid #ddd;
-      border-radius: 4px;
+      border-radius: 8px; /* Bordes más redondeados para un aspecto más moderno */
+      font-size: 16px; /* Tamaño de fuente consistente con el input */
+      background-color: #fff; /* Fondo blanco para un contraste agradable */
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra ligera para profundidad */
+      appearance: none; /* Elimina el estilo predeterminado del navegador */
+      -webkit-appearance: none; /* Elimina el estilo predeterminado en WebKit */
+      -moz-appearance: none; /* Elimina el estilo predeterminado en Firefox */
     }
   }
 

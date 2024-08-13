@@ -25,6 +25,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     OrderEditModalComponent,
   ],
   imports: [
+    NgbModule,
     FormsModule,
     BrowserModule,
     AppRoutingModule,
@@ -32,7 +33,6 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     HttpClientModule,
     BrowserAnimationsModule, // Agrega este módulo
     TooltipModule.forRoot(),
-    NgbModule,
     ToastrModule.forRoot()
   ],
   providers: [ApiService, MessageService], // <--- Asegúrate de incluirlo en los providers

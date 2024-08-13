@@ -20,10 +20,6 @@
 
     <button (click)="filterOrders()">Filtrar</button>
   </div>
-  <td>
-    <button (click)="editOrder(order)" class="btn btn-primary">Editar</button>
-  </td>
-  <br>
 
   <table>
     <thead>
@@ -36,6 +32,7 @@
         <th>Datos Cliente</th>
         <th>Datos de envío</th>
         <th>Productos</th>
+        <th>Acciones</th>
       </tr>
     </thead>
     <tbody>
@@ -44,7 +41,7 @@
         <td>
           <div class="status-container">
             <div [ngClass]="getStatusClass(order.status)" class="status"></div>
-            {{ order.status }}
+            {{ translateStatus(order.status) }}
           </div>
         </td>
         <td>{{ order.total }} {{ order.currency }}</td>
@@ -63,8 +60,10 @@
             {{ order.billing.city }}, {{ order.billing.state }} {{ order.billing.postcode }}
             {{ order.billing.country }}
             {{ order.billing.email }}
+             {{ order.billing.identification }}
             {{ order.billing.phone }}">
             {{ order.billing.first_name }} {{ order.billing.last_name }}<br/>
+            <br/>
           </span>
         </td>
         <td>
@@ -73,6 +72,7 @@
           {{ order.shipping.city }}, {{ order.shipping.state }} {{ order.shipping.postcode }}<br/>
           {{ order.shipping.country }}
           {{ order.billing.phone}}
+          {{ order.billing.identification }}
         </td>
         <td>
           <table>
@@ -91,6 +91,9 @@
               </tr>
             </tbody>
           </table>
+        </td>
+        <td> <!-- Botón de edición dentro del bucle -->
+          <button (click)="openEditOrderModal(order)" class="btn btn-primary">Editar</button>
         </td>
       </tr>
     </tbody>

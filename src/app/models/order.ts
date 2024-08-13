@@ -1,6 +1,7 @@
 export interface Billing {
   first_name: string;
   last_name: string;
+  identification: string;
   address_1: string;
   address_2: string;
   city: string;
@@ -14,6 +15,7 @@ export interface Billing {
 export interface Shipping {
   first_name: string;
   last_name: string;
+  identification: string;
   address_1: string;
   address_2: string;
   city: string;
@@ -43,4 +45,3 @@ export interface Order {
   shipping: Shipping;
   line_items: LineItem[];
 }
-  

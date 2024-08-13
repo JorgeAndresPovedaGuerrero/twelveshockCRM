@@ -22,7 +22,11 @@
       </label>
       <label>
         Estado:
-        <input type="text" formControlName="status" />
+        <select formControlName="status">
+          <option *ngFor="let status of statusOptions" [value]="status.value">
+            {{ status.display }}
+          </option>
+        </select>
       </label>
       <label>
         Moneda:
@@ -45,6 +49,10 @@
         <label>
           Apellidos:
           <input type="text" formControlName="last_name" />
+        </label>
+        <label>
+          Identificación:
+          <input type="text" formControlName="identification" />
         </label>
       </div>
       <div class="flex-container">
@@ -98,6 +106,10 @@
         <label>
           Apellido:
           <input type="text" formControlName="last_name" />
+        </label>
+        <label>
+          Identificación:
+          <input type="text" formControlName="identification" />
         </label>
       </div>
       <div class="flex-container">

@@ -1,29 +1,194 @@
-<div class="modal fade" id="editOrderModal" tabindex="-1" role="dialog" aria-labelledby="editOrderModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
+<div class="modal fade" tabindex="-1" aria-labelledby="editOrderModalLabel">
+  <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="editOrderModalLabel">Editar Pedido</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
+        <h3 class="modal-title" id="editOrderModalLabel">Editar Orden</h3>
+        <button type="button" class="btn-close" aria-label="Close" (click)="closeModal()"></button>
       </div>
-      <form [formGroup]="orderForm" (ngSubmit)="saveOrder()">
-        <div class="modal-body">
-          <div class="form-group">
-            <label for="orderStatus">Estado</label>
-            <input id="orderStatus" formControlName="status" class="form-control">
+      <div class="modal-body">
+        <form [formGroup]="editOrderForm" (ngSubmit)="saveChanges()">
+          <div class="grid-container">
+            <!-- Primera Columna: Datos del Pedido -->
+            <div class="grid-item">
+              <div class="mb-3">
+                <label for="id" class="form-label">Id</label>
+                <input id="id" formControlName="id" class="form-control" />
+              </div>
+              <div class="mb-3">
+                <label for="status" class="form-label">Estado</label>
+                <input id="status" formControlName="status" class="form-control" />
+              </div>
+              <div class="mb-3">
+                <label for="total" class="form-label">Total</label>
+                <input id="total" formControlName="total" type="number" class="form-control" />
+              </div>
+              <div class="mb-3">
+                <label for="date_created" class="form-label">Fecha de creación</label>
+                <input id="date_created" formControlName="date_created" type="datetime-local" class="form-control" />
+              </div>
+              <div class="mb-3">
+                <label for="date_modified" class="form-label">Fecha de modificación</label>
+                <input id="date_modified" formControlName="date_modified" type="datetime-local" class="form-control" />
+              </div>
+              <div class="mb-3">
+                <label for="currency" class="form-label">Moneda</label>
+                <input id="currency" formControlName="currency" type="text" class="form-control" />
+              </div>
+              <div class="mb-3">
+                <label for="total_tax" class="form-label">Total Impuestos</label>
+                <input id="total_tax" formControlName="total_tax" type="text" class="form-control" />
+              </div>
+            </div>
+
+            <!-- Segunda Columna: Información de Facturación -->
+            <fieldset formGroupName="billing" class="grid-item">
+              <legend>Información de Facturación</legend>
+              <div class="flex-container">
+                <div class="mb-3">
+                  <label for="billing_first_name" class="form-label">Nombres</label>
+                  <input id="billing_first_name" formControlName="first_name" type="text" class="form-control" />
+                </div>
+                <div class="mb-3">
+                  <label for="billing_last_name" class="form-label">Apellidos</label>
+                  <input id="billing_last_name" formControlName="last_name" type="text" class="form-control" />
+                </div>
+                <div class="mb-3">
+                  <label for="billing_identification" class="form-label">Identificación</label>
+                  <input id="billing_identification" formControlName="identification" type="text" class="form-control" />
+                </div>
+              </div>
+              <div class="flex-container">
+                <div class="mb-3">
+                  <label for="billing_address_1" class="form-label">Dirección</label>
+                  <input id="billing_address_1" formControlName="address_1" type="text" class="form-control" />
+                </div>
+                <div class="mb-3">
+                  <label for="billing_address_2" class="form-label">Complemento</label>
+                  <input id="billing_address_2" formControlName="address_2" type="text" class="form-control" />
+                </div>
+              </div>
+              <div class="flex-container">
+                <div class="mb-3">
+                  <label for="billing_city" class="form-label">Ciudad</label>
+                  <input id="billing_city" formControlName="city" type="text" class="form-control" />
+                </div>
+                <div class="mb-3">
+                  <label for="billing_state" class="form-label">Departamento</label>
+                  <input id="billing_state" formControlName="state" type="text" class="form-control" />
+                </div>
+              </div>
+              <div class="flex-container">
+                <div class="mb-3">
+                  <label for="billing_postcode" class="form-label">Postcode</label>
+                  <input id="billing_postcode" formControlName="postcode" type="text" class="form-control" />
+                </div>
+                <div class="mb-3">
+                  <label for="billing_country" class="form-label">País</label>
+                  <input id="billing_country" formControlName="country" type="text" class="form-control" />
+                </div>
+              </div>
+              <div class="mb-3">
+                <label for="billing_email" class="form-label">Email</label>
+                <input id="billing_email" formControlName="email" type="email" class="form-control" />
+              </div>
+              <div class="mb-3">
+                <label for="billing_phone" class="form-label">Teléfono</label>
+                <input id="billing_phone" formControlName="phone" type="text" class="form-control" />
+              </div>
+            </fieldset>
+
+            <!-- Tercera Columna: Información de Envío -->
+            <fieldset formGroupName="shipping" class="grid-item">
+              <legend>Información de Envío</legend>
+              <div class="flex-container">
+                <div class="mb-3">
+                  <label for="shipping_first_name" class="form-label">Nombre</label>
+                  <input id="shipping_first_name" formControlName="first_name" type="text" class="form-control" />
+                </div>
+                <div class="mb-3">
+                  <label for="shipping_last_name" class="form-label">Apellido</label>
+                  <input id="shipping_last_name" formControlName="last_name" type="text" class="form-control" />
+                </div>
+                <div class="mb-3">
+                  <label for="billing_identification" class="form-label">Identificación</label>
+                  <input id="billing_identification" formControlName="identification" type="text" class="form-control" />
+                </div>
+              </div>
+              <div class="flex-container">
+                <div class="mb-3">
+                  <label for="shipping_address_1" class="form-label">Dirección</label>
+                  <input id="shipping_address_1" formControlName="address_1" type="text" class="form-control" />
+                </div>
+                <div class="mb-3">
+                  <label for="shipping_address_2" class="form-label">Complemento</label>
+                  <input id="shipping_address_2" formControlName="address_2" type="text" class="form-control" />
+                </div>
+              </div>
+              <div class="flex-container">
+                <div class="mb-3">
+                  <label for="shipping_city" class="form-label">Ciudad</label>
+                  <input id="shipping_city" formControlName="city" type="text" class="form-control" />
+                </div>
+                <div class="mb-3">
+                  <label for="shipping_state" class="form-label">Departamento</label>
+                  <input id="shipping_state" formControlName="state" type="text" class="form-control" />
+                </div>
+              </div>
+              <div class="flex-container">
+                <div class="mb-3">
+                  <label for="shipping_postcode" class="form-label">Postcode</label>
+                  <input id="shipping_postcode" formControlName="postcode" type="text" class="form-control" />
+                </div>
+                <div class="mb-3">
+                  <label for="shipping_country" class="form-label">País</label>
+                  <input id="shipping_country" formControlName="country" type="text" class="form-control" />
+                </div>
+              </div>
+            </fieldset>
           </div>
-          <div class="form-group">
-            <label for="orderTotal">Total</label>
-            <input id="orderTotal" formControlName="total" type="number" class="form-control">
+
+          <!-- Copiar información de facturación a envío -->
+          <div class="copy-info">
+            <div class="copy-info-content">
+              <input type="checkbox" (change)="copyBillingInfo($event)" id="copyBilling" />
+              <label for="copyBilling">Copiar información de facturación a información de envío</label>
+            </div>
           </div>
-          <!-- Agrega más campos según sea necesario -->
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-          <button type="submit" class="btn btn-primary">Guardar Cambios</button>
-        </div>
-      </form>
+
+          <!-- Productos -->
+          <div formArrayName="line_items" class="line-items-container">
+            <div *ngFor="let item of lineItems.controls; let i = index" [formGroupName]="i" class="line-item">
+              <h3>Producto {{ i + 1 }}</h3>
+              <div class="mb-3">
+                <label for="line_item_name_{{i}}" class="form-label">Nombre Producto</label>
+                <input id="line_item_name_{{i}}" formControlName="name" type="text" class="form-control" />
+              </div>
+              <div class="mb-3">
+                <label for="line_item_product_id_{{i}}" class="form-label">ID de producto</label>
+                <input id="line_item_product_id_{{i}}" formControlName="product_id" type="number" class="form-control" />
+              </div>
+              <div class="mb-3">
+                <label for="line_item_quantity_{{i}}" class="form-label">Cantidad</label>
+                <input id="line_item_quantity_{{i}}" formControlName="quantity" type="number" class="form-control" />
+              </div>
+              <div class="mb-3">
+                <label for="line_item_price_{{i}}" class="form-label">Precio</label>
+                <input id="line_item_price_{{i}}" formControlName="price" type="number" class="form-control" />
+              </div>
+              <div class="mb-3">
+                <label for="line_item_total_{{i}}" class="form-label">Total</label>
+                <input id="line_item_total_{{i}}" formControlName="total" type="number" class="form-control" />
+              </div>
+            </div>
+          </div>
+
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" (click)="saveChanges()">Save changes</button>
+            <button type="button" class="btn btn-danger" (click)="deleteOrder()">Delete Order</button>
+            <button type="button" class="btn btn-secondary" (click)="closeModal()">Close</button>
+          </div>
+        </form>
+      </div>
     </div>
   </div>
 </div>

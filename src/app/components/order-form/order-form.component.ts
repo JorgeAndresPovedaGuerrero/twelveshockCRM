@@ -13,6 +13,13 @@ import { ToastrService } from 'ngx-toastr';
 })
 export class OrderFormComponent implements OnInit {
   orderForm: FormGroup;
+  statusOptions = [
+    { value: 'processing', display: 'En proceso' },
+    { value: 'cancelled', display: 'Cancelado' },
+    { value: 'completed', display: 'Finalizado' },
+    { value: 'pending', display: 'Pendiente saldo' },
+    { value: 'enviado', display: 'Enviado' }
+  ];
 
   constructor(
     private fb: FormBuilder,
@@ -32,6 +39,7 @@ export class OrderFormComponent implements OnInit {
       billing: this.fb.group({
         first_name: [''],
         last_name: [''],
+        identification: [0],
         address_1: [''],
         address_2: [''],
         city: [''],
@@ -44,6 +52,7 @@ export class OrderFormComponent implements OnInit {
       shipping: this.fb.group({
         first_name: [''],
         last_name: [''],
+        identification: [0],
         address_1: [''],
         address_2: [''],
         city: [''],
@@ -135,6 +144,7 @@ export class OrderFormComponent implements OnInit {
         shippingGroup.reset({
           first_name: '',
           last_name: '',
+          identification: '',
           address_1: '',
           address_2: '',
           city: '',
@@ -144,5 +154,22 @@ export class OrderFormComponent implements OnInit {
         });
       }
     }
+  }
+
+  translateStatus(status: string): string {
+    const statusMap = new Map<string, string>([
+      ['processing', 'En proceso'],
+      ['cancelled', 'Cancelado'],
+      ['completed', 'Finalizado'],
+      ['pending', 'Pendiente saldo'],
+      ['enviado', 'Enviado'],
+      ['En proceso', 'En proceso'], // También soporta el texto en español directamente
+      ['Cancelado', 'Cancelado'],
+      ['Finalizado', 'Finalizado'],
+      ['Pendiente saldo', 'Pendiente saldo'],
+      ['Enviado', 'Enviado']
+    ]);
+
+    return statusMap.get(status) || status; // Devuelve el estado traducido o el original si no se encuentra
   }
 }
