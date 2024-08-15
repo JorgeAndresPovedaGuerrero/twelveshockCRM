@@ -37,6 +37,7 @@ export class OrderFormComponent implements OnInit {
       currency: ['COP'],
       total_tax: ['0', Validators.pattern('^[0-9]*$')],
       billing: this.fb.group({
+        id_cliente: [0],
         first_name: [''],
         last_name: [''],
         identification: [0],
@@ -64,7 +65,9 @@ export class OrderFormComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.getNextOrderId();
+  }
 
   get lineItems(): FormArray {
     return this.orderForm.get('line_items') as FormArray;
@@ -171,5 +174,17 @@ export class OrderFormComponent implements OnInit {
     ]);
 
     return statusMap.get(status) || status; // Devuelve el estado traducido o el original si no se encuentra
+  }
+
+  getNextOrderId(): void {
+    this.apiService.getHighestOrderId().subscribe({
+      next: (highestId: number) => {
+        this.orderForm.patchValue({ id: highestId + 1 });
+      },
+      error: (error) => {
+        console.error('Error fetching highest order ID:', error);
+        this.toastr.error('No se pudo obtener el ID del pedido', 'Error');
+      }
+    });
   }
 }

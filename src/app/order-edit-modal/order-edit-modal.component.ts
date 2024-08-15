@@ -27,6 +27,7 @@ export class OrderEditModalComponent implements OnInit {
       currency: [''],
       total_tax: [''],
       billing: this.fb.group({
+        id_cliente:[0],
         first_name: [''],
         last_name: [''],
         identification: [''],

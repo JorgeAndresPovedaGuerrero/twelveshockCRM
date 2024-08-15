@@ -6,6 +6,7 @@ import { Subscription } from 'rxjs';
 import { MessageService } from '../../services/message.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { OrderEditModalComponent } from '../../order-edit-modal/order-edit-modal.component';
+import { PdfService } from '../../services/pdf.service';
 
 @Component({
   selector: 'app-order-list',
@@ -21,6 +22,8 @@ export class OrderListComponent implements OnInit, OnDestroy {
   endDate: string = '';
   messageSubscription: Subscription | undefined;
   successMessage: string | null = null;
+  searchOrderId: string = '';
+  searchClientId: string = '';
 
 
   constructor(
@@ -28,7 +31,8 @@ export class OrderListComponent implements OnInit, OnDestroy {
     private toastr: ToastrService,
     private messageService: MessageService,
     private cdr: ChangeDetectorRef,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private pdfService: PdfService
   ) {}
 
   ngOnInit(): void {
@@ -68,7 +72,7 @@ export class OrderListComponent implements OnInit, OnDestroy {
   filterOrders(): void {
     const possibleStatuses = this.getPossibleStatuses(this.selectedStatus);
 
-    if (possibleStatuses.length === 0) {  
+    if (possibleStatuses.length === 0) {
       // Si no hay estados posibles, mostrar todos los registros
       this.filteredOrders = this.orders;
     } else {
@@ -164,4 +168,67 @@ export class OrderListComponent implements OnInit, OnDestroy {
         return status; // En caso de no tener una traducción, retorna el estado original
     }
   }
+
+  companyData = {
+    name: 'Twelve Shock',
+    address: 'Cra 54a # 169-15',
+    phone: '+57 3196253251',
+    email: 'info@twelveshock.com',
+    logoUrl: '../../../assets/marcadeagualetras2.png',
+    socialMedia: {
+      facebook: 'https://www.facebook.com/twelveshock12',
+      web: 'http://www.twelveshock.com',
+      instagram: 'https://www.instagram.com/twelveshock_oficial/'
+    }
+  };
+
+  generatePDF(order: any) {
+    const recipientData = {
+      name: `${order.shipping.first_name} ${order.shipping.last_name}`,
+      address: `${order.shipping.address_1}, ${order.shipping.city}, ${order.shipping.state} ${order.shipping.postcode}`,
+      identification: order.shipping.identification,
+      email: order.billing.email,
+      phone: order.billing.phone
+    };
+    this.pdfService.generatePDF(this.companyData, recipientData);
+  }
+
+  searchOrderById(): void {
+    const orderId = parseInt(this.searchOrderId, 10); // Convertir a número
+    if (!isNaN(orderId)) {
+      this.apiService.getOrderById(orderId).subscribe({
+        next: (order) => {
+          this.filteredOrders = [order]; // Mostrar solo el pedido encontrado
+          this.toastr.success('Pedido encontrado', 'Éxito');
+        },
+        error: (err) => {
+          console.error('Error fetching order by ID:', err);
+          this.toastr.error('Pedido no encontrado', 'Error');
+        }
+      });
+    } else {
+      this.toastr.warning('Por favor ingrese un ID válido', 'Advertencia');
+    }
+  }
+
+  searchByClientId(): void {
+    const clientId = Number(this.searchClientId.trim()); // Convertir a número
+    if (!isNaN(clientId)) {
+      // Filtrar órdenes por id_cliente
+      this.filteredOrders = this.orders.filter(order =>
+        order.billing && order.billing.id_cliente === clientId
+      );
+
+      console.log('Filtered Orders:', this.filteredOrders); // Para depurar
+
+      if (this.filteredOrders.length > 0) {
+        this.toastr.success('Órdenes filtradas correctamente', 'Éxito');
+      } else {
+        this.toastr.warning('No se encontraron órdenes para este ID de cliente', 'Advertencia');
+      }
+    } else {
+      this.toastr.warning('Por favor ingrese un ID de cliente válido', 'Advertencia');
+    }
+  }
+
 }

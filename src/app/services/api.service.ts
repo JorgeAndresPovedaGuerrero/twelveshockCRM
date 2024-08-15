@@ -37,6 +37,12 @@ export class ApiService {
     return this.http.get<Order>(`${this.baseUrl}/${id}`);
   }
 
+  getHighestOrderId(): Observable<number> {
+    return this.http.get<number>(`${this.baseUrl}/highest-id`);
+  }
+
+
+
   deleteOrder(id: number): Observable<void> {
     return this.http.delete<void>(`${this.baseUrl}/${id}`);
   }

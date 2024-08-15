@@ -19,6 +19,15 @@
     <input id="endDate" type="date" [(ngModel)]="endDate">
 
     <button (click)="filterOrders()">Filtrar</button>
+
+      <!-- Campo de búsqueda por ID -->
+    <label for="orderId">ID Pedido:</label>
+    <input id="orderId" type="text" [(ngModel)]="searchOrderId" (keyup.enter)="searchOrderById()" placeholder="Buscar Pedido">
+    <button (click)="searchOrderById()">Buscar por ID</button>
+
+    <input type="text" [(ngModel)]="searchClientId" (keyup.enter)="searchByClientId()" placeholder="Buscar Cliente">
+    <button (click)="searchByClientId()">Buscar</button>
+
   </div>
 
   <table>
@@ -62,7 +71,9 @@
             {{ order.billing.email }}
              {{ order.billing.identification }}
             {{ order.billing.phone }}">
-            {{ order.billing.first_name }} {{ order.billing.last_name }}<br/>
+            {{ order.billing.first_name }} {{ order.billing.last_name }}
+            {{ order.billing.id_cliente }}
+            <br/>
             <br/>
           </span>
         </td>
@@ -94,6 +105,7 @@
         </td>
         <td> <!-- Botón de edición dentro del bucle -->
           <button (click)="openEditOrderModal(order)" class="btn btn-primary">Editar</button>
+          <button (click)="generatePDF(order)">Generate PDF</button>
         </td>
       </tr>
     </tbody>

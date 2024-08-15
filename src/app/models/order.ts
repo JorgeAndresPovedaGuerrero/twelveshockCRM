@@ -1,4 +1,5 @@
 export interface Billing {
+  id_cliente: number,
   first_name: string;
   last_name: string;
   identification: string;
@@ -22,6 +23,8 @@ export interface Shipping {
   state: string;
   postcode: string;
   country: string;
+  email: string;
+  phone: string;
 }
 
 export interface LineItem {

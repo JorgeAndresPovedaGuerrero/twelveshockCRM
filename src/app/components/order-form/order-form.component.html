@@ -41,6 +41,16 @@
     <!-- Segunda Columna: Información de Facturación -->
     <fieldset formGroupName="billing" class="grid-item">
       <legend>Información de Facturación</legend>
+      <div>
+        <label>
+          Id Cliente:
+          <input type="text" formControlName="id_cliente" />
+        </label>
+        <label>
+          Identificación:
+          <input type="text" formControlName="identification" />
+        </label>
+      </div>
       <div class="flex-container">
         <label>
           Nombres:
@@ -49,10 +59,6 @@
         <label>
           Apellidos:
           <input type="text" formControlName="last_name" />
-        </label>
-        <label>
-          Identificación:
-          <input type="text" formControlName="identification" />
         </label>
       </div>
       <div class="flex-container">
@@ -107,6 +113,8 @@
           Apellido:
           <input type="text" formControlName="last_name" />
         </label>
+      </div>
+      <div>
         <label>
           Identificación:
           <input type="text" formControlName="identification" />
