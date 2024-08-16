@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { FormBuilder, FormGroup, FormArray } from '@angular/forms';
+import { FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
 import { ApiService } from '../services/api.service';
 import { Order } from '../models/order';
 
@@ -12,6 +12,28 @@ import { Order } from '../models/order';
 export class OrderEditModalComponent implements OnInit {
   @Input() orderId: number | undefined;
   editOrderForm: FormGroup;
+
+  paymentMethods = [
+    { value: 'bancolombia', display: 'Bancolombia' },
+    { value: 'nequi', display: 'Nequi' },
+    { value: 'daviplata', display: 'Daviplata' },
+    { value: 'pagina_web', display: 'Página Web' },
+    { value: 'wompi', display: 'Wompi' },
+    { value: 'payu', display: 'Payu' },
+    { value: 'efectivo', display: 'Efectivo' },
+    { value: 'efecty', display: 'Efecty' },
+    { value: 'paga_todo', display: 'Paga Todo' },
+    { value: 'gana', display: 'Gana' },
+    { value: 'otro', display: 'Otro' }
+  ];
+
+  statusOptions = [
+    { value: 'processing', display: 'En proceso' },
+    { value: 'cancelled', display: 'Cancelado' },
+    { value: 'completed', display: 'Finalizado' },
+    { value: 'pending', display: 'Pendiente saldo' },
+    { value: 'enviado', display: 'Enviado' }
+  ];
 
   constructor(
     public activeModal: NgbActiveModal,
@@ -26,6 +48,11 @@ export class OrderEditModalComponent implements OnInit {
       date_modified: [''],
       currency: [''],
       total_tax: [''],
+      balance: [''],
+      date_balance: [''],
+      down_payment: [''],
+      means_of_payment_1: [''],
+      means_of_payment_2: [''],
       billing: this.fb.group({
         id_cliente:[0],
         first_name: [''],
@@ -67,7 +94,12 @@ export class OrderEditModalComponent implements OnInit {
             date_created: order.date_created,
             date_modified: order.date_modified,
             currency: order.currency,
-            total_tax: order.total_tax
+            total_tax: order.total_tax,
+            balance: order.balance,
+            date_balance: order.date_balance,
+            down_payment: order.down_payment,
+            means_of_payment_1: order.means_of_payment_1,
+            means_of_payment_2: order.means_of_payment_2
           });
 
           const billingGroup = this.editOrderForm.get('billing') as FormGroup;
@@ -82,11 +114,13 @@ export class OrderEditModalComponent implements OnInit {
           }
 
           const lineItemsArray = this.editOrderForm.get('line_items') as FormArray;
+          lineItemsArray.clear();
           if (lineItemsArray && order.line_items) {
             order.line_items.forEach(item => {
               lineItemsArray.push(this.createLineItem(item));
             });
           }
+          this.lineItems.valueChanges.subscribe(() => this.updateOrderTotal());
         },
         (error) => {
           console.error('Error fetching order:', error);
@@ -100,11 +134,24 @@ export class OrderEditModalComponent implements OnInit {
       name: [item?.name || ''],
       product_id: [item?.product_id || ''],
       quantity: [item?.quantity || ''],
-      price: [item?.price || ''],
+      subtotal: [item?.subtotal || ''],
       total: [item?.total || '']
     });
   }
 
+  updateOrderTotal(): void {
+    const lineItemsArray = this.editOrderForm.get('line_items') as FormArray;
+    let total = 0;
+    lineItemsArray.controls.forEach(control => {
+      const itemTotal = control.get('total')?.value;
+      if (itemTotal) {
+        total += parseFloat(itemTotal);
+      }
+    });
+
+    // Update the order total
+    this.editOrderForm.patchValue({ total });
+  }
   saveChanges(): void {
     if (this.editOrderForm.valid) {
       const updatedOrder = { ...this.editOrderForm.value };
@@ -173,5 +220,21 @@ export class OrderEditModalComponent implements OnInit {
 
   get lineItems(): FormArray {
     return this.editOrderForm.get('line_items') as FormArray;
+  }
+
+  addLineItem(): void {
+    const lineItemGroup = this.fb.group({
+      id: [0],
+      name: [''],
+      product_id: [0],
+      quantity: [0, Validators.min(1)],
+      subtotal: ['0', Validators.pattern('^[0-9]*$')],
+      total: ['0', Validators.pattern('^[0-9]*$')]
+    });
+    this.lineItems.push(lineItemGroup);
+  }
+
+  removeLineItem(index: number): void {
+    this.lineItems.removeAt(index);
   }
 }

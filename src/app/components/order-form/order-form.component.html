@@ -4,14 +4,14 @@
   <div class="grid-container">
     <!-- Primera Columna: Datos del Pedido -->
     <div class="grid-item">
-      <label>
-        ID:
-        <input type="number" formControlName="id" />
-      </label>
-      <label>
-        Fecha de creación:
-        <input type="datetime-local" formControlName="date_created" />
-      </label>
+      <div>
+        <label>
+          ID:
+          <input type="number" formControlName="id" />
+          Fecha creación:
+          <input type="datetime-local" formControlName="date_created" />
+        </label>
+      </div>
       <label>
         Fecha de modificación:
         <input type="datetime-local" formControlName="date_modified" />
@@ -19,6 +19,32 @@
       <label>
         Total:
         <input type="text" formControlName="total" />
+      </label>
+      <label>
+        <label for="down_payment">Abono:</label>
+        <input id="down_payment" type="text" formControlName="down_payment" />
+      </label>
+      <label>
+        Metodo de pago Abono:
+        <select formControlName="means_of_payment_1">
+          <option *ngFor="let method of paymentMethods" [value]="method.value">
+            {{ method.display }}
+          </option>
+        </select>
+      </label>
+      <label>
+        Saldo:
+        <input type="text" formControlName="balance" />
+        Fecha saldo:
+        <input type="datetime-local" formControlName="date_balance" />
+      </label>
+      <label>
+        Metodo de pago Saldo:
+        <select formControlName="means_of_payment_2">
+          <option *ngFor="let method of paymentMethods" [value]="method.value">
+            {{ method.display }}
+          </option>
+        </select>
       </label>
       <label>
         Estado:
@@ -31,8 +57,6 @@
       <label>
         Moneda:
         <input type="text" formControlName="currency" />
-      </label>
-      <label>
         Total Impuestos:
         <input type="text" formControlName="total_tax" />
       </label>
@@ -190,7 +214,6 @@
     <button type="button" (click)="addLineItem()">Agregar Producto</button>
   </div>
 
-
   <button type="submit">Crear Pedido</button>
 </form>
 
@@ -221,7 +244,8 @@
     align-items: center;
   }
 
-  .grid-item label input {
+  .grid-item label input,
+  .grid-item label select {
     flex: 1;
     margin-left: 10px;
   }
@@ -239,7 +263,8 @@
     align-items: center;
   }
 
-  .flex-container label input {
+  .flex-container label input,
+  .flex-container label select {
     flex: 1;
     margin-left: 10px;
   }
@@ -277,10 +302,6 @@
   }
 
   .copy-info-content input[type="checkbox"] {
-    margin-right: 10px;
-  }
-
-  .copy-info-content label {
     margin: 0;
   }
 </style>

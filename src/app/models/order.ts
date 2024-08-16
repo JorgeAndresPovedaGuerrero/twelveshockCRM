@@ -47,4 +47,9 @@ export interface Order {
   billing: Billing;
   shipping: Shipping;
   line_items: LineItem[];
+  balance: string;
+  date_balance: string;
+  down_payment: string;
+  means_of_payment_1: string;
+  means_of_payment_2: string;
 }

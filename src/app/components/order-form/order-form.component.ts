@@ -13,6 +13,21 @@ import { ToastrService } from 'ngx-toastr';
 })
 export class OrderFormComponent implements OnInit {
   orderForm: FormGroup;
+
+  paymentMethods = [
+    { value: 'bancolombia', display: 'Bancolombia' },
+    { value: 'nequi', display: 'Nequi' },
+    { value: 'daviplata', display: 'Daviplata' },
+    { value: 'pagina_web', display: 'Página Web' },
+    { value: 'wompi', display: 'Wompi' },
+    { value: 'payu', display: 'Payu' },
+    { value: 'efectivo', display: 'Efectivo' },
+    { value: 'efecty', display: 'Efecty' },
+    { value: 'paga_todo', display: 'Paga Todo' },
+    { value: 'gana', display: 'Gana' },
+    { value: 'otro', display: 'Otro' }
+  ];
+  
   statusOptions = [
     { value: 'processing', display: 'En proceso' },
     { value: 'cancelled', display: 'Cancelado' },
@@ -36,6 +51,11 @@ export class OrderFormComponent implements OnInit {
       status: ['processing'],
       currency: ['COP'],
       total_tax: ['0', Validators.pattern('^[0-9]*$')],
+      balance: [''],
+      date_balance: [''],
+      down_payment: [''],
+      means_of_payment_1: [''],
+      means_of_payment_2: [''],
       billing: this.fb.group({
         id_cliente: [0],
         first_name: [''],

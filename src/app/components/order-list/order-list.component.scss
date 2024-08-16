@@ -135,10 +135,16 @@ th, td {
 
 /* Estilos para los filtros */
 .filters {
+  position: sticky;
+  top: 50px; /* Ajusta según la altura del header */
   display: flex;
   flex-wrap: wrap;
   gap: 15px;
   margin-bottom: 20px;
+  background-color: #ffffff;
+  z-index: 999; /* Asegúrate de que esté por encima de la tabla */
+  padding: 10px;
+  border-bottom: 1px solid #dee2e6;
 }
 
 .filters label {

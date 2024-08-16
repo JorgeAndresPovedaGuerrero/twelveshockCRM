@@ -16,7 +16,9 @@
               </div>
               <div class="mb-3">
                 <label for="status" class="form-label">Estado</label>
-                <input id="status" formControlName="status" class="form-control" />
+                <select id="status" formControlName="status" class="form-select">
+                  <option *ngFor="let metodo of statusOptions" [value]="metodo.value">{{ metodo.display }}</option>
+                </select>
               </div>
               <div class="mb-3">
                 <label for="total" class="form-label">Total</label>
@@ -37,6 +39,30 @@
               <div class="mb-3">
                 <label for="total_tax" class="form-label">Total Impuestos</label>
                 <input id="total_tax" formControlName="total_tax" type="text" class="form-control" />
+              </div>
+              <div class="mb-3">
+                <label for="balance" class="form-label">Saldo</label>
+                <input id="balance" formControlName="balance" type="text" class="form-control" />
+              </div>
+              <div class="mb-3">
+                <label for="date_balance" class="form-label">Fecha de saldo</label>
+                <input id="date_balance" formControlName="date_balance" type="text" class="form-control" />
+              </div>
+              <div class="mb-3">
+                <label for="means_of_payment_1" class="form-label">Método de pago 1</label>
+                <select id="means_of_payment_1" formControlName="means_of_payment_1" class="form-select">
+                  <option *ngFor="let metodo of paymentMethods" [value]="metodo.value">{{ metodo.display }}</option>
+                </select>
+              </div>
+              <div class="mb-3">
+                <label for="down_payment" class="form-label">Abono</label>
+                <input id="down_payment" formControlName="down_payment" type="text" class="form-control" />
+              </div>
+              <div class="mb-3">
+                <label for="means_of_payment_2" class="form-label">Método de pago 2</label>
+                <select id="means_of_payment_2" formControlName="means_of_payment_2" class="form-select">
+                  <option *ngFor="let metodo of paymentMethods" [value]="metodo.value">{{ metodo.display }}</option>
+                </select>
               </div>
             </div>
 
@@ -176,14 +202,16 @@
                 <input id="line_item_quantity_{{i}}" formControlName="quantity" type="number" class="form-control" />
               </div>
               <div class="mb-3">
-                <label for="line_item_price_{{i}}" class="form-label">Precio</label>
-                <input id="line_item_price_{{i}}" formControlName="price" type="number" class="form-control" />
+                <label for="line_item_subtotal_{{i}}" class="form-label">Precio</label>
+                <input id="line_item_subtotal_{{i}}" formControlName="subtotal" type="number" class="form-control" />
               </div>
               <div class="mb-3">
                 <label for="line_item_total_{{i}}" class="form-label">Total</label>
                 <input id="line_item_total_{{i}}" formControlName="total" type="number" class="form-control" />
               </div>
+              <button type="button" class="btn btn-danger" (click)="removeLineItem(i)">Eliminar Producto</button>
             </div>
+            <button type="button" class="btn btn-primary" (click)="addLineItem()">Agregar Producto</button>
           </div>
 
           <div class="modal-footer">

@@ -2,11 +2,12 @@ import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { ApiService } from '../../services/api.service';
 import { Order } from '../../models/order';
 import { ToastrService } from 'ngx-toastr';
-import { Subscription } from 'rxjs';
+import { Subscription, Subject } from 'rxjs';
 import { MessageService } from '../../services/message.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { OrderEditModalComponent } from '../../order-edit-modal/order-edit-modal.component';
 import { PdfService } from '../../services/pdf.service';
+import { debounceTime } from 'rxjs/operators';
 
 @Component({
   selector: 'app-order-list',
@@ -24,6 +25,9 @@ export class OrderListComponent implements OnInit, OnDestroy {
   successMessage: string | null = null;
   searchOrderId: string = '';
   searchClientId: string = '';
+  searchTerm: string = '';
+
+  private searchTermSubject: Subject<string> = new Subject();
 
 
   constructor(
@@ -37,6 +41,7 @@ export class OrderListComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.loadOrders();
+
     this.messageSubscription = this.messageService.getMessage().subscribe(message => {
       if (message) {
         this.successMessage = message;
@@ -45,10 +50,21 @@ export class OrderListComponent implements OnInit, OnDestroy {
         }, 5000);
       }
     });
+
+    this.searchTermSubject
+      .pipe(debounceTime(3000))  // 3 segundos de debounce
+      .subscribe(searchTerm => {
+        this.filterOrdersByNameOrPhoneOrIdentification(searchTerm);
+      });
   }
 
   ngOnDestroy(): void {
     this.messageSubscription?.unsubscribe();
+    this.searchTermSubject.unsubscribe();
+  }
+
+  onSearchTermChanged(searchTerm: string): void {
+    this.searchTermSubject.next(searchTerm);
   }
 
   loadOrders(): void {
@@ -230,5 +246,28 @@ export class OrderListComponent implements OnInit, OnDestroy {
       this.toastr.warning('Por favor ingrese un ID de cliente válido', 'Advertencia');
     }
   }
+
+  filterOrdersByNameOrPhoneOrIdentification(searchTerm: string): void {
+    const searchTermLower = searchTerm.trim().toLowerCase();
+
+    this.filteredOrders = this.orders.filter(order => {
+      const billingName = `${order.billing.first_name} ${order.billing.last_name}`.toLowerCase();
+      const shippingName = `${order.shipping.first_name} ${order.shipping.last_name}`.toLowerCase();
+      const phone = order.billing.phone ? order.billing.phone.toLowerCase() : '';
+      const identification = order.shipping.identification ? order.shipping.identification.toLowerCase() : '';
+
+      return billingName.includes(searchTermLower) ||
+             shippingName.includes(searchTermLower) ||
+             phone.includes(searchTermLower) ||
+             identification.includes(searchTermLower);
+    });
+
+    if (this.filteredOrders.length > 0) {
+      this.toastr.success('Órdenes filtradas correctamente', 'Éxito');
+    } else {
+      this.toastr.warning('No se encontraron órdenes para la búsqueda realizada', 'Advertencia');
+    }
+  }
+
 
 }
