@@ -269,5 +269,50 @@ export class OrderListComponent implements OnInit, OnDestroy {
     }
   }
 
+  togglePaymentType(order: any) {
+    if (order.shipping.paymentType === 'Contado') {
+      order.shipping.paymentType = 'Contado';
+    } else {
+      order.shipping.paymentType = 'Contraentrega';
+    }
+    this.cdr.detectChanges();
+  }
+
+  copyShippingData(order: any): void {
+    const paymentType = order.shipping.paymentType || 'Contado';
+    const shippingFirstName = order.shipping.first_name || 'No especificado';
+    const shippingLastName = order.shipping.last_name || 'No especificado';
+    const billingIdentification = order.billing.identification || 'No especificado';
+    const shippingAddress = order.shipping.address_1 || 'No especificado';
+    const shippingAddress2 = order.shipping.address_2 || 'No especificado';
+    const shippingCity = order.shipping.city || 'No especificado';
+    const shippingState = order.shipping.state || 'No especificado';
+    const shippingPhone = order.billing.phone ? `+${order.billing.phone}` : 'No especificado';
+
+    // Texto que se copiará
+    const shippingText = `
+costo del envío "*${paymentType}*" por favor
+
+*Remitente*
+
+Jorge Andres Poveda Guerrero
+3184228730
+
+*Destinatario*
+
+Nombre: ${shippingFirstName} ${shippingLastName}
+Cédula: ${billingIdentification}
+Teléfono: ${shippingPhone}
+Dirección: ${shippingAddress} ${shippingAddress2}
+Ciudad: ${shippingCity}
+    `;
+
+    navigator.clipboard.writeText(shippingText).then(() => {
+      alert('Datos copiados al portapapeles');
+    }).catch(err => {
+      console.error('Error al copiar', err);
+    });
+  }
+
 
 }

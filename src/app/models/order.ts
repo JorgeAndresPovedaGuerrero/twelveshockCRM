@@ -25,6 +25,8 @@ export interface Shipping {
   country: string;
   email: string;
   phone: string;
+  price_shipping:number;
+  paymentType: string;
 }
 
 export interface LineItem {

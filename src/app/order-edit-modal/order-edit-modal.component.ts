@@ -76,7 +76,8 @@ export class OrderEditModalComponent implements OnInit {
         city: [''],
         state: [''],
         postcode: [''],
-        country: ['']
+        country: [''],
+        price_shipping:[0]
       }),
       line_items: this.fb.array([])
     });
@@ -212,7 +213,8 @@ export class OrderEditModalComponent implements OnInit {
           city: '',
           state: '',
           postcode: '',
-          country: 'CO'
+          country: 'CO',
+          price_shipping: 0
         });
       }
     }

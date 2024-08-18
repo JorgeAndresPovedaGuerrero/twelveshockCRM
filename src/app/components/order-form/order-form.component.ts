@@ -27,7 +27,7 @@ export class OrderFormComponent implements OnInit {
     { value: 'gana', display: 'Gana' },
     { value: 'otro', display: 'Otro' }
   ];
-  
+
   statusOptions = [
     { value: 'processing', display: 'En proceso' },
     { value: 'cancelled', display: 'Cancelado' },
@@ -79,7 +79,8 @@ export class OrderFormComponent implements OnInit {
         city: [''],
         state: [''],
         postcode: [''],
-        country: ['CO']
+        country: ['CO'],
+        price_shipping:[0]
       }),
       line_items: this.fb.array([])
     });
@@ -173,7 +174,8 @@ export class OrderFormComponent implements OnInit {
           city: '',
           state: '',
           postcode: '',
-          country: 'CO'
+          country: 'CO',
+          price_shipping: 0
         });
       }
     }

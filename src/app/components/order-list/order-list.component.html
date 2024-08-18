@@ -87,6 +87,7 @@
           {{ order.shipping.address_1 }}<br/>
           {{ order.shipping.city }}, {{ order.shipping.state }} {{ order.shipping.postcode }}<br/>
           {{ order.shipping.country }}
+          {{ order.shipping.price_shipping }}
           {{ order.billing.phone}}
           {{ order.billing.identification }}
         </td>
@@ -111,6 +112,15 @@
         <td> <!-- Botón de edición dentro del bucle -->
           <button (click)="openEditOrderModal(order)" class="btn btn-primary">Editar</button>
           <button (click)="generatePDF(order)">Generate PDF</button>
+        </td>
+        <td>
+          <div>
+            <label>
+              <input type="checkbox" (change)="togglePaymentType(order)" [checked]="order.shipping.paymentType === 'Contraentrega'">
+              Contraentrega
+            </label>
+          </div>
+          <button (click)="copyShippingData(order)">Copy</button>
         </td>
       </tr>
     </tbody>
