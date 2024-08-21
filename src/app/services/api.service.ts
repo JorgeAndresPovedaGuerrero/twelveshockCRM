@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Order } from '../models/order';
+import { Order, Billing } from '../models/order';
+
 
 @Injectable({
   providedIn: 'root'
@@ -41,10 +42,16 @@ export class ApiService {
     return this.http.get<number>(`${this.baseUrl}/highest-id`);
   }
 
-
+  getClientId(): Observable<number> {
+    return this.http.get<number>(`${this.baseUrl}/highest-client-id`); // Ajusta la URL según tu endpoint real
+  }
 
   deleteOrder(id: number): Observable<void> {
     return this.http.delete<void>(`${this.baseUrl}/${id}`);
+  }
+
+  getBillingData(idCliente: number): Observable<Billing> {
+    return this.http.get<Billing>(`${this.baseUrl}/billing/${idCliente}`);
   }
 
 }

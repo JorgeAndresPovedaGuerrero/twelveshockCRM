@@ -122,12 +122,22 @@ export class OrderEditModalComponent implements OnInit {
             });
           }
           this.lineItems.valueChanges.subscribe(() => this.updateOrderTotal());
+          this.editOrderForm.get('total')?.valueChanges.subscribe(() => this.updateBalance());
+          this.editOrderForm.get('down_payment')?.valueChanges.subscribe(() => this.updateBalance());
+
         },
         (error) => {
           console.error('Error fetching order:', error);
         }
       );
     }
+  }
+
+  updateBalance() {
+    const total = this.editOrderForm.get('total')?.value || 0;
+    const downPayment = this.editOrderForm.get('down_payment')?.value || 0;
+    const balance = total - downPayment;
+    this.editOrderForm.get('balance')?.setValue(balance, { emitEvent: false });
   }
 
   createLineItem(item?: any): FormGroup {

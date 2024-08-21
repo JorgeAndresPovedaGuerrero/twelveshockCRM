@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
 import { ApiService } from '../../services/api.service';
-import { Order } from '../../models/order';
+import { Order, Billing } from '../../models/order';
 import { MessageService } from '../../services/message.service';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
@@ -88,6 +88,8 @@ export class OrderFormComponent implements OnInit {
 
   ngOnInit(): void {
     this.getNextOrderId();
+    this.onAbonoChange();
+    this.loadClientId();
   }
 
   get lineItems(): FormArray {
@@ -209,4 +211,49 @@ export class OrderFormComponent implements OnInit {
       }
     });
   }
+
+  loadClientId(): void {
+    this.apiService.getClientId().subscribe({
+      next: (id_cliente: number) => {
+        this.orderForm.get('billing')?.patchValue({ id_cliente: id_cliente + 1 });
+      },
+      error: (error) => {
+        console.error('Error fetching client ID:', error);
+        this.toastr.error('No se pudo obtener el ID del cliente', 'Error');
+      }
+    });
+  }
+
+  onAbonoChange(): void {
+    this.orderForm.get('down_payment')?.valueChanges.subscribe(value => {
+      const total = this.orderForm.get('total')?.value || 0;
+      const balance = total - value;
+      this.orderForm.get('balance')?.setValue(balance >= 0 ? balance : 0);
+    });
+  }
+
+
+  loadBilling(): void {
+    const id_cliente = this.orderForm.get('billing.id_cliente')?.value;
+
+    if (id_cliente) {
+      this.apiService.getBillingData(id_cliente).subscribe({
+        next: (billing: Billing) => {
+          if (billing) {
+            this.orderForm.get('billing')?.patchValue(billing);
+            this.toastr.success('La información de facturación se cargó correctamente.', 'Éxito');
+          } else {
+            this.toastr.warning('Cliente no encontrado.', 'Advertencia');
+          }
+        },
+        error: (error) => {
+          console.error('Error fetching billing info:', error);
+          this.toastr.error('No se pudo obtener la información de facturación', 'Error');
+        }
+      });
+    } else {
+      this.toastr.warning('El ID del cliente no está definido', 'Advertencia');
+    }
+  }
+
 }
