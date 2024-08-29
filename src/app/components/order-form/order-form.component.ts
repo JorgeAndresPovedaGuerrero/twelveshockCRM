@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
 import { ApiService } from '../../services/api.service';
 import { Order, Billing } from '../../models/order';
@@ -68,7 +68,8 @@ export class OrderFormComponent implements OnInit {
         postcode: [''],
         country: ['CO'],
         email: ['', Validators.email],
-        phone: ['']
+        phone: [''],
+        phone2: ['']
       }),
       shipping: this.fb.group({
         first_name: [''],
@@ -80,7 +81,8 @@ export class OrderFormComponent implements OnInit {
         state: [''],
         postcode: [''],
         country: ['CO'],
-        price_shipping:[0]
+        price_shipping:[0],
+        phone: ['']
       }),
       line_items: this.fb.array([])
     });

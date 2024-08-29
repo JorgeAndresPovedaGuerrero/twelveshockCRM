@@ -65,7 +65,8 @@ export class OrderEditModalComponent implements OnInit {
         postcode: [''],
         country: [''],
         email: [''],
-        phone: ['']
+        phone: [''],
+        phone2: ['']
       }),
       shipping: this.fb.group({
         first_name: [''],

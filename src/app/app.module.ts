@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'; // Importa este módulo
 import { ToastrModule } from 'ngx-toastr';
 import { AppComponent } from './app.component';
@@ -17,26 +17,19 @@ import { OrderEditModalComponent } from './order-edit-modal/order-edit-modal.com
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 
-@NgModule({
-  declarations: [
-    AppComponent,
-    OrderFormComponent,
-    OrderListComponent,
-    HeaderComponent,
-    OrderEditModalComponent,
-  ],
-  imports: [
-    NgbModule,
-    FormsModule,
-    BrowserModule,
-    AppRoutingModule,
-    ReactiveFormsModule,
-    HttpClientModule,
-    BrowserAnimationsModule, // Agrega este módulo
-    TooltipModule.forRoot(),
-    ToastrModule.forRoot()
-  ],
-  providers: [ApiService, MessageService], // <--- Asegúrate de incluirlo en los providers
-  bootstrap: [AppComponent]
-})
+@NgModule({ declarations: [
+        AppComponent,
+        OrderFormComponent,
+        OrderListComponent,
+        HeaderComponent,
+        OrderEditModalComponent,
+    ], // <--- Asegúrate de incluirlo en los providers
+    bootstrap: [AppComponent], imports: [NgbModule,
+        FormsModule,
+        BrowserModule,
+        AppRoutingModule,
+        ReactiveFormsModule,
+        BrowserAnimationsModule, // Agrega este módulo
+        TooltipModule.forRoot(),
+        ToastrModule.forRoot()], providers: [ApiService, MessageService, provideHttpClient(withInterceptorsFromDi())] })
 export class AppModule { }

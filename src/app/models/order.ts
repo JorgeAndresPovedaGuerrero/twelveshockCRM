@@ -11,6 +11,7 @@ export interface Billing {
   country: string;
   email: string;
   phone: string;
+  phone2: string;
 }
 
 export interface Shipping {

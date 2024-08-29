@@ -254,11 +254,13 @@ export class OrderListComponent implements OnInit, OnDestroy {
       const billingName = `${order.billing.first_name} ${order.billing.last_name}`.toLowerCase();
       const shippingName = `${order.shipping.first_name} ${order.shipping.last_name}`.toLowerCase();
       const phone = order.billing.phone ? order.billing.phone.toLowerCase() : '';
+      const phone2 = order.billing.phone2 ? order.billing.phone2.toLowerCase() : '';
       const identification = order.shipping.identification ? order.shipping.identification.toLowerCase() : '';
 
       return billingName.includes(searchTermLower) ||
              shippingName.includes(searchTermLower) ||
              phone.includes(searchTermLower) ||
+             phone2.includes(searchTermLower) ||
              identification.includes(searchTermLower);
     });
 
