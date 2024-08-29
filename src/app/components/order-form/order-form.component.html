@@ -1,0 +1,318 @@
+<form [formGroup]="orderForm" (ngSubmit)="onSubmit()" class="order-form">
+  <h4>Crear Pedido</h4>
+
+  <div class="grid-container">
+    <!-- Primera Columna: Datos del Pedido -->
+    <div class="grid-item">
+      <div>
+        <label>
+          ID:
+          <input type="number" formControlName="id" />
+          Fecha creación:
+          <input type="datetime-local" formControlName="date_created" />
+        </label>
+      </div>
+      <label>
+        Fecha de modificación:
+        <input type="datetime-local" formControlName="date_modified" />
+      </label>
+      <label>
+        Total:
+        <input type="text" formControlName="total" />
+      </label>
+      <label>
+        <label for="down_payment">Abono:</label>
+        <input id="down_payment" type="text" formControlName="down_payment" />
+      </label>
+      <label>
+        Metodo de pago Abono:
+        <select formControlName="means_of_payment_1">
+          <option *ngFor="let method of paymentMethods" [value]="method.value">
+            {{ method.display }}
+          </option>
+        </select>
+      </label>
+      <label>
+        Saldo:
+        <input type="text" formControlName="balance" />
+        Fecha saldo:
+        <input type="datetime-local" formControlName="date_balance" />
+      </label>
+      <label>
+        Metodo de pago Saldo:
+        <select formControlName="means_of_payment_2">
+          <option *ngFor="let method of paymentMethods" [value]="method.value">
+            {{ method.display }}
+          </option>
+        </select>
+      </label>
+      <label>
+        Estado:
+        <select formControlName="status">
+          <option *ngFor="let status of statusOptions" [value]="status.value">
+            {{ status.display }}
+          </option>
+        </select>
+      </label>
+      <label>
+        Moneda:
+        <input type="text" formControlName="currency" />
+        Total Impuestos:
+        <input type="text" formControlName="total_tax" />
+      </label>
+    </div>
+
+    <!-- Segunda Columna: Información de Facturación -->
+    <fieldset formGroupName="billing" class="grid-item">
+      <legend>Información de Facturación</legend>
+      <div>
+        <label>
+          Id Cliente:
+          <input type="text" formControlName="id_cliente" />
+        </label>
+        <label>
+          <button type="button" (click)="loadBilling()">Cargar Cliente</button>
+        </label>
+        <label>
+          Identificación:
+          <input type="text" formControlName="identification" />
+        </label>
+      </div>
+      <div class="flex-container">
+        <label>
+          Nombres:
+          <input type="text" formControlName="first_name" />
+        </label>
+        <label>
+          Apellidos:
+          <input type="text" formControlName="last_name" />
+        </label>
+      </div>
+      <div class="flex-container">
+        <label>
+          Dirección:
+          <input type="text" formControlName="address_1" />
+        </label>
+        <label>
+          Complemento:
+          <input type="text" formControlName="address_2" />
+        </label>
+      </div>
+      <div class="flex-container">
+        <label>
+          Ciudad:
+          <input type="text" formControlName="city" />
+        </label>
+        <label>
+          Departamento:
+          <input type="text" formControlName="state" />
+        </label>
+      </div>
+      <div class="flex-container">
+        <label>
+          Postcode:
+          <input type="text" formControlName="postcode" />
+        </label>
+        <label>
+          País:
+          <input type="text" formControlName="country" />
+        </label>
+      </div>
+      <label>
+        Email:
+        <input type="email" formControlName="email" />
+      </label>
+      <label>
+        Teléfono:
+        <input type="text" formControlName="phone" />
+      </label>
+      <label>
+        Teléfono 2:
+        <input type="text" formControlName="phone2" />
+      </label>
+    </fieldset>
+
+    <!-- Tercera Columna: Información de Envío -->
+    <fieldset formGroupName="shipping" class="grid-item">
+      <legend>Información de Envío</legend>
+      <div class="flex-container">
+        <label>
+          Nombre:
+          <input type="text" formControlName="first_name" />
+        </label>
+        <label>
+          Apellido:
+          <input type="text" formControlName="last_name" />
+        </label>
+      </div>
+      <div>
+        <label>
+          Identificación:
+          <input type="text" formControlName="identification" />
+        </label>
+      </div>
+      <div class="flex-container">
+        <label>
+          Dirección:
+          <input type="text" formControlName="address_1" />
+        </label>
+        <label>
+          Complemento:
+          <input type="text" formControlName="address_2" />
+        </label>
+      </div>
+      <div class="flex-container">
+        <label>
+          Ciudad:
+          <input type="text" formControlName="city" />
+        </label>
+        <label>
+          Departamento:
+          <input type="text" formControlName="state" />
+        </label>
+      </div>
+      <div class="flex-container">
+        <label>
+          Postcode:
+          <input type="text" formControlName="postcode" />
+        </label>
+        <label>
+          País:
+          <input type="text" formControlName="country" />
+        </label>
+        <label>
+          Precio Envío:
+          <input type="text" formControlName="price_shipping" />
+        </label>
+      </div>
+    </fieldset>
+  </div>
+
+  <!-- Copiar información de facturación a envío -->
+  <div class="copy-info">
+    <div class="copy-info-content">
+      <input type="checkbox" (change)="copyBillingInfo($event)" id="copyBilling" />
+      <label for="copyBilling">Copiar información de facturación a información de envío</label>
+    </div>
+  </div>
+
+  <!-- Productos -->
+  <div formArrayName="line_items" class="line-items-container">
+    <div *ngFor="let item of lineItems.controls; let i = index" [formGroupName]="i" class="line-item">
+      <h3>Producto {{ i + 1 }}</h3>
+      <label>
+        Nombre Producto:
+        <input type="text" formControlName="name" />
+      </label>
+      <label>
+        ID de producto:
+        <input type="number" formControlName="product_id" />
+      </label>
+      <label>
+        Cantidad:
+        <input type="number" formControlName="quantity" />
+      </label>
+      <label>
+        Subtotal:
+        <input type="text" formControlName="subtotal" />
+      </label>
+      <label>
+        Total:
+        <input type="text" formControlName="total" />
+      </label>
+      <button type="button" (click)="removeLineItem(i)">Remove Producto</button>
+    </div>
+    <button type="button" (click)="addLineItem()">Agregar Producto</button>
+  </div>
+
+  <button type="submit">Crear Pedido</button>
+</form>
+
+<style>
+  .order-form {
+    width: 100%;
+    max-width: 1650px;
+    margin: auto;
+    padding: 20px;
+  }
+
+  .grid-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    width: 100%;
+  }
+
+  .grid-item {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .grid-item label {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .grid-item label input,
+  .grid-item label select {
+    flex: 1;
+    margin-left: 10px;
+  }
+
+  .flex-container {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px; /* Añadir espacio entre filas */
+  }
+
+  .flex-container label {
+    flex: 1;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .flex-container label input,
+  .flex-container label select {
+    flex: 1;
+    margin-left: 10px;
+  }
+
+  .line-items-container {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .line-item {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  button {
+    margin-top: 10px;
+  }
+
+  .copy-info {
+    grid-column: span 3;
+    margin-top: 20px;
+  }
+
+  .copy-info-content {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Espacio entre checkbox y texto */
+    border: 1px solid #ddd;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+  }
+
+  .copy-info-content input[type="checkbox"] {
+    margin: 0;
+  }
+</style>

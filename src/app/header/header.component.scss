@@ -1,0 +1,27 @@
+.app-header {
+  position: sticky;
+  top: 0;
+  display: flex;
+  justify-content: space-around;
+  padding: 10px;
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #dee2e6;
+  z-index: 1000; /* Asegúrate de que esté por encima de otros elementos */
+}
+
+.app-header button {
+  padding: 10px;
+  border: none;
+  background-color: #2561a1;
+  color: white;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.app-header button:hover {
+  background-color: #0056b3;
+}
+
+.app-header-container {
+  max-width: 100%;
+}
