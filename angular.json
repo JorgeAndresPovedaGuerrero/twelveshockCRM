@@ -32,7 +32,26 @@
             "styles": [
               "src/styles.scss"
             ],
-            "scripts": []
+            "scripts": [],
+            "allowedCommonJsDependencies": [
+              "core-js/modules/es.array.index-of.js",
+              "core-js/modules/es.array.iterator.js",
+              "core-js/modules/es.array.reduce.js",
+              "core-js/modules/es.array.reverse.js",
+              "core-js/modules/es.promise.js",
+              "core-js/modules/es.regexp.to-string.js",
+              "core-js/modules/es.string.ends-with.js",
+              "core-js/modules/es.string.includes.js",
+              "core-js/modules/es.string.match.js",
+              "core-js/modules/es.string.replace.js",
+              "core-js/modules/es.string.split.js",
+              "core-js/modules/es.string.starts-with.js",
+              "core-js/modules/es.string.trim.js",
+              "core-js/modules/web.dom-collections.iterator.js",
+              "raf",
+              "rgbcolor",
+              "jspdf-autotable"
+            ]
           },
           "configurations": {
             "production": {
@@ -65,10 +84,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "twelveshockCRM:build:production"
+              "buildTarget": "twelveshockCRM:build:production"
             },
             "development": {
-              "browserTarget": "twelveshockCRM:build:development"
+              "buildTarget": "twelveshockCRM:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -76,7 +95,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "twelveshockCRM:build"
+            "buildTarget": "twelveshockCRM:build"
           }
         },
         "test": {

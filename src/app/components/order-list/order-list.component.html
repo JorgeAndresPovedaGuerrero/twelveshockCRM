@@ -19,8 +19,21 @@
     <input id="endDate" type="date" [(ngModel)]="endDate">
 
     <button (click)="filterOrders()">Filtrar</button>
-  </div>
-  <br>
+
+      <!-- Campo de búsqueda por ID -->
+    <label for="orderId">ID Pedido:</label>
+    <input id="orderId" type="text" [(ngModel)]="searchOrderId" (keyup.enter)="searchOrderById()" placeholder="Buscar Pedido">
+    <button (click)="searchOrderById()">Buscar por ID</button>
+
+    <input type="text" [(ngModel)]="searchClientId" (keyup.enter)="searchByClientId()" placeholder="Id CLiente">
+    <button (click)="searchByClientId()">Buscar</button>
+
+    <label>
+      Buscar por Nombre, Teléfono o Identificación:
+      <input type="text" [(ngModel)]="searchTerm" (input)="onSearchTermChanged(searchTerm)" placeholder="Buscar por nombre, teléfono o identificación">
+    </label>
+
+  </div>|
 
   <table>
     <thead>
@@ -33,6 +46,8 @@
         <th>Datos Cliente</th>
         <th>Datos de envío</th>
         <th>Productos</th>
+        <th>Acciones</th>
+        <th>Copiar Datos</th>
       </tr>
     </thead>
     <tbody>
@@ -41,7 +56,7 @@
         <td>
           <div class="status-container">
             <div [ngClass]="getStatusClass(order.status)" class="status"></div>
-            {{ order.status }}
+            {{ translateStatus(order.status) }}
           </div>
         </td>
         <td>{{ order.total }} {{ order.currency }}</td>
@@ -60,8 +75,13 @@
             {{ order.billing.city }}, {{ order.billing.state }} {{ order.billing.postcode }}
             {{ order.billing.country }}
             {{ order.billing.email }}
-            {{ order.billing.phone }}">
-            {{ order.billing.first_name }} {{ order.billing.last_name }}<br/>
+             {{ order.billing.identification }}
+            {{ order.billing.phone }}
+             {{ order.billing.phone2 }}">
+            {{ order.billing.first_name }} {{ order.billing.last_name }}
+            {{ order.billing.id_cliente }}
+            <br/>
+            <br/>
           </span>
         </td>
         <td>
@@ -69,7 +89,9 @@
           {{ order.shipping.address_1 }}<br/>
           {{ order.shipping.city }}, {{ order.shipping.state }} {{ order.shipping.postcode }}<br/>
           {{ order.shipping.country }}
+          {{ order.shipping.price_shipping }}
           {{ order.billing.phone}}
+          {{ order.billing.identification }}
         </td>
         <td>
           <table>
@@ -88,6 +110,19 @@
               </tr>
             </tbody>
           </table>
+        </td>
+        <td> <!-- Botón de edición dentro del bucle -->
+          <button (click)="openEditOrderModal(order)" class="btn btn-primary">Editar</button>
+          <button (click)="generatePDF(order)">Generate PDF</button>
+        </td>
+        <td>
+          <div>
+            <label>
+              <input type="checkbox" (change)="togglePaymentType(order)" [checked]="order.shipping.paymentType === 'Contraentrega'">
+              Contraentrega
+            </label>
+          </div>
+          <button (click)="copyShippingData(order)">Copy</button>
         </td>
       </tr>
     </tbody>

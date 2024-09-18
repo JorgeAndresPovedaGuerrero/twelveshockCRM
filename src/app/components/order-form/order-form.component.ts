@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
 import { ApiService } from '../../services/api.service';
-import { Order } from '../../models/order';
+import { Order, Billing } from '../../models/order';
 import { MessageService } from '../../services/message.service';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
@@ -13,6 +13,28 @@ import { ToastrService } from 'ngx-toastr';
 })
 export class OrderFormComponent implements OnInit {
   orderForm: FormGroup;
+
+  paymentMethods = [
+    { value: 'bancolombia', display: 'Bancolombia' },
+    { value: 'nequi', display: 'Nequi' },
+    { value: 'daviplata', display: 'Daviplata' },
+    { value: 'pagina_web', display: 'Página Web' },
+    { value: 'wompi', display: 'Wompi' },
+    { value: 'payu', display: 'Payu' },
+    { value: 'efectivo', display: 'Efectivo' },
+    { value: 'efecty', display: 'Efecty' },
+    { value: 'paga_todo', display: 'Paga Todo' },
+    { value: 'gana', display: 'Gana' },
+    { value: 'otro', display: 'Otro' }
+  ];
+
+  statusOptions = [
+    { value: 'processing', display: 'En proceso' },
+    { value: 'cancelled', display: 'Cancelado' },
+    { value: 'completed', display: 'Finalizado' },
+    { value: 'pending', display: 'Pendiente saldo' },
+    { value: 'enviado', display: 'Enviado' }
+  ];
 
   constructor(
     private fb: FormBuilder,
@@ -29,9 +51,16 @@ export class OrderFormComponent implements OnInit {
       status: ['processing'],
       currency: ['COP'],
       total_tax: ['0', Validators.pattern('^[0-9]*$')],
+      balance: [''],
+      date_balance: [''],
+      down_payment: [''],
+      means_of_payment_1: [''],
+      means_of_payment_2: [''],
       billing: this.fb.group({
+        id_cliente: [0],
         first_name: [''],
         last_name: [''],
+        identification: [0],
         address_1: [''],
         address_2: [''],
         city: [''],
@@ -39,23 +68,31 @@ export class OrderFormComponent implements OnInit {
         postcode: [''],
         country: ['CO'],
         email: ['', Validators.email],
-        phone: ['']
+        phone: [''],
+        phone2: ['']
       }),
       shipping: this.fb.group({
         first_name: [''],
         last_name: [''],
+        identification: [0],
         address_1: [''],
         address_2: [''],
         city: [''],
         state: [''],
         postcode: [''],
-        country: ['CO']
+        country: ['CO'],
+        price_shipping:[0],
+        phone: ['']
       }),
       line_items: this.fb.array([])
     });
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.getNextOrderId();
+    this.onAbonoChange();
+    this.loadClientId();
+  }
 
   get lineItems(): FormArray {
     return this.orderForm.get('line_items') as FormArray;
@@ -135,14 +172,90 @@ export class OrderFormComponent implements OnInit {
         shippingGroup.reset({
           first_name: '',
           last_name: '',
+          identification: '',
           address_1: '',
           address_2: '',
           city: '',
           state: '',
           postcode: '',
-          country: 'CO'
+          country: 'CO',
+          price_shipping: 0
         });
       }
     }
   }
+
+  translateStatus(status: string): string {
+    const statusMap = new Map<string, string>([
+      ['processing', 'En proceso'],
+      ['cancelled', 'Cancelado'],
+      ['completed', 'Finalizado'],
+      ['pending', 'Pendiente saldo'],
+      ['enviado', 'Enviado'],
+      ['En proceso', 'En proceso'], // También soporta el texto en español directamente
+      ['Cancelado', 'Cancelado'],
+      ['Finalizado', 'Finalizado'],
+      ['Pendiente saldo', 'Pendiente saldo'],
+      ['Enviado', 'Enviado']
+    ]);
+
+    return statusMap.get(status) || status; // Devuelve el estado traducido o el original si no se encuentra
+  }
+
+  getNextOrderId(): void {
+    this.apiService.getHighestOrderId().subscribe({
+      next: (highestId: number) => {
+        this.orderForm.patchValue({ id: highestId + 1 });
+      },
+      error: (error) => {
+        console.error('Error fetching highest order ID:', error);
+        this.toastr.error('No se pudo obtener el ID del pedido', 'Error');
+      }
+    });
+  }
+
+  loadClientId(): void {
+    this.apiService.getClientId().subscribe({
+      next: (id_cliente: number) => {
+        this.orderForm.get('billing')?.patchValue({ id_cliente: id_cliente + 1 });
+      },
+      error: (error) => {
+        console.error('Error fetching client ID:', error);
+        this.toastr.error('No se pudo obtener el ID del cliente', 'Error');
+      }
+    });
+  }
+
+  onAbonoChange(): void {
+    this.orderForm.get('down_payment')?.valueChanges.subscribe(value => {
+      const total = this.orderForm.get('total')?.value || 0;
+      const balance = total - value;
+      this.orderForm.get('balance')?.setValue(balance >= 0 ? balance : 0);
+    });
+  }
+
+
+  loadBilling(): void {
+    const id_cliente = this.orderForm.get('billing.id_cliente')?.value;
+
+    if (id_cliente) {
+      this.apiService.getBillingData(id_cliente).subscribe({
+        next: (billing: Billing) => {
+          if (billing) {
+            this.orderForm.get('billing')?.patchValue(billing);
+            this.toastr.success('La información de facturación se cargó correctamente.', 'Éxito');
+          } else {
+            this.toastr.warning('Cliente no encontrado.', 'Advertencia');
+          }
+        },
+        error: (error) => {
+          console.error('Error fetching billing info:', error);
+          this.toastr.error('No se pudo obtener la información de facturación', 'Error');
+        }
+      });
+    } else {
+      this.toastr.warning('El ID del cliente no está definido', 'Advertencia');
+    }
+  }
+
 }

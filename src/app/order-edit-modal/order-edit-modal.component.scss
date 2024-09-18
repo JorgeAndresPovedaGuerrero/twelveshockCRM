@@ -1,0 +1,195 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: white;
+  z-index: 1050;
+}
+
+.modal {
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1050; /* Asegura que el modal tenga un z-index alto */
+  overflow: hidden;
+  background-color: rgba(242, 242, 242, 0.759); /* Fondo semi-transparente para el efecto de overlay */
+}
+
+.modal-dialog {
+  margin: 0;
+  height: auto;
+  max-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-content {
+  height: auto;
+  max-height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.modal-header {
+  border-bottom: 1px solid #ddd;
+  padding: 15px;
+  background-color: #f7f7f7;
+  position: relative;
+}
+
+.btn-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: transparent;
+  border: none;
+  font-size: 1.25rem;
+  color: #333;
+
+  &::before {
+    content: "×";
+    font-size: 1.5rem;
+  }
+}
+
+.modal-body {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  padding: 20px;
+}
+
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  width: 100%;
+}
+
+.grid-item {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.form-label {
+  font-weight: bold;
+}
+
+.form-control {
+  width: 100%;
+  padding: 8px;
+  margin-top: 4px;
+  box-sizing: border-box;
+}
+
+.flex-container {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.mb-3 {
+  margin-bottom: 15px;
+}
+
+.line-items-container {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.line-item {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.copy-info {
+  grid-column: span 3;
+  margin-top: 20px;
+}
+
+.copy-info-content {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border: 1px solid #ddd;
+  padding: 10px;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+
+  input[type="checkbox"] {
+    margin-right: 10px;
+  }
+
+  label {
+    margin: 0;
+  }
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 20px;
+  padding: 15px;
+  border-top: 1px solid #ddd;
+}
+
+// Estilos globales (podrían ir en styles.scss)
+body.modal-open {
+  overflow: hidden;
+}
+
+.modal-backdrop {
+  opacity: 0.5;
+}
+
+.modal-fullscreen .modal-dialog {
+  max-width: 90vw;
+  height: 100vh;
+  margin: 0;
+}
+
+.modal-fullscreen .modal-content {
+  height: 100%;
+}
+
+.modal-fullscreen .modal-body {
+  height: 100%;
+  overflow-y: auto; /* Enable vertical scrolling */
+}
+
+/* Aplica estilos similares a los `input` a los `select` */
+.form-select {
+  width: 100%; /* Asegura que el select ocupe todo el ancho del contenedor */
+  padding: 8px; /* Igualar padding con los inputs */
+  margin-top: 4px; /* Igualar margen superior con los inputs */
+  box-sizing: border-box; /* Asegura que el padding no afecte el ancho total */
+  font-size: 1rem; /* Igualar tamaño de fuente con los inputs */
+  font-family: inherit; /* Asegura que se use la misma fuente que los inputs */
+  border: 1px solid #ced4da; /* Igualar borde con los inputs */
+  border-radius: 0.25rem; /* Igualar radio del borde con los inputs */
+}
+
+/* Agregar estilos adicionales si es necesario */
+.form-select:focus {
+  border-color: #80bdff; /* Color de borde al enfocar el select */
+  outline: none; /* Eliminar el borde azul predeterminado del navegador */
+}
+
+/* Opcional: Ajuste de estilos para el estado deshabilitado */
+.form-select:disabled {
+  background-color: #e9ecef; /* Color de fondo para selects deshabilitados */
+  cursor: not-allowed; /* Cambiar el cursor al pasar sobre un select deshabilitado */
+}

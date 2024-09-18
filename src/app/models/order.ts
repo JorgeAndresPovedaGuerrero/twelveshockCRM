@@ -1,6 +1,8 @@
 export interface Billing {
+  id_cliente: number,
   first_name: string;
   last_name: string;
+  identification: string;
   address_1: string;
   address_2: string;
   city: string;
@@ -9,17 +11,23 @@ export interface Billing {
   country: string;
   email: string;
   phone: string;
+  phone2: string;
 }
 
 export interface Shipping {
   first_name: string;
   last_name: string;
+  identification: string;
   address_1: string;
   address_2: string;
   city: string;
   state: string;
   postcode: string;
   country: string;
+  email: string;
+  phone: string;
+  price_shipping:number;
+  paymentType: string;
 }
 
 export interface LineItem {
@@ -42,5 +50,9 @@ export interface Order {
   billing: Billing;
   shipping: Shipping;
   line_items: LineItem[];
+  balance: string;
+  date_balance: string;
+  down_payment: string;
+  means_of_payment_1: string;
+  means_of_payment_2: string;
 }
-  
