@@ -8,7 +8,8 @@ import { Order, Billing } from '../models/order';
   providedIn: 'root'
 })
 export class ApiService {
-  private baseUrl = 'https://twelveshockcrmbackend.onrender.com/data/orders';
+  private baseUrl = 'http://localhost:8080/data/orders';
+  //private baseUrl = 'https://twelveshockcrmbackend.onrender.com/data/orders';
 
   constructor(private http: HttpClient) {}
 
