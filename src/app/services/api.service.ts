@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { HttpClient, HttpErrorResponse , HttpParams } from '@angular/common/http';
+import { Observable, throwError } from 'rxjs';
 import { Order, Billing } from '../models/order';
+import { LogProduct } from '../models/logProduct';
+import { catchError, tap } from 'rxjs/operators';
 
 
 @Injectable({
@@ -9,8 +11,9 @@ import { Order, Billing } from '../models/order';
 })
 export class ApiService {
   //private baseUrl = 'http://localhost:8080/data/orders';
+  //private baseUrlLogs = 'http://localhost:8080/api/logs/order/';
   private baseUrl = 'https://twelveshockcrmb.onrender.com/data/orders';
-
+  private baseUrlLogs = 'https://twelveshockcrmb.onrender.com/api/logs/order';
   constructor(private http: HttpClient) {}
 
   getOrders(filters: { status?: string; startDate?: string; endDate?: string } = {}): Observable<Order[]> {
@@ -53,6 +56,27 @@ export class ApiService {
 
   getBillingData(idCliente: number): Observable<Billing> {
     return this.http.get<Billing>(`${this.baseUrl}/billing/${idCliente}`);
+  }
+  getOrderLogs(orderId: number): Observable<LogProduct[]> {
+    return this.http.get<LogProduct[]>(`${this.baseUrlLogs}/${orderId}`)
+      .pipe(
+        tap(response => console.log('Logs recibidos:', response)),
+        catchError(this.handleError)
+      );
+  }
+
+
+  private handleError(error: HttpErrorResponse) {
+    console.error('Error detallado:', error);
+    let errorMessage = 'Ocurrió un error al procesar la solicitud';
+
+    if (error.error instanceof ErrorEvent) {
+      errorMessage = `Error del cliente: ${error.error.message}`;
+    } else {
+      errorMessage = `Error del servidor: ${error.status}, mensaje: ${error.message}`;
+    }
+
+    return throwError(() => new Error(errorMessage));
   }
 
 }

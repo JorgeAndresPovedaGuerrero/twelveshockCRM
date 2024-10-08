@@ -8,6 +8,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { OrderEditModalComponent } from '../../order-edit-modal/order-edit-modal.component';
 import { PdfService } from '../../services/pdf.service';
 import { debounceTime } from 'rxjs/operators';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-order-list',
@@ -31,6 +32,7 @@ export class OrderListComponent implements OnInit, OnDestroy {
 
 
   constructor(
+    private router: Router,
     private apiService: ApiService,
     private toastr: ToastrService,
     private messageService: MessageService,
@@ -314,6 +316,10 @@ Ciudad: ${shippingCity}
     }).catch(err => {
       console.error('Error al copiar', err);
     });
+  }
+
+    viewLogs(orderId: number) {
+    this.router.navigate(['/order-logs', orderId]);
   }
 
 

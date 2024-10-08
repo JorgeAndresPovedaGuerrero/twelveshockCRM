@@ -1,0 +1,21 @@
+<div class="logs-container">
+  <h2>Registros del Pedido #{{orderId}}</h2>
+
+  <button (click)="goBack()" class="back-button">Volver</button>
+
+  <div class="logs-list" *ngIf="logs.length > 0">
+    <div class="log-item" *ngFor="let log of logs">
+      <div class="log-header">
+        <h3>{{log.title}}</h3>
+        <span class="date">{{formatDate(log.changeDate)}}</span>
+      </div>
+      <div class="log-content">
+        <p>{{log.changes}}</p>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="logs.length === 0" class="no-logs">
+    No hay registros disponibles para este pedido.
+  </div>
+</div>

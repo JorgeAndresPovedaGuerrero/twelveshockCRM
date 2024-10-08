@@ -15,6 +15,8 @@ import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { FormsModule } from '@angular/forms';
 import { OrderEditModalComponent } from './order-edit-modal/order-edit-modal.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { CommonModule } from '@angular/common';
+import { OrderLogsComponent } from './order-logs/order-logs.component';
 
 
 @NgModule({ declarations: [
@@ -22,6 +24,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
         OrderFormComponent,
         OrderListComponent,
         HeaderComponent,
+        OrderLogsComponent,
         OrderEditModalComponent,
     ], // <--- Asegúrate de incluirlo en los providers
     bootstrap: [AppComponent], imports: [NgbModule,
@@ -29,6 +32,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
         BrowserModule,
         AppRoutingModule,
         ReactiveFormsModule,
+        CommonModule,
         BrowserAnimationsModule, // Agrega este módulo
         TooltipModule.forRoot(),
         ToastrModule.forRoot()], providers: [ApiService, MessageService, provideHttpClient(withInterceptorsFromDi())] })

@@ -122,7 +122,12 @@
               Contraentrega
             </label>
           </div>
-          <button (click)="copyShippingData(order)">Copy</button>
+          <button (click)="copyShippingData(order)">Copy
+            <i class="fa fa-copy"></i>
+          </button>
+          <button (click)="viewLogs(order.id)">
+            Registros <i class="fas fa-history"></i>
+          </button>
         </td>
       </tr>
     </tbody>
