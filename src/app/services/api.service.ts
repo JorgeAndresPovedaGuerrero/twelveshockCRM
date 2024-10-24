@@ -4,16 +4,19 @@ import { Observable, throwError } from 'rxjs';
 import { Order, Billing } from '../models/order';
 import { LogProduct } from '../models/logProduct';
 import { catchError, tap } from 'rxjs/operators';
+import { Gasto } from '../models/gasto';
 
 
 @Injectable({
   providedIn: 'root'
 })
 export class ApiService {
-  //private baseUrl = 'http://localhost:8080/data/orders';
-  //private baseUrlLogs = 'http://localhost:8080/api/logs/order/';
-  private baseUrl = 'https://twelveshockcrmb.onrender.com/data/orders';
-  private baseUrlLogs = 'https://twelveshockcrmb.onrender.com/api/logs/order';
+  private baseUrl = 'http://localhost:8080/data/orders';
+  private baseUrlLogs = 'http://localhost:8080/api/logs/order/';
+  private baseUrlGastos = 'http://localhost:8080/gastos';
+  //private baseUrl = 'https://twelveshockcrmb.onrender.com/data/orders';
+  //private baseUrlLogs = 'https://twelveshockcrmb.onrender.com/api/logs/order';
+  //private baseUrlGastos = 'https://twelveshockcrmb.onrender.com/gastos';
   constructor(private http: HttpClient) {}
 
   getOrders(filters: { status?: string; startDate?: string; endDate?: string } = {}): Observable<Order[]> {
@@ -57,6 +60,7 @@ export class ApiService {
   getBillingData(idCliente: number): Observable<Billing> {
     return this.http.get<Billing>(`${this.baseUrl}/billing/${idCliente}`);
   }
+
   getOrderLogs(orderId: number): Observable<LogProduct[]> {
     return this.http.get<LogProduct[]>(`${this.baseUrlLogs}/${orderId}`)
       .pipe(
@@ -77,6 +81,46 @@ export class ApiService {
     }
 
     return throwError(() => new Error(errorMessage));
+  }
+
+  //Metodos para el apartado de gastos
+  obtenerGastos(): Observable<any> {
+    return this.http.get(this.baseUrlGastos);
+  }
+
+  guardarGasto(gasto: any): Observable<any> {
+    return this.http.post(this.baseUrlGastos, gasto);
+  }
+
+  actualizarGasto(id: string, gasto: any): Observable<any> {
+    return this.http.put(`${this.baseUrlGastos}/${id}`, gasto);
+  }
+
+  eliminarGasto(id: string): Observable<any> {
+    return this.http.delete(`${this.baseUrlGastos}/${id}`);
+  }
+
+  obtenerGastosConFiltros(filtros: { fechaInicio?: string; fechaFin?: string; concepto?: string; precioMin?: number; precioMax?: number }): Observable<Gasto[]> {
+    let params = new HttpParams();
+
+    if (filtros.fechaInicio) {
+      params = params.set('fechaInicio', filtros.fechaInicio);
+    }
+    if (filtros.fechaFin) {
+      params = params.set('fechaFin', filtros.fechaFin);
+    }
+    if (filtros.concepto) {
+      params = params.set('concepto', filtros.concepto);
+    }
+    if (filtros.precioMin != null) {  // Cambia a != null para manejar undefined y null
+      params = params.set('precioMin', filtros.precioMin.toString());
+    }
+    if (filtros.precioMax != null) {  // Cambia a != null para manejar undefined y null
+      params = params.set('precioMax', filtros.precioMax.toString());
+    }
+
+    return this.http.get<Gasto[]>(this.baseUrlGastos + '/buscar', { params })
+      .pipe(catchError(this.handleError));
   }
 
 }

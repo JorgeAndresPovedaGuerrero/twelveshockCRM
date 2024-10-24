@@ -16,14 +16,16 @@
         Fecha de modificación:
         <input type="datetime-local" formControlName="date_modified" />
       </label>
-      <label>
-        Total:
-        <input type="text" formControlName="total" />
-      </label>
-      <label>
-        <label for="down_payment">Abono:</label>
-        <input id="down_payment" type="text" formControlName="down_payment" />
-      </label>
+      <div class="flex-container">
+        <label >
+          Total:
+          <input type="text" formControlName="total" />
+        </label>
+        <label>
+          <label for="down_payment">Abono:</label>
+          <input id="down_payment" type="text" formControlName="down_payment" />
+        </label>
+      </div>
       <label>
         Metodo de pago Abono:
         <select formControlName="means_of_payment_1">
@@ -66,17 +68,25 @@
     <fieldset formGroupName="billing" class="grid-item">
       <legend>Información de Facturación</legend>
       <div>
-        <label>
-          Id Cliente:
-          <input type="text" formControlName="id_cliente" />
-        </label>
-        <label>
-          <button type="button" (click)="loadBilling()">Cargar Cliente</button>
-        </label>
-        <label>
-          Identificación:
-          <input type="text" formControlName="identification" />
-        </label>
+        <div class="flex-container">
+          <label>
+            Id Cliente:
+            <input type="text" formControlName="id_cliente" />
+          </label>
+          <label>
+            <button type="button" (click)="loadBilling()">Cargar Cliente</button>
+          </label>
+        </div>
+        <div class="flex-container">
+          <label>
+            Identificación:
+            <input type="text" formControlName="identification" />
+          </label>
+          <label>
+            Email:
+            <input type="email" formControlName="email" />
+          </label>
+        </div>
       </div>
       <div class="flex-container">
         <label>
@@ -118,18 +128,16 @@
           <input type="text" formControlName="country" />
         </label>
       </div>
-      <label>
-        Email:
-        <input type="email" formControlName="email" />
-      </label>
-      <label>
-        Teléfono:
-        <input type="text" formControlName="phone" />
-      </label>
-      <label>
-        Teléfono 2:
-        <input type="text" formControlName="phone2" />
-      </label>
+      <div class="flex-container">
+        <label>
+          Teléfono:
+          <input type="text" formControlName="phone" />
+        </label>
+        <label>
+          Teléfono 2:
+          <input type="text" formControlName="phone2" />
+        </label>
+      </div>
     </fieldset>
 
     <!-- Tercera Columna: Información de Envío -->
@@ -233,20 +241,17 @@
     width: 100%;
     max-width: 1650px;
     margin: auto;
-    padding: 20px;
   }
 
   .grid-container {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
     width: 100%;
   }
 
   .grid-item {
     display: flex;
     flex-direction: column;
-    gap: 10px;
   }
 
   .grid-item label {
@@ -263,12 +268,9 @@
 
   .flex-container {
     display: flex;
-    gap: 10px;
-    margin-bottom: 10px; /* Añadir espacio entre filas */
   }
 
   .flex-container label {
-    flex: 1;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -284,17 +286,15 @@
     margin-top: 20px;
     display: flex;
     flex-direction: column;
-    gap: 20px;
   }
 
   .line-item {
     display: flex;
     flex-direction: column;
-    gap: 5px;
   }
 
   button {
-    margin-top: 10px;
+    margin-top: 6px;
   }
 
   .copy-info {
@@ -305,7 +305,6 @@
   .copy-info-content {
     display: flex;
     align-items: center;
-    gap: 10px; /* Espacio entre checkbox y texto */
     border: 1px solid #ddd;
     padding: 10px;
     border-radius: 5px;

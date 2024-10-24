@@ -1,0 +1,49 @@
+<div class="container">
+  <div class="header">
+    <h2>Lista de Gastos</h2>
+    <a routerLink="/gastos/nuevo" class="btn btn-primary btn-agregar">Agregar Gasto</a>
+  </div>
+
+  <div class="filters">
+    <label>Fecha Inicio:</label>
+    <input type="date" [(ngModel)]="filtros.fechaInicio">
+
+    <label>Fecha Fin:</label>
+    <input type="date" [(ngModel)]="filtros.fechaFin">
+
+    <label>Concepto:</label>
+    <input type="text" [(ngModel)]="filtros.concepto">
+  </div>
+  <div class="filters">
+    <label>Precio Mínimo:</label>
+    <input type="number" [(ngModel)]="filtros.precioMin">
+
+    <label>Precio Máximo:</label>
+    <input type="number" [(ngModel)]="filtros.precioMax">
+
+    <button (click)="aplicarFiltros()" class="btn btn-primary">Aplicar Filtros</button>
+    <button (click)="limpiarFiltros()" class="btn btn-secondary">Limpiar Filtros</button>
+  </div>
+
+  <table class="table table-striped table-custom">
+    <thead>
+      <tr>
+        <th>Fecha</th>
+        <th>Valor</th>
+        <th>Concepto</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let gasto of gastos">
+        <td>{{ gasto.fecha | date:'shortDate' }}</td>
+        <td>{{ gasto.valor | currency }}</td>
+        <td>{{ gasto.concepto }}</td>
+        <td>
+          <a [routerLink]="['/gastos/editar', gasto.id]" class="btn btn-warning btn-editar" *ngIf="gasto.id">Editar</a>
+          <button (click)="eliminarGasto(gasto.id)" class="btn btn-danger btn-eliminar" *ngIf="gasto.id">Eliminar</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

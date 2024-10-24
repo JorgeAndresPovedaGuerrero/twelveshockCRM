@@ -1,0 +1,21 @@
+<div class="form-container">
+  <h2>{{ isEditing ? 'Editar Gasto' : 'Agregar Gasto' }}</h2>
+  <form (ngSubmit)="guardarGasto()">
+    <div class="form-group">
+      <label for="fecha">Fecha:</label>
+      <input type="date" id="fecha" [(ngModel)]="gasto.fecha" name="fecha" required>
+    </div>
+    <div class="form-group">
+      <label for="valor">Valor:</label>
+      <input type="number" id="valor" [(ngModel)]="gasto.valor" name="valor" required>
+    </div>
+    <div class="form-group">
+      <label for="concepto">Concepto:</label>
+      <input type="text" id="concepto" [(ngModel)]="gasto.concepto" name="concepto" required>
+    </div>
+    <div class="button-group">
+      <button class="primary-button" type="submit">{{ isEditing ? 'Actualizar' : 'Guardar' }}</button>
+      <button class="secondary-button" type="button" routerLink="/gastos">Cancelar</button>
+    </div>
+  </form>
+</div>

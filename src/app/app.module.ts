@@ -17,6 +17,9 @@ import { OrderEditModalComponent } from './order-edit-modal/order-edit-modal.com
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { CommonModule } from '@angular/common';
 import { OrderLogsComponent } from './order-logs/order-logs.component';
+import { RouterModule } from '@angular/router';
+import { GastoFormComponent } from './gasto/gasto-form.component';
+import { GastoListComponent } from './gasto/gasto-list.component';
 
 
 @NgModule({ declarations: [
@@ -25,6 +28,8 @@ import { OrderLogsComponent } from './order-logs/order-logs.component';
         OrderListComponent,
         HeaderComponent,
         OrderLogsComponent,
+        GastoFormComponent,
+        GastoListComponent,
         OrderEditModalComponent,
     ], // <--- Asegúrate de incluirlo en los providers
     bootstrap: [AppComponent], imports: [NgbModule,
@@ -33,6 +38,8 @@ import { OrderLogsComponent } from './order-logs/order-logs.component';
         AppRoutingModule,
         ReactiveFormsModule,
         CommonModule,
+        RouterModule,
+        FormsModule,
         BrowserAnimationsModule, // Agrega este módulo
         TooltipModule.forRoot(),
         ToastrModule.forRoot()], providers: [ApiService, MessageService, provideHttpClient(withInterceptorsFromDi())] })

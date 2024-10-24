@@ -87,20 +87,38 @@ export class OrderListComponent implements OnInit, OnDestroy {
     });
   }
 
-  filterOrders(): void {
-    const possibleStatuses = this.getPossibleStatuses(this.selectedStatus);
+filterOrders(): void {
+  const possibleStatuses = this.getPossibleStatuses(this.selectedStatus);
 
-    if (possibleStatuses.length === 0) {
-      // Si no hay estados posibles, mostrar todos los registros
-      this.filteredOrders = this.orders;
-    } else {
-      this.filteredOrders = this.orders.filter(order =>
-        possibleStatuses.includes(order.status.trim().toLowerCase())
-      );
-    }
+  // Filtrar por estado
+  let filtered = this.orders.filter(order =>
+    possibleStatuses.length === 0 || possibleStatuses.includes(order.status.trim().toLowerCase())
+  );
 
-    this.cdr.detectChanges();
+  // Filtrar por rango de fechas
+  if (this.startDate && this.endDate) {
+    const start = new Date(this.startDate).getTime();
+    const end = new Date(this.endDate).getTime();
+
+    filtered = filtered.filter(order => {
+      const orderDate = new Date(order.date_created).getTime();
+      return orderDate >= start && orderDate <= end;
+    });
   }
+
+  this.filteredOrders = filtered;
+  this.cdr.detectChanges();  // Refrescar vista
+}
+
+limpiarFiltros():void{
+  this.selectedStatus = '';
+  this.startDate = '';
+  this.endDate = '';
+  this.searchOrderId = '';
+  this.searchClientId = '';
+  this.searchTerm= '';
+  this.loadOrders();
+}
 
   getPossibleStatuses(status: string): string[] {
     const normalizedStatus = status.trim().toLowerCase();

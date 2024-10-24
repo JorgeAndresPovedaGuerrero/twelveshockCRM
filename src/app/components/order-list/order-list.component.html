@@ -2,38 +2,43 @@
   {{ successMessage }}
   <button (click)="successMessage = null">×</button>
 </div>
-<div>
-  <h3>Lista de pedidos</h3>
-  <!-- Filtros -->
-  <div class="filters">
-    <label for="status">Estado:</label>
-    <select id="status" [(ngModel)]="selectedStatus">
-      <option value="">Todos</option>
-      <option *ngFor="let status of statusOptions" [value]="status">{{ status }}</option>
-    </select>
+<div class="containerpriped">
+  <div class="filters-container">
+    <h3>Lista de pedidos</h3>
+    <!-- Filtros -->
+    <div class="filters">
+      <label for="status">Estado:</label>
+      <select id="status" [(ngModel)]="selectedStatus">
+        <option value="">Todos</option>
+        <option *ngFor="let status of statusOptions" [value]="status">{{ status }}</option>
+      </select>
 
-    <label for="startDate">Fecha de Inicio:</label>
-    <input id="startDate" type="date" [(ngModel)]="startDate">
+      <label for="startDate">Fecha de Inicio:</label>
+      <input id="startDate" type="date" [(ngModel)]="startDate">
 
-    <label for="endDate">Fecha de Fin:</label>
-    <input id="endDate" type="date" [(ngModel)]="endDate">
+      <label for="endDate">Fecha de Fin:</label>
+      <input id="endDate" type="date" [(ngModel)]="endDate">
 
-    <button (click)="filterOrders()">Filtrar</button>
+      <button (click)="filterOrders()">Filtrar</button>
 
-      <!-- Campo de búsqueda por ID -->
-    <label for="orderId">ID Pedido:</label>
-    <input id="orderId" type="text" [(ngModel)]="searchOrderId" (keyup.enter)="searchOrderById()" placeholder="Buscar Pedido">
-    <button (click)="searchOrderById()">Buscar por ID</button>
+        <!-- Campo de búsqueda por ID -->
+      <label for="orderId">ID Pedido:</label>
+      <input id="orderId" type="text" [(ngModel)]="searchOrderId" (keyup.enter)="searchOrderById()" placeholder="Buscar Pedido">
+      <button (click)="searchOrderById()">Buscar por ID</button>
 
-    <input type="text" [(ngModel)]="searchClientId" (keyup.enter)="searchByClientId()" placeholder="Id CLiente">
-    <button (click)="searchByClientId()">Buscar</button>
+      <input type="text" [(ngModel)]="searchClientId" (keyup.enter)="searchByClientId()" placeholder="Id CLiente">
+      <button (click)="searchByClientId()">Buscar</button>
 
-    <label>
-      Buscar por Nombre, Teléfono o Identificación:
-      <input type="text" [(ngModel)]="searchTerm" (input)="onSearchTermChanged(searchTerm)" placeholder="Buscar por nombre, teléfono o identificación">
-    </label>
+    </div>
+    <div class="filters">
+      <label>
+        Buscar por Nombre, Teléfono o Identificación:
+        <input type="text" [(ngModel)]="searchTerm" (input)="onSearchTermChanged(searchTerm)" placeholder="Buscar por nombre, teléfono o identificación">
+      </label>
+      <button (click)="limpiarFiltros()" class="btn btn-secondary">Limpiar filtros</button>
+    </div>
+  </div>
 
-  </div>|
 
   <table>
     <thead>
@@ -112,8 +117,10 @@
           </table>
         </td>
         <td> <!-- Botón de edición dentro del bucle -->
-          <button (click)="openEditOrderModal(order)" class="btn btn-primary">Editar</button>
-          <button (click)="generatePDF(order)">Generate PDF</button>
+          <button (click)="openEditOrderModal(order)">
+            Editar<i class="fas fa-edit"></i></button>
+          <br>
+          <button (click)="generatePDF(order)">Generate PDF<i class="fas fa-file-pdf"></i></button>
         </td>
         <td>
           <div>
@@ -125,6 +132,7 @@
           <button (click)="copyShippingData(order)">Copy
             <i class="fa fa-copy"></i>
           </button>
+          <br>
           <button (click)="viewLogs(order.id)">
             Registros <i class="fas fa-history"></i>
           </button>
