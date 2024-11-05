@@ -1,0 +1,21 @@
+<div class="form-container">
+  <h2>{{ isEditing ? 'Editar Proveedor' : 'Agregar Proveedor' }}</h2>
+  <form (ngSubmit)="guardarProveedor()">
+    <div class="form-group">
+      <label for="fechaCreacion">Fecha de creación:</label>
+      <input type="date" id="fechaCreacion" [(ngModel)]="proveedor.fechaCreacion" name="fechaCreacion" required>
+    </div>
+    <div class="form-group">
+      <label for="codigo">Codigo:</label>
+      <input type="text" id="codigo" [(ngModel)]="proveedor.codigo" name="codigo" required>
+    </div>
+    <div class="form-group">
+      <label for="nombre">Nombre:</label>
+      <input type="text" id="nombre" [(ngModel)]="proveedor.nombre" name="nombre" required>
+    </div>
+    <div class="button-group">
+      <button class="primary-button" type="submit">{{ isEditing ? 'Actualizar' : 'Guardar' }}</button>
+      <button class="secondary-button" type="button" routerLink="/proveedor">Cancelar</button>
+    </div>
+  </form>
+</div>

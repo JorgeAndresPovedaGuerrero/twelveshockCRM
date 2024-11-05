@@ -1,0 +1,20 @@
+<div class="filter-container">
+  <label for="startDate">Fecha de inicio:</label>
+  <input type="date" id="startDate" [(ngModel)]="startDate" (change)="updateChart()">
+
+  <label for="endDate">Fecha de fin:</label>
+  <input type="date" id="endDate" [(ngModel)]="endDate" (change)="updateChart()">
+</div>
+<!-- Añadimos un recuadro para mostrar el total de gastos filtrados -->
+<div class="gastos-filtrados-chart">
+  <div class="total-gastos-container">
+    <p>Total de Gastos Filtrados: {{ totalGastosFiltrados | currency }}</p>
+  </div>
+  <div class="total-gastos-promedio-container">
+    <p>Promedio de Gastos por Día: {{ promedioGastosFiltrados | currency }}</p>
+  </div>
+ </div>
+
+<div class="chart-container">
+  <canvas id="gastoChart"></canvas>
+</div>

@@ -5,6 +5,7 @@ import { Order, Billing } from '../models/order';
 import { LogProduct } from '../models/logProduct';
 import { catchError, tap } from 'rxjs/operators';
 import { Gasto } from '../models/gasto';
+import { Proveedor } from '../models/proveedor';
 
 
 @Injectable({
@@ -14,9 +15,11 @@ export class ApiService {
   //private baseUrl = 'http://localhost:8080/data/orders';
   //private baseUrlLogs = 'http://localhost:8080/api/logs/order/';
   //private baseUrlGastos = 'http://localhost:8080/gastos';
+  //private baseUrlProveedor = 'http://localhost:8080/proveedor';
   private baseUrl = 'https://twelveshockcrmb.onrender.com/data/orders';
   private baseUrlLogs = 'https://twelveshockcrmb.onrender.com/api/logs/order';
   private baseUrlGastos = 'https://twelveshockcrmb.onrender.com/gastos';
+  private baseUrlProveedor = 'https://twelveshockcrmb.onrender.com/proveedor';
   constructor(private http: HttpClient) {}
 
   getOrders(filters: { status?: string; startDate?: string; endDate?: string } = {}): Observable<Order[]> {
@@ -122,5 +125,44 @@ export class ApiService {
     return this.http.get<Gasto[]>(this.baseUrlGastos + '/buscar', { params })
       .pipe(catchError(this.handleError));
   }
+  // ||------------------------- ||
+  // Metodos para el apartado de proveedores
+  // ||------------------------- ||
+  obtenerProveedores(): Observable<any> {
+    return this.http.get(this.baseUrlProveedor).pipe(
+      tap(data => console.log('Proveedores cargados:', data)),
+      catchError(error => {
+        console.error('Error cargando proveedores:', error);
+        return throwError(() => error);
+      })
+    );
+  }
+
+  guardarProveedor(proveedor: any): Observable<any> {
+    return this.http.post(this.baseUrlProveedor, proveedor);
+  }
+
+  actualizarProveedor(id: string, proveedor: any): Observable<any> {
+    return this.http.put(`${this.baseUrlProveedor}/${id}`, proveedor);
+  }
+
+  eliminarProveedor(id: string): Observable<any> {
+    return this.http.delete(`${this.baseUrlProveedor}/${id}`);
+  }
+
+  obtenerProveedoresConFiltros(filtros: { fechaInicio?: string; fechaFin?: string; }): Observable<Proveedor[]> {
+    let params = new HttpParams();
+
+    if (filtros.fechaInicio) {
+      params = params.set('fechaInicio', filtros.fechaInicio);
+    }
+    if (filtros.fechaFin) {
+      params = params.set('fechaFin', filtros.fechaFin);
+    }
+
+    return this.http.get<Proveedor[]>(this.baseUrlProveedor + '/buscar', { params })
+      .pipe(catchError(this.handleError));
+  }
+
 
 }

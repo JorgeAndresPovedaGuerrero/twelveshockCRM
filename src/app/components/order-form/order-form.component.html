@@ -228,6 +228,14 @@
         Total:
         <input type="text" formControlName="total" />
       </label>
+      <label>
+        Codigo Proveedor:
+        <select formControlName="codigoProveedor">
+          <option *ngFor="let proveedor of proveedores" [value]="proveedor.codigo">
+            {{ proveedor.codigo }}
+          </option>
+        </select>
+      </label>
       <button type="button" (click)="removeLineItem(i)">Remove Producto</button>
     </div>
     <button type="button" (click)="addLineItem()">Agregar Producto</button>

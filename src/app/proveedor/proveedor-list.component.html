@@ -1,0 +1,41 @@
+<div class="container">
+  <div class="header">
+    <h2>Lista de Proveedores</h2>
+    <a routerLink="/proveedor/nuevo" class="btn btn-primary btn-agregar">Agregar Proveedor</a>
+  </div>
+
+  <div class="filters">
+    <label>Fecha Inicio:</label>
+    <input type="date" [(ngModel)]="filtros.fechaInicio">
+
+    <label>Fecha Fin:</label>
+    <input type="date" [(ngModel)]="filtros.fechaFin">
+  </div>
+  <div class="filters">
+
+    <button (click)="aplicarFiltros()" class="btn btn-primary">Aplicar Filtros</button>
+    <button (click)="limpiarFiltros()" class="btn btn-secondary">Limpiar Filtros</button>
+  </div>
+
+  <table class="table table-striped table-custom">
+    <thead>
+      <tr>
+        <th>FechaCreacion</th>
+        <th>Codigo</th>
+        <th>Nombre</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let proveedor of proveedores">
+        <td>{{ proveedor.fechaCreacion| date:'shortDate' }}</td>
+        <td>{{ proveedor.codigo}}</td>
+        <td>{{ proveedor.nombre }}</td>
+        <td>
+          <a [routerLink]="['/proveedor/editar', proveedor.id]" class="btn btn-warning btn-editar" *ngIf="proveedor.id">Editar</a>
+          <button (click)="eliminarProveedor(proveedor.id)" class="btn btn-danger btn-eliminar" *ngIf="proveedor.id">Eliminar</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

@@ -1,0 +1,45 @@
+<div class="estadisticas-container">
+  <h1>Estadísticas de Gastos</h1>
+
+  <div *ngIf="gastos && gastos.length > 0; else noGastos">
+    <div class="stats-summary">
+      <div class="stat">
+        <p>{{ totalGastosAnuales | currency }}</p>
+        <span>Total de Gastos Anuales</span>
+      </div>
+      <div class="stat">
+        <p>{{ promedioGastos | currency }}</p>
+        <span>Gasto Promedio</span>
+      </div>
+      <div class="stat">
+        <p>{{ gastosMensuales | currency }}</p>
+        <span>Gastos Mensuales</span>
+      </div>
+    </div>
+
+    <!-- Componente para el gráfico -->
+    <app-gasto-chart [gastos]="gastos" (gastosFiltrados)="actualizarGastosFiltrados($event)"></app-gasto-chart>
+
+    <!-- Tabla de gastos filtrados -->
+    <table>
+      <thead>
+        <tr>
+          <th>Fecha</th>
+          <th>Concepto</th>
+          <th>Valor</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let gasto of gastosFiltrados">
+          <td>{{ gasto.fecha | date:'dd/MM/yyyy' }}</td>
+          <td>{{ gasto.concepto }}</td>
+          <td>{{ gasto.valor | currency }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <ng-template #noGastos>
+    <p>No hay datos de gastos disponibles.</p>
+  </ng-template>
+</div>

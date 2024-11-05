@@ -20,6 +20,10 @@ import { OrderLogsComponent } from './order-logs/order-logs.component';
 import { RouterModule } from '@angular/router';
 import { GastoFormComponent } from './gasto/gasto-form.component';
 import { GastoListComponent } from './gasto/gasto-list.component';
+import { ProveedorFormComponent } from './proveedor/proveedor-form.component';
+import { ProveedorListComponent } from './proveedor/proveedor-list.component';
+import { EstadisticasComponent } from './gasto/Estadisticas/estadisticas.component';
+import { GastoChartComponent  } from './gasto/gasto-chart/gasto-chart.component';
 
 
 @NgModule({ declarations: [
@@ -30,7 +34,11 @@ import { GastoListComponent } from './gasto/gasto-list.component';
         OrderLogsComponent,
         GastoFormComponent,
         GastoListComponent,
+        ProveedorFormComponent,
+        ProveedorListComponent,
         OrderEditModalComponent,
+        EstadisticasComponent,
+        GastoChartComponent,
     ], // <--- Asegúrate de incluirlo en los providers
     bootstrap: [AppComponent], imports: [NgbModule,
         FormsModule,

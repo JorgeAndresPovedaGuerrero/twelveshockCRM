@@ -16,6 +16,8 @@ export class HeaderComponent {
       this.router.navigate(['/order-form']);
     } else if (page === 'gastos') {
       this.router.navigate(['/gastos']);
+    } else if (page === 'proveedor') {
+      this.router.navigate(['/proveedor']);
     }
   }
 }

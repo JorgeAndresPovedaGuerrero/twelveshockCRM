@@ -12,6 +12,7 @@ import { Order } from '../models/order';
 export class OrderEditModalComponent implements OnInit {
   @Input() orderId: number | undefined;
   editOrderForm: FormGroup;
+  proveedores: any[] = [];
 
   paymentMethods = [
     { value: 'bancolombia', display: 'Bancolombia' },
@@ -82,6 +83,8 @@ export class OrderEditModalComponent implements OnInit {
       }),
       line_items: this.fb.array([])
     });
+
+    this.obtenerProveedores();
   }
 
   ngOnInit(): void {
@@ -134,6 +137,12 @@ export class OrderEditModalComponent implements OnInit {
     }
   }
 
+  obtenerProveedores() {
+    this.apiService.obtenerProveedores().subscribe((data) => {
+      this.proveedores = data;
+    });
+  }
+
   updateBalance() {
     const total = this.editOrderForm.get('total')?.value || 0;
     const downPayment = this.editOrderForm.get('down_payment')?.value || 0;
@@ -147,7 +156,8 @@ export class OrderEditModalComponent implements OnInit {
       product_id: [item?.product_id || ''],
       quantity: [item?.quantity || ''],
       subtotal: [item?.subtotal || ''],
-      total: [item?.total || '']
+      total: [item?.total || ''],
+      codigoProveedor: [item?.codigoProveedor || '']
     });
   }
 
@@ -242,7 +252,8 @@ export class OrderEditModalComponent implements OnInit {
       product_id: [0],
       quantity: [0, Validators.min(1)],
       subtotal: ['0', Validators.pattern('^[0-9]*$')],
-      total: ['0', Validators.pattern('^[0-9]*$')]
+      total: ['0', Validators.pattern('^[0-9]*$')],
+      codigoProveedor: ['']
     });
     this.lineItems.push(lineItemGroup);
   }

@@ -6,6 +6,7 @@ import { MessageService } from '../../services/message.service';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 
+
 @Component({
   selector: 'app-order-form',
   templateUrl: './order-form.component.html',
@@ -13,6 +14,7 @@ import { ToastrService } from 'ngx-toastr';
 })
 export class OrderFormComponent implements OnInit {
   orderForm: FormGroup;
+  proveedores: any[] = [];
 
   paymentMethods = [
     { value: 'bancolombia', display: 'Bancolombia' },
@@ -92,6 +94,13 @@ export class OrderFormComponent implements OnInit {
     this.getNextOrderId();
     this.onAbonoChange();
     this.loadClientId();
+    this.cargarProveedores();
+  }
+
+  cargarProveedores(): void {
+    this.apiService.obtenerProveedores().subscribe((data) => {
+      this.proveedores = data;
+    });
   }
 
   get lineItems(): FormArray {
@@ -105,7 +114,8 @@ export class OrderFormComponent implements OnInit {
       product_id: [0],
       quantity: [0, Validators.min(1)],
       subtotal: ['0', Validators.pattern('^[0-9]*$')],
-      total: ['0', Validators.pattern('^[0-9]*$')]
+      total: ['0', Validators.pattern('^[0-9]*$')],
+      codigoProveedor: ['']
     });
     this.lineItems.push(lineItemGroup);
   }
@@ -117,6 +127,8 @@ export class OrderFormComponent implements OnInit {
   onSubmit(): void {
     if (this.orderForm.valid) {
       const orderData: Order = this.orderForm.value;
+      console.log('Form Data:', orderData); // Añade este log
+      console.log('Line Items:', orderData.line_items); // Y este
       this.apiService.createOrder(orderData).subscribe({
         next: (data) => {
           this.toastr.success('El pedido fue creado correctamente', 'Éxito');

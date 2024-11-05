@@ -37,6 +37,7 @@ export interface LineItem {
   quantity: number;
   subtotal: string;
   total: string;
+  codigoProveedor: string;
 }
 
 export interface Order {

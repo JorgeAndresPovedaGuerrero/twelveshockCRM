@@ -2,6 +2,7 @@
   <div class="header">
     <h2>Lista de Gastos</h2>
     <a routerLink="/gastos/nuevo" class="btn btn-primary btn-agregar">Agregar Gasto</a>
+    <button routerLink="/gastos/estadisticas" class="btn btn-primary btn-estadisticas">Ver estadísticas</button>
   </div>
 
   <div class="filters">
@@ -36,7 +37,7 @@
     </thead>
     <tbody>
       <tr *ngFor="let gasto of gastos">
-        <td>{{ gasto.fecha | date:'shortDate' }}</td>
+        <td>{{ gasto.fecha| date:'shortDate' }}</td>
         <td>{{ gasto.valor | currency }}</td>
         <td>{{ gasto.concepto }}</td>
         <td>
