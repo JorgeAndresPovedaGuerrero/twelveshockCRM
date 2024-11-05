@@ -23,6 +23,7 @@
     "bootstrap": "^5.3.3",
     "chart.js": "^4.4.6",
     "chartjs-adapter-date-fns": "^3.0.0",
+    "date-fns": "^4.1.0",
     "jspdf": "^2.5.1",
     "jspdf-autotable": "^3.8.2",
     "ngx-bootstrap": "^18.0.2",
