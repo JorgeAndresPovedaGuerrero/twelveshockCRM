@@ -1,8 +1,8 @@
-<header class="app-header app-header-container">
+<header class="app-header" *ngIf="authService.isLoggedIn; else guestHeader">
   <h2>TwelveShock</h2>
   <div class="button-group">
-    <button (click)="navigateTo('list')">Pedidos</button>
-    <button (click)="navigateTo('create')">
+    <button (click)="navigateTo('orders')">Pedidos</button>
+    <button (click)="navigateTo('order-form')">
       Crear Pedido <i class="fas fa-plus"></i>
     </button>
     <button (click)="navigateTo('gastos')">
@@ -12,7 +12,19 @@
       Proveedores <i class="fas fa-money-bill-wave"></i>
     </button>
   </div>
+  <button class="logout-button" (click)="logout()">Cerrar Sesión</button>
 </header>
+
+<ng-template #guestHeader>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+      <h2>TwelveShock</h2>
+      <form (ngSubmit)="login()" *ngIf="!authService.isLoggedIn">
+        <!-- Contenido del formulario de inicio de sesión -->
+      </form>
+    </div>
+  </nav>
+</ng-template>
 
 <!-- Link para incluir Font Awesome -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">

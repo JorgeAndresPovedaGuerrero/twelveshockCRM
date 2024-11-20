@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { AuthService } from '../services/auth.service';
+import { LoginCredentials } from '../models/auth.model';  // Asegúrate de tener esta interfaz
 
 @Component({
   selector: 'app-header',
@@ -7,17 +9,31 @@ import { Router } from '@angular/router';
   styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent {
-  constructor(private router: Router) {}
+  credentials: LoginCredentials = { username: '', password: '' }; // Definir las credenciales
+
+  constructor(
+    public authService: AuthService,
+    private router: Router
+  ) {}
+
+  // Método de login
+  login(): void {
+    this.authService.login(this.credentials).subscribe(
+      response => {
+        this.router.navigate(['/']);  // Redirigir a la página principal o a donde necesites
+      },
+      error => {
+        console.error('Error de login', error);  // Manejo del error
+      }
+    );
+  }
 
   navigateTo(page: string): void {
-    if (page === 'list') {
-      this.router.navigate(['/orders']);
-    } else if (page === 'create') {
-      this.router.navigate(['/order-form']);
-    } else if (page === 'gastos') {
-      this.router.navigate(['/gastos']);
-    } else if (page === 'proveedor') {
-      this.router.navigate(['/proveedor']);
-    }
+    this.router.navigate([`/${page}`]);
+  }
+
+  logout(): void {
+    this.authService.logout();
+    this.router.navigate(['/login']);
   }
 }

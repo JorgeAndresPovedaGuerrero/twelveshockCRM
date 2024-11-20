@@ -8,22 +8,63 @@ import { GastoFormComponent } from './gasto/gasto-form.component';
 import { ProveedorListComponent } from './proveedor/proveedor-list.component';
 import { ProveedorFormComponent } from './proveedor/proveedor-form.component';
 import { EstadisticasComponent } from './gasto/Estadisticas/estadisticas.component';
+import { LoginComponent } from './components/login/login.component';
+import { AuthGuard } from './guards/auth.guard';
 
 const routes: Routes = [
-  { path: 'orders', component: OrderListComponent },
-  { path: 'order-form', component: OrderFormComponent },
-  { path: '', redirectTo: '/orders', pathMatch: 'full' },
-  { path: 'order-logs/:id', component: OrderLogsComponent },
-  //Gastos
-  { path: 'gastos', component: GastoListComponent },
-  { path: 'gastos/nuevo', component: GastoFormComponent },
-  { path: 'gastos/editar/:id', component: GastoFormComponent },
-  //{ path: '**', redirectTo: '/orders' }
-  { path: 'proveedor', component: ProveedorListComponent },
-  { path: 'proveedor/nuevo', component: ProveedorFormComponent },
-  { path: 'proveedor/editar/:id', component: ProveedorFormComponent },
-  //Estadisticas de gastos
-  { path: 'gastos/estadisticas', component: EstadisticasComponent }
+  { path: 'login', component: LoginComponent },
+  {
+    path: 'orders',
+    component: OrderListComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'order-form',
+    component: OrderFormComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'order-logs/:id',
+    component: OrderLogsComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'gastos',
+    component: GastoListComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'gastos/nuevo',
+    component: GastoFormComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'gastos/editar/:id',
+    component: GastoFormComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'proveedor',
+    component: ProveedorListComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'proveedor/nuevo',
+    component: ProveedorFormComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'proveedor/editar/:id',
+    component: ProveedorFormComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'gastos/estadisticas',
+    component: EstadisticasComponent,
+    canActivate: [AuthGuard]
+  },
+  { path: '', redirectTo: '/login', pathMatch: 'full' },
+  { path: '**', redirectTo: '/login' }
 ];
 
 @NgModule({
