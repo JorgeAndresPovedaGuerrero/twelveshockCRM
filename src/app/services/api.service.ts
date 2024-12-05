@@ -40,7 +40,7 @@ export class ApiService {
     return this.http.post<Order>(this.baseUrl, order);
   }
 
-  updateOrder(id: number, order: Order): Observable<Order> {  // Cambia a number
+  updateOrder(id: number, order: Order): Observable<Order> {
     return this.http.put<Order>(`${this.baseUrl}/${id}`, order);
   }
 

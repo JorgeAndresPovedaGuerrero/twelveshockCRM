@@ -10,6 +10,8 @@ import { Order } from '../models/order';
   styleUrls: ['./order-edit-modal.component.scss']
 })
 export class OrderEditModalComponent implements OnInit {
+
+  selectedImageIndex: number | null = null;
   @Input() orderId: number | undefined;
   editOrderForm: FormGroup;
   proveedores: any[] = [];
@@ -157,7 +159,9 @@ export class OrderEditModalComponent implements OnInit {
       quantity: [item?.quantity || ''],
       subtotal: [item?.subtotal || ''],
       total: [item?.total || ''],
-      codigoProveedor: [item?.codigoProveedor || '']
+      codigoProveedor: [item?.codigoProveedor || ''],
+      imagen: [item?.imagen || null],  // Cambia a null por defecto
+      tieneImagen: [!!item?.imagen]  // Convierte a booleano
     });
   }
 
@@ -174,11 +178,43 @@ export class OrderEditModalComponent implements OnInit {
     // Update the order total
     this.editOrderForm.patchValue({ total });
   }
+
+
+  onImageUpload(event: Event, index: number): void {
+    const input = event.target as HTMLInputElement;
+
+    if (input.files && input.files[0]) {
+      const file = input.files[0];
+      const reader = new FileReader();
+
+      reader.onload = () => {
+        // Verifica que el índice exista en el FormArray
+        if (index < this.lineItems.length) {
+          this.lineItems.at(index).patchValue({
+            imagen: reader.result as string,
+            tieneImagen: true
+          });
+        }
+      };
+
+      reader.readAsDataURL(file);
+    }
+  }
+
   saveChanges(): void {
     if (this.editOrderForm.valid) {
       const updatedOrder = { ...this.editOrderForm.value };
 
+      // Asegúrate de que las imágenes base64 estén bien asignadas en los productos
+      updatedOrder.line_items = updatedOrder.line_items.map((item: any) => ({
+        ...item,
+        imagen: item.tieneImagen ? (item.imagen || '') : ''
+      }));
+
       if (this.orderId) {
+        console.log('Order ID:', this.orderId);
+        console.log('Updated order payload:', updatedOrder);
+
         this.apiService.updateOrder(this.orderId, updatedOrder).subscribe(
           (response) => {
             console.log('Order updated successfully:', response);
@@ -186,6 +222,9 @@ export class OrderEditModalComponent implements OnInit {
           },
           (error) => {
             console.error('Error updating order:', error);
+            if (error.status === 404) {
+              console.error('El recurso no fue encontrado. Verifica el ID y el endpoint.');
+            }
           }
         );
       } else {
@@ -195,7 +234,6 @@ export class OrderEditModalComponent implements OnInit {
       console.log('Form is invalid');
     }
   }
-
   deleteOrder(): void {
     if (this.orderId) {
       this.apiService.deleteOrder(this.orderId).subscribe(
@@ -253,7 +291,9 @@ export class OrderEditModalComponent implements OnInit {
       quantity: [0, Validators.min(1)],
       subtotal: ['0', Validators.pattern('^[0-9]*$')],
       total: ['0', Validators.pattern('^[0-9]*$')],
-      codigoProveedor: ['']
+      codigoProveedor: [''],
+      imagen: [null],  // Añade el campo de imagen
+      tieneImagen: [false]  // Añade el flag de imagen
     });
     this.lineItems.push(lineItemGroup);
   }
@@ -261,4 +301,17 @@ export class OrderEditModalComponent implements OnInit {
   removeLineItem(index: number): void {
     this.lineItems.removeAt(index);
   }
+    // Método para abrir el modal de imagen
+    openImageModal(index: number): void {
+      if (this.lineItems.at(index).get('imagen')?.value) {
+        this.selectedImageIndex = index;
+      }
+    }
+
+    // Método para cerrar el modal de imagen
+    closeImageModal(): void {
+      this.selectedImageIndex = null;
+    }
 }
+
+

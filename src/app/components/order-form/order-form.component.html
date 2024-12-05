@@ -217,11 +217,19 @@
         <input type="number" formControlName="product_id" />
       </label>
       <label>
+        Imagen del Producto:
+        <input type="file"
+               (change)="onImageUpload($event, i)"
+               accept=".jpg,.jpeg,.png"
+        />
+        <span *ngIf="lineItems.at(i).get('tieneImagen')?.value" class="imagen-agregada">✓</span>
+      </label>
+      <label>
         Cantidad:
         <input type="number" formControlName="quantity" />
       </label>
       <label>
-        Subtotal:
+        Precio:
         <input type="text" formControlName="subtotal" />
       </label>
       <label>

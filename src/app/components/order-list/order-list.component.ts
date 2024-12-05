@@ -16,6 +16,8 @@ import { Router } from '@angular/router';
   styleUrls: ['./order-list.component.scss']
 })
 export class OrderListComponent implements OnInit, OnDestroy {
+  selectedImageOrder: any = null;
+  selectedImageIndex: number | null = null;
   orders: Order[] = [];
   filteredOrders: Order[] = [];
   statusOptions: string[] = ['processing', 'en proceso', 'pendiente saldo', 'cancelado', 'enviado', 'finalizado'];
@@ -339,6 +341,20 @@ Ciudad: ${shippingCity}
     viewLogs(orderId: number) {
     this.router.navigate(['/order-logs', orderId]);
   }
+
+    // Método para abrir el modal de imagen
+    openImageModal(order: any, index: number): void {
+      if (order.line_items[index].imagen) {
+        this.selectedImageOrder = order;
+        this.selectedImageIndex = index;
+      }
+    }
+
+    // Método para cerrar el modal de imagen
+    closeImageModal(): void {
+      this.selectedImageOrder = null;
+      this.selectedImageIndex = null;
+    }
 
 
 }

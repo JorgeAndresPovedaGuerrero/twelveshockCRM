@@ -115,9 +115,28 @@ export class OrderFormComponent implements OnInit {
       quantity: [0, Validators.min(1)],
       subtotal: ['0', Validators.pattern('^[0-9]*$')],
       total: ['0', Validators.pattern('^[0-9]*$')],
-      codigoProveedor: ['']
+      codigoProveedor: [''],
+      imagen: [''],
+      tieneImagen: [false]
     });
     this.lineItems.push(lineItemGroup);
+  }
+
+  onImageUpload(event: any, index: number) {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e: any) => {
+        const base64Image = e.target.result;
+
+        // Actualizar el FormArray con la imagen
+        this.lineItems.at(index).patchValue({
+          imagen: base64Image,
+          tieneImagen: true
+        });
+      };
+      reader.readAsDataURL(file);
+    }
   }
 
   removeLineItem(index: number): void {

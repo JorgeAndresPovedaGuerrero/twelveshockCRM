@@ -38,6 +38,8 @@ export interface LineItem {
   subtotal: string;
   total: string;
   codigoProveedor: string;
+  imagen?: string; // Nuevo campo para la imagen
+  tieneImagen?: boolean; // Indica si ya se agregó imagen
 }
 
 export interface Order {

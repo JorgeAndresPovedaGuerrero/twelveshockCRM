@@ -72,7 +72,8 @@
               <div class="flex-container">
                 <div class="mb-3">
                   <label for="billing_id_cliente" class="form-label">Id Cliente</label>
-                  <input id="billing_id_cliente" formControlName="id_cliente" type="text" class="form-control" readonly />
+                  <input id="billing_id_cliente" formControlName="id_cliente" type="text" class="form-control"
+                    readonly />
                 </div>
                 <div class="mb-3">
                   <label for="billing_first_name" class="form-label">Nombres</label>
@@ -84,7 +85,8 @@
                 </div>
                 <div class="mb-3">
                   <label for="billing_identification" class="form-label">Identificación</label>
-                  <input id="billing_identification" formControlName="identification" type="text" class="form-control" />
+                  <input id="billing_identification" formControlName="identification" type="text"
+                    class="form-control" />
                 </div>
               </div>
               <div class="flex-container">
@@ -145,7 +147,8 @@
                 </div>
                 <div class="mb-3">
                   <label for="billing_identification" class="form-label">Identificación</label>
-                  <input id="billing_identification" formControlName="identification" type="text" class="form-control" />
+                  <input id="billing_identification" formControlName="identification" type="text"
+                    class="form-control" />
                 </div>
               </div>
               <div class="flex-container">
@@ -179,7 +182,8 @@
                 </div>
                 <div class="mb-3">
                   <label for="shipping_price_shipping" class="form-label">Precio Envío</label>
-                  <input id="shipping_price_shipping" formControlName="price_shipping" type="text" class="form-control" />
+                  <input id="shipping_price_shipping" formControlName="price_shipping" type="text"
+                    class="form-control" />
                 </div>
               </div>
             </fieldset>
@@ -203,7 +207,30 @@
               </div>
               <div class="mb-3">
                 <label for="line_item_product_id_{{i}}" class="form-label">ID de producto</label>
-                <input id="line_item_product_id_{{i}}" formControlName="product_id" type="number" class="form-control" />
+                <input id="line_item_product_id_{{i}}" formControlName="product_id" type="number"
+                  class="form-control" />
+              </div>
+              <!-- Imagen del Producto -->
+              <div class="mb-3">
+                <label class="form-label">Imagen del Producto</label>
+
+                <!-- Previsualización de la imagen existente -->
+                <div class="image-preview-container">
+                  <img *ngIf="lineItems.at(i).get('imagen')?.value" [src]="lineItems.at(i).get('imagen')?.value"
+                    alt="Imagen del Producto" class="image-preview" (click)="openImageModal(i)" />
+                </div>
+
+                <!-- Input para cargar nueva imagen -->
+                <input type="file" id="line_item_image_{{i}}" class="form-control" (change)="onImageUpload($event, i)"
+                  accept=".jpg,.jpeg,.png" />
+              </div>
+              <!-- Modal para imagen ampliada -->
+              <div *ngIf="selectedImageIndex !== null" class="image-modal">
+                <div class="image-modal-content">
+                  <span class="close-button" (click)="closeImageModal()">&times;</span>
+                  <img [src]="lineItems.at(selectedImageIndex).get('imagen')?.value" alt="Imagen Ampliada"
+                    class="expanded-image" />
+                </div>
               </div>
               <div class="mb-3">
                 <label for="line_item_quantity_{{i}}" class="form-label">Cantidad</label>
@@ -219,7 +246,7 @@
               </div>
               <label for="line_item_codigoProveedor_{{i}}" class="form-label">
                 Codigo Proveedor:
-                <select formControlName="codigoProveedor">  <!-- Cambiado de codigo_proveedor a codigoProveedor -->
+                <select formControlName="codigoProveedor"> <!-- Cambiado de codigo_proveedor a codigoProveedor -->
                   <option value="">Seleccione un proveedor</option>
                   <option *ngFor="let proveedor of proveedores" [ngValue]="proveedor.codigo">
                     {{ proveedor.codigo }}

@@ -21,9 +21,10 @@
 
       <button (click)="filterOrders()">Filtrar</button>
 
-        <!-- Campo de búsqueda por ID -->
+      <!-- Campo de búsqueda por ID -->
       <label for="orderId">ID Pedido:</label>
-      <input id="orderId" type="text" [(ngModel)]="searchOrderId" (keyup.enter)="searchOrderById()" placeholder="Buscar Pedido">
+      <input id="orderId" type="text" [(ngModel)]="searchOrderId" (keyup.enter)="searchOrderById()"
+        placeholder="Buscar Pedido">
       <button (click)="searchOrderById()">Buscar por ID</button>
 
       <input type="text" [(ngModel)]="searchClientId" (keyup.enter)="searchByClientId()" placeholder="Id CLiente">
@@ -33,7 +34,8 @@
     <div class="filters">
       <label>
         Buscar por Nombre, Teléfono o Identificación:
-        <input type="text" [(ngModel)]="searchTerm" (input)="onSearchTermChanged(searchTerm)" placeholder="Buscar por nombre, teléfono o identificación">
+        <input type="text" [(ngModel)]="searchTerm" (input)="onSearchTermChanged(searchTerm)"
+          placeholder="Buscar por nombre, teléfono o identificación">
       </label>
       <button (click)="limpiarFiltros()" class="btn btn-secondary">Limpiar filtros</button>
     </div>
@@ -56,7 +58,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let order of filteredOrders"> <!-- Cambiar orders por filteredOrders -->
+      <tr *ngFor="let order of filteredOrders">
         <td>{{ order.id }}</td>
         <td>
           <div class="status-container">
@@ -85,14 +87,14 @@
              {{ order.billing.phone2 }}">
             {{ order.billing.first_name }} {{ order.billing.last_name }}
             {{ order.billing.id_cliente }}
-            <br/>
-            <br/>
+            <br />
+            <br />
           </span>
         </td>
         <td>
-          {{ order.shipping.first_name }} {{ order.shipping.last_name }}<br/>
-          {{ order.shipping.address_1 }}<br/>
-          {{ order.shipping.city }}, {{ order.shipping.state }} {{ order.shipping.postcode }}<br/>
+          {{ order.shipping.first_name }} {{ order.shipping.last_name }}<br />
+          {{ order.shipping.address_1 }}<br />
+          {{ order.shipping.city }}, {{ order.shipping.state }} {{ order.shipping.postcode }}<br />
           {{ order.shipping.country }}
           {{ order.shipping.price_shipping }}
           {{ order.billing.phone}}
@@ -102,13 +104,20 @@
           <table>
             <thead>
               <tr>
+                <th>Imagen</th>
                 <th>Nombre de Producto</th>
                 <th>Cantidad</th>
                 <th>Total</th>
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let item of order.line_items">
+              <tr *ngFor="let item of order.line_items; let i = index">
+                <td>
+                  <img *ngIf="item.imagen" [src]="item.imagen" alt="{{ item.name }}"
+                    style="max-width: 100px; max-height: 100px; object-fit: contain; cursor: pointer;"
+                    (click)="openImageModal(order, i)">
+                  <span *ngIf="!item.imagen">Sin imagen</span>
+                </td>
                 <td>{{ item.name }}</td>
                 <td>{{ item.quantity }}</td>
                 <td>{{ item.total }}</td>
@@ -116,6 +125,18 @@
             </tbody>
           </table>
         </td>
+        <!-- Modal para imagen ampliada -->
+        <div *ngIf="selectedImageOrder && selectedImageIndex !== null" class="image-modal">
+          <div class="image-modal-content">
+            <span class="close-button" (click)="closeImageModal()">&times;</span>
+            <img [src]="selectedImageOrder.line_items[selectedImageIndex].imagen" alt="Imagen Ampliada"
+              class="expanded-image" />
+            <div class="image-details">
+              <p>{{ selectedImageOrder.line_items[selectedImageIndex].name }}</p>
+              <p>Pedido #{{ selectedImageOrder.id }}</p>
+            </div>
+          </div>
+        </div>
         <td> <!-- Botón de edición dentro del bucle -->
           <button (click)="openEditOrderModal(order)">
             Editar<i class="fas fa-edit"></i></button>
@@ -125,7 +146,8 @@
         <td>
           <div>
             <label>
-              <input type="checkbox" (change)="togglePaymentType(order)" [checked]="order.shipping.paymentType === 'Contraentrega'">
+              <input type="checkbox" (change)="togglePaymentType(order)"
+                [checked]="order.shipping.paymentType === 'Contraentrega'">
               Contraentrega
             </label>
           </div>
@@ -141,4 +163,3 @@
     </tbody>
   </table>
 </div>
-

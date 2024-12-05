@@ -146,7 +146,8 @@ export class PdfService {
       },
     });
 
-    // Guardar el PDF
-    doc.save('shipping-guide.pdf');
+    // Guardar el PDF con el nombre personalizado
+    const sanitizedIdentification = recipientData.identification.replace(/[^a-zA-Z0-9-_]/g, '_');
+    doc.save(`shipping-guide_${sanitizedIdentification}.pdf`);
   }
 }
