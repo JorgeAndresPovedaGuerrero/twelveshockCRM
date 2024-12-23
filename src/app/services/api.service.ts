@@ -12,14 +12,14 @@ import { Proveedor } from '../models/proveedor';
   providedIn: 'root'
 })
 export class ApiService {
-  //private baseUrl = 'http://localhost:8080/data/orders';
-  //private baseUrlLogs = 'http://localhost:8080/api/logs/order/';
-  //private baseUrlGastos = 'http://localhost:8080/gastos';
-  //private baseUrlProveedor = 'http://localhost:8080/proveedor';
-  private baseUrl = 'https://twelveshockcrmb.onrender.com/data/orders';
-  private baseUrlLogs = 'https://twelveshockcrmb.onrender.com/api/logs/order';
-  private baseUrlGastos = 'https://twelveshockcrmb.onrender.com/gastos';
-  private baseUrlProveedor = 'https://twelveshockcrmb.onrender.com/proveedor';
+  private baseUrl = 'http://localhost:8080/data/orders';
+  private baseUrlLogs = 'http://localhost:8080/api/logs/order/';
+  private baseUrlGastos = 'http://localhost:8080/gastos';
+  private baseUrlProveedor = 'http://localhost:8080/proveedor';
+  //private baseUrl = 'https://twelveshockcrmb.onrender.com/data/orders';
+  //private baseUrlLogs = 'https://twelveshockcrmb.onrender.com/api/logs/order';
+  //private baseUrlGastos = 'https://twelveshockcrmb.onrender.com/gastos';
+  //private baseUrlProveedor = 'https://twelveshockcrmb.onrender.com/proveedor';
   constructor(private http: HttpClient) {}
 
   getOrders(filters: { status?: string; startDate?: string; endDate?: string } = {}): Observable<Order[]> {

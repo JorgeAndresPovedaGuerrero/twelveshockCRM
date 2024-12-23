@@ -8,8 +8,8 @@ import { User, LoginCredentials, TokenResponse } from '../models/auth.model';
   providedIn: 'root'
 })
 export class AuthService {
-  //private readonly API_URL = 'http://localhost:8080/auth';
-  private readonly API_URL = 'https://twelveshockcrmb.onrender.com/auth';
+  private readonly API_URL = 'http://localhost:8080/auth';
+  //private readonly API_URL = 'https://twelveshockcrmb.onrender.com/auth';
   private readonly TOKEN_KEY = 'jwt_token';
   private currentUserSubject = new BehaviorSubject<User | null>(null);
   private isLoggingInSubject = new BehaviorSubject<boolean>(false);
