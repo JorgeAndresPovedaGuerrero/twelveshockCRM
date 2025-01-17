@@ -277,12 +277,14 @@ limpiarFiltros():void{
       const shippingName = `${order.shipping.first_name} ${order.shipping.last_name}`.toLowerCase();
       const phone = order.billing.phone ? order.billing.phone.toLowerCase() : '';
       const phone2 = order.billing.phone2 ? order.billing.phone2.toLowerCase() : '';
+      const id = order.id ? order.id : '';
       const identification = order.shipping.identification ? order.shipping.identification.toLowerCase() : '';
 
       return billingName.includes(searchTermLower) ||
              shippingName.includes(searchTermLower) ||
              phone.includes(searchTermLower) ||
              phone2.includes(searchTermLower) ||
+             id.toString().includes(searchTermLower) ||
              identification.includes(searchTermLower);
     });
 
