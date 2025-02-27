@@ -234,15 +234,19 @@ export class OrderFormComponent implements OnInit {
   }
 
   getNextOrderId(): void {
-    this.apiService.getHighestOrderId().subscribe({
-      next: (highestId: number) => {
-        this.orderForm.patchValue({ id: highestId + 1 });
+    this.apiService.getHighestOrderId(true).subscribe({
+      next: (orderId) => {
+          console.log(orderId); // Verifica que el valor se muestra en la consola
+
+          // Asignamos el valor al campo correspondiente en el formulario
+          this.orderForm.patchValue({
+              id: orderId
+          });
       },
       error: (error) => {
-        console.error('Error fetching highest order ID:', error);
-        this.toastr.error('No se pudo obtener el ID del pedido', 'Error');
+          console.error('Error fetching highest order ID', error);
       }
-    });
+  });
   }
 
   loadClientId(): void {

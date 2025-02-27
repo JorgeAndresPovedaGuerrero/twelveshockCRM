@@ -48,9 +48,9 @@ export class ApiService {
     return this.http.get<Order>(`${this.baseUrl}/${id}`);
   }
 
-  getHighestOrderId(): Observable<number> {
-    return this.http.get<number>(`${this.baseUrl}/highest-id`);
-  }
+  getHighestOrderId(isManual: boolean): Observable<number> {
+    return this.http.get<number>(`${this.baseUrl}/highest-id?isManual=${isManual}`);
+}
 
   getClientId(): Observable<number> {
     return this.http.get<number>(`${this.baseUrl}/highest-client-id`); // Ajusta la URL según tu endpoint real

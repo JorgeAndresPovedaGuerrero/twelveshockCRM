@@ -89,28 +89,41 @@ export class OrderListComponent implements OnInit, OnDestroy {
     });
   }
 
-filterOrders(): void {
-  const possibleStatuses = this.getPossibleStatuses(this.selectedStatus);
+  filterOrders(): void {
+    const possibleStatuses = this.getPossibleStatuses(this.selectedStatus);
 
-  // Filtrar por estado
-  let filtered = this.orders.filter(order =>
-    possibleStatuses.length === 0 || possibleStatuses.includes(order.status.trim().toLowerCase())
-  );
+    // Filtrar por estado
+    let filtered = this.orders.filter(order =>
+      possibleStatuses.length === 0 || possibleStatuses.includes(order.status.trim().toLowerCase())
+    );
 
-  // Filtrar por rango de fechas
-  if (this.startDate && this.endDate) {
-    const start = new Date(this.startDate).getTime();
-    const end = new Date(this.endDate).getTime();
+    // Filtrar por rango de fechas
+    if (this.startDate && this.endDate) {
+      // Convertir fechas a objetos Date y ajustar la hora
+      let start = new Date(this.startDate);
+      start.setHours(0, 0, 0, 0);
+      start.setDate(start.getDate() + 1);
 
-    filtered = filtered.filter(order => {
-      const orderDate = new Date(order.date_created).getTime();
-      return orderDate >= start && orderDate <= end;
-    });
+      let end = new Date(this.endDate);
+      end.setHours(23, 59, 59, 999);
+      end.setDate(end.getDate() + 1);
+
+      console.log("Fecha de fin (antes de ajuste):", end);
+      console.log("Fecha de inicio (antes de ajuste):", start);
+
+      // Convertir a UTC
+      const startUtc = new Date(Date.UTC(start.getFullYear(), start.getMonth(), start.getDate()));
+      const endUtc = new Date(Date.UTC(end.getFullYear(), end.getMonth(), end.getDate(), 23, 59, 59, 999));
+
+      filtered = filtered.filter(order => {
+        const orderDate = new Date(order.date_created);
+        return orderDate.getTime() >= startUtc.getTime() && orderDate.getTime() <= endUtc.getTime();
+      });
+    }
+
+    this.filteredOrders = filtered;
+    this.cdr.detectChanges();  // Refrescar vista
   }
-
-  this.filteredOrders = filtered;
-  this.cdr.detectChanges();  // Refrescar vista
-}
 
 limpiarFiltros():void{
   this.selectedStatus = '';
@@ -331,6 +344,7 @@ Cédula: ${billingIdentification}
 Teléfono: ${shippingPhone}
 Dirección: ${shippingAddress} ${shippingAddress2}
 Ciudad: ${shippingCity}
+Departamento: ${shippingState}
     `;
 
     navigator.clipboard.writeText(shippingText).then(() => {
