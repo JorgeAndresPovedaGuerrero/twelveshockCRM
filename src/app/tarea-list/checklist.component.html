@@ -1,0 +1,49 @@
+<!-- Modificación del archivo checklist.component.html -->
+<div class="container">
+  <div class="header">
+    <h2>Check List Diario</h2>
+    <div class="fecha-container">
+      <label for="fechaActual">Fecha:</label>
+      <input type="date" id="fechaActual" [(ngModel)]="fechaActual" (change)="cargarProgresoDelDia()">
+    </div>
+  </div>
+
+  <div class="progress-indicator" *ngIf="showProgressBar">
+    <div class="progress-text">
+      Tareas del día: {{ resumenProgreso.tareasCompletadas }}/{{ resumenProgreso.totalTareas }}
+      ({{ resumenProgreso.porcentajeCompletado.toFixed(0) }}%)
+    </div>
+    <div class="progress">
+        <div class="progress-bar"
+        [style.width]="resumenProgreso.porcentajeCompletado + '%'"
+        [style.backgroundColor]="getProgressBarColor(resumenProgreso.porcentajeCompletado)">
+ </div>
+    </div>
+  </div>
+
+  <!-- Mensaje cuando no hay tareas -->
+  <div class="no-tasks-message" *ngIf="tareasConEstado.length === 0">
+    <p>No hay tareas disponibles para mostrar.</p>
+  </div>
+
+  <div class="task-list" *ngIf="tareasConEstado.length > 0">
+    <div class="task-item" *ngFor="let tarea of tareasConEstado">
+      <div class="task-info">
+        <h3>{{ tarea.nombre }}</h3>
+        <p>{{ tarea.descripcion }}</p>
+      </div>
+      <div class="task-status">
+        <select [(ngModel)]="tarea.estado" (change)="actualizarEstadoTarea(tarea)">
+          <option [value]="0">No completada</option>
+          <option [value]="1">Completada</option>
+          <option [value]="2">No aplica</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- Siempre mostrar las opciones de administración, independientemente de si hay tareas o no -->
+  <div class="admin-options">
+    <a routerLink="/checklist/tareas" class="btn btn-primary">Gestionar tareas</a>
+  </div>
+</div>

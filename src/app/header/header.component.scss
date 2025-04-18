@@ -136,3 +136,47 @@ button:disabled {
 .logout-button:hover {
   background-color: #c0392b;
 }
+
+.progress-indicator {
+  margin-left: 15px;
+  width: 300px;
+
+  .progress-text {
+    font-size: 12px;
+    margin-bottom: 3px;
+    white-space: nowrap;
+  }
+
+  .progress {
+    height: 6px;
+    border-radius: 3px;
+    background-color: #f0f0f0;
+    margin-bottom: 0;
+  }
+}
+
+.progress-indicator {
+  margin-left: 15px;
+  width: 300px;
+}
+
+.progress-text {
+  font-size: 12px;
+  margin-bottom: 3px;
+  white-space: nowrap;
+}
+
+.progress {
+  height: 6px;
+  border-radius: 3px;
+  background-color: #f0f0f0;
+  margin-bottom: 0;
+  overflow: hidden; /* Importante para que no se salga la barra */
+}
+
+.progress-bar {
+  height: 100%;
+  transition: width 0.3s ease;
+}
+
+

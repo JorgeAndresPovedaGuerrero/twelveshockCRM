@@ -10,6 +10,9 @@ import { ProveedorFormComponent } from './proveedor/proveedor-form.component';
 import { EstadisticasComponent } from './gasto/Estadisticas/estadisticas.component';
 import { LoginComponent } from './components/login/login.component';
 import { AuthGuard } from './guards/auth.guard';
+import { TareaListComponent } from './tarea-list/tarea-list.component';
+import { TareaFormComponent } from './tarea-list/tarea-form.component';
+import { ChecklistComponent } from './tarea-list/checklist.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -63,6 +66,11 @@ const routes: Routes = [
     component: EstadisticasComponent,
     canActivate: [AuthGuard]
   },
+     // Nuevas rutas para el checklist
+  { path: 'checklist', component: ChecklistComponent, canActivate: [AuthGuard] },
+  { path: 'checklist/tareas', component: TareaListComponent, canActivate: [AuthGuard] },
+  { path: 'checklist/tareas/nuevo', component: TareaFormComponent, canActivate: [AuthGuard] },
+  { path: 'checklist/tareas/editar/:id', component: TareaFormComponent, canActivate: [AuthGuard] },
   { path: '', redirectTo: '/login', pathMatch: 'full' },
   { path: '**', redirectTo: '/login' }
 ];

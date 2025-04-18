@@ -23,6 +23,9 @@ import { ProveedorListComponent } from './proveedor/proveedor-list.component';
 import { EstadisticasComponent } from './gasto/Estadisticas/estadisticas.component';
 import { GastoChartComponent } from './gasto/gasto-chart/gasto-chart.component';
 import { LoginComponent } from './components/login/login.component';
+import { TareaListComponent } from './tarea-list/tarea-list.component';
+import { TareaFormComponent } from './tarea-list/tarea-form.component';
+import { ChecklistComponent } from './tarea-list/checklist.component';
 
 // Services
 import { ApiService } from './services/api.service';
@@ -47,6 +50,9 @@ import { AuthInterceptor } from './interceptors/auth.interceptor';
     OrderEditModalComponent,
     EstadisticasComponent,
     GastoChartComponent,
+    TareaListComponent,
+    TareaFormComponent,
+    ChecklistComponent
   ],
   imports: [
     BrowserModule,

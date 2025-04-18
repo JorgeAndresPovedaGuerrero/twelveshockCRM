@@ -1,0 +1,24 @@
+<div class="form-container">
+  <h2>{{ isEditing ? 'Editar Tarea' : 'Agregar Tarea' }}</h2>
+  <form (ngSubmit)="guardarTarea()">
+    <div class="form-group">
+      <label for="nombre">Nombre:</label>
+      <input type="text" id="nombre" [(ngModel)]="tarea.nombre" name="nombre" required>
+    </div>
+    <div class="form-group">
+      <label for="descripcion">Descripción:</label>
+      <textarea id="descripcion" [(ngModel)]="tarea.descripcion" name="descripcion" rows="3"></textarea>
+    </div>
+    <div class="form-group">
+      <label for="activa">Estado:</label>
+      <select id="activa" [(ngModel)]="tarea.activa" name="activa">
+        <option [ngValue]="true">Activa</option>
+        <option [ngValue]="false">Inactiva</option>
+      </select>
+    </div>
+    <div class="button-group">
+      <button class="primary-button" type="submit">{{ isEditing ? 'Actualizar' : 'Guardar' }}</button>
+      <button class="secondary-button" type="button" routerLink="/checklist/tareas">Cancelar</button>
+    </div>
+  </form>
+</div>

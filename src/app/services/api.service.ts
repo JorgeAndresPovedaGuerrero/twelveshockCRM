@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse , HttpParams } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
+import { Observable, throwError, Subject } from 'rxjs';
 import { Order, Billing } from '../models/order';
 import { LogProduct } from '../models/logProduct';
 import { catchError, tap } from 'rxjs/operators';
 import { Gasto } from '../models/gasto';
 import { Proveedor } from '../models/proveedor';
+import { Tarea, ProgresoTarea, ResumenProgreso } from '../models/checklist.model';
 
 
 @Injectable({
@@ -20,6 +21,11 @@ export class ApiService {
   //private baseUrlLogs = 'https://twelveshockcrmb.onrender.com/api/logs/order';
   //private baseUrlGastos = 'https://twelveshockcrmb.onrender.com/gastos';
   //private baseUrlProveedor = 'https://twelveshockcrmb.onrender.com/proveedor';
+  private baseUrlTareas = 'http://localhost:8080/tareas';
+  private baseUrlChecklist = 'http://localhost:8080/checklist';
+
+  private tareaActualizadaSubject = new Subject<void>();
+
   constructor(private http: HttpClient) {}
 
   getOrders(filters: { status?: string; startDate?: string; endDate?: string } = {}): Observable<Order[]> {
@@ -162,6 +168,81 @@ export class ApiService {
 
     return this.http.get<Proveedor[]>(this.baseUrlProveedor + '/buscar', { params })
       .pipe(catchError(this.handleError));
+  }
+
+    // ||------------------------- ||
+  // Metodos para el apartado de Checklist
+  // ||------------------------- ||
+
+  obtenerHistorialProgreso(fechaInicio: string, fechaFin: string): Observable<any> {
+    return this.http.get<any>(`${this.baseUrlTareas}/checklist/historial?fechaInicio=${fechaInicio}&fechaFin=${fechaFin}`);
+  }
+
+  obtenerTareas(): Observable<Tarea[]> {
+    return this.http.get<Tarea[]>(this.baseUrlTareas).pipe(
+      catchError(this.handleError)
+    );
+  }
+
+  obtenerTareasActivas(): Observable<Tarea[]> {
+    return this.http.get<Tarea[]>(`${this.baseUrlTareas}/activas`).pipe(
+      catchError(this.handleError)
+    );
+  }
+
+  guardarTarea(tarea: Tarea): Observable<Tarea> {
+    return this.http.post<Tarea>(this.baseUrlTareas, tarea).pipe(
+      catchError(this.handleError)
+    );
+  }
+
+  actualizarTarea(id: string, tarea: Tarea): Observable<Tarea> {
+    return this.http.put<Tarea>(`${this.baseUrlTareas}/${id}`, tarea).pipe(
+      catchError(this.handleError)
+    );
+  }
+
+  eliminarTarea(id: string): Observable<any> {
+    return this.http.delete(`${this.baseUrlTareas}/${id}`).pipe(
+      catchError(this.handleError)
+    );
+  }
+
+  // Métodos para Progreso de Tareas (checklist)
+  obtenerProgresoPorFecha(fecha: string): Observable<ProgresoTarea> {
+    return this.http.get<ProgresoTarea>(`${this.baseUrlChecklist}/progreso/${fecha}`).pipe(
+      catchError(this.handleError)
+    );
+  }
+
+  obtenerResumenProgreso(fecha: string): Observable<ResumenProgreso> {
+    return this.http.get<ResumenProgreso>(`${this.baseUrlChecklist}/resumen/${fecha}`).pipe(
+      catchError(this.handleError)
+    );
+  }
+
+  inicializarProgresoDiario(fecha: string): Observable<ProgresoTarea> {
+    return this.http.post<ProgresoTarea>(`${this.baseUrlChecklist}/inicializar/${fecha}`, {}).pipe(
+      catchError(this.handleError)
+    );
+  }
+
+  // En api.service.ts
+  actualizarEstadoTarea(progresoId: string, tareaId: string, estado: number): Observable<any> {
+    const url = `${this.baseUrlChecklist}/tarea/${progresoId}/${tareaId}/${estado}`;
+    return this.http.put(url, {}).pipe(
+      catchError(this.handleError)
+    );
+  }
+
+  // Método para notificar que una tarea ha sido actualizada
+  notificarTareaActualizada(): void {
+    this.tareaActualizadaSubject.next();
+  }
+
+  // Observable al que se pueden suscribir los componentes
+  get tareaActualizada$(): Observable<void> {
+    return this.tareaActualizadaSubject.asObservable();
   }
 
 
