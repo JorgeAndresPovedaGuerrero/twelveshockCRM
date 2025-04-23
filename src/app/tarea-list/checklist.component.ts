@@ -151,8 +151,8 @@ export class ChecklistComponent implements OnInit {
   }
 
   cargarResumenProgreso(): void {
-    const fechaHoy = formatDate(new Date(), 'yyyy-MM-dd', 'en');
-    this.apiService.obtenerResumenProgreso(fechaHoy).subscribe(
+    // Change this line to use fechaActual instead of getting today's date
+    this.apiService.obtenerResumenProgreso(this.fechaActual).subscribe(
       (resumen: ResumenProgreso) => {
         this.resumenProgreso = resumen;
       },
