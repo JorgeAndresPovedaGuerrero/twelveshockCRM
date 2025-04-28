@@ -1,0 +1,40 @@
+<div class="container">
+  <div class="header">
+    <h2>Lista de Productos</h2>
+    <a routerLink="/productos/nuevo" class="btn btn-primary btn-agregar">Agregar Producto</a>
+  </div>
+
+  <div class="filters">
+    <label>Fecha Inicio:</label>
+    <input type="date" [(ngModel)]="filtros.fechaInicio">
+
+    <label>Fecha Fin:</label>
+    <input type="date" [(ngModel)]="filtros.fechaFin">
+  </div>
+  <div class="filters">
+    <button (click)="aplicarFiltros()" class="btn btn-primary">Aplicar Filtros</button>
+    <button (click)="limpiarFiltros()" class="btn btn-secondary">Limpiar Filtros</button>
+  </div>
+
+  <table class="table table-striped table-custom">
+    <thead>
+      <tr>
+        <th>FechaCreacion</th>
+        <th>Codigo</th>
+        <th>Nombre</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let producto of productos">
+        <td>{{ producto.fechaCreacion | date:'shortDate' }}</td>
+        <td>{{ producto.codigo }}</td>
+        <td>{{ producto.nombre }}</td>
+        <td>
+          <a [routerLink]="['/productos/editar', producto.id]" class="btn btn-warning btn-editar">Editar</a>
+          <button (click)="eliminarProducto(producto.id)" class="btn btn-danger btn-eliminar">Eliminar</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

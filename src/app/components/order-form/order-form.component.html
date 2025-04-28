@@ -214,7 +214,11 @@
       </label>
       <label>
         ID de producto:
-        <input type="number" formControlName="product_id" />
+        <select formControlName="product_id">
+          <option *ngFor="let producto of productos" [value]="producto.id">
+            {{ producto.nombre }} ({{ producto.codigo }})
+          </option>
+        </select>
       </label>
       <label>
         Imagen del Producto:

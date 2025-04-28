@@ -6,6 +6,7 @@ import { LogProduct } from '../models/logProduct';
 import { catchError, tap } from 'rxjs/operators';
 import { Gasto } from '../models/gasto';
 import { Proveedor } from '../models/proveedor';
+import { Producto } from '../models/producto';
 import { Tarea, ProgresoTarea, ResumenProgreso } from '../models/checklist.model';
 
 
@@ -17,6 +18,7 @@ export class ApiService {
   private baseUrlLogs = 'http://localhost:8080/api/logs/order/';
   private baseUrlGastos = 'http://localhost:8080/gastos';
   private baseUrlProveedor = 'http://localhost:8080/proveedor';
+  private baseUrlProducto = 'http://localhost:8080/productos';
   //private baseUrl = 'https://twelveshockcrmb.onrender.com/data/orders';
   //private baseUrlLogs = 'https://twelveshockcrmb.onrender.com/api/logs/order';
   //private baseUrlGastos = 'https://twelveshockcrmb.onrender.com/gastos';
@@ -167,6 +169,45 @@ export class ApiService {
     }
 
     return this.http.get<Proveedor[]>(this.baseUrlProveedor + '/buscar', { params })
+      .pipe(catchError(this.handleError));
+  }
+  // ||------------------------- ||
+// Métodos para el apartado de productos
+// ||------------------------- ||
+
+obtenerProductos(): Observable<any> {
+  return this.http.get(this.baseUrlProducto).pipe(
+    tap(data => console.log('Productos cargados:', data)),
+    catchError(error => {
+      console.error('Error cargando productos:', error);
+      return throwError(() => error);
+    })
+  );
+}
+
+  guardarProducto(producto: any): Observable<any> {
+    return this.http.post(this.baseUrlProducto, producto);
+  }
+
+  actualizarProducto(id: string, producto: any): Observable<any> {
+    return this.http.put(`${this.baseUrlProducto}/${id}`, producto);
+  }
+
+  eliminarProducto(id: string): Observable<any> {
+    return this.http.delete(`${this.baseUrlProducto}/${id}`);
+  }
+
+  obtenerProductosConFiltros(filtros: { fechaInicio?: string; fechaFin?: string; }): Observable<Producto[]> {
+    let params = new HttpParams();
+
+    if (filtros.fechaInicio) {
+      params = params.set('fechaInicio', filtros.fechaInicio);
+    }
+    if (filtros.fechaFin) {
+      params = params.set('fechaFin', filtros.fechaFin);
+    }
+
+    return this.http.get<Producto[]>(this.baseUrlProducto + '/buscar', { params })
       .pipe(catchError(this.handleError));
   }
 

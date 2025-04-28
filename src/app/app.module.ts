@@ -26,6 +26,8 @@ import { LoginComponent } from './components/login/login.component';
 import { TareaListComponent } from './tarea-list/tarea-list.component';
 import { TareaFormComponent } from './tarea-list/tarea-form.component';
 import { ChecklistComponent } from './tarea-list/checklist.component';
+import { ProductoFormComponent } from './productos/producto-form.component';
+import { ProductoListComponent } from './productos/producto-list.component';
 
 // Services
 import { ApiService } from './services/api.service';
@@ -47,6 +49,8 @@ import { AuthInterceptor } from './interceptors/auth.interceptor';
     GastoListComponent,
     ProveedorFormComponent,
     ProveedorListComponent,
+    ProductoFormComponent,
+    ProductoListComponent,
     OrderEditModalComponent,
     EstadisticasComponent,
     GastoChartComponent,

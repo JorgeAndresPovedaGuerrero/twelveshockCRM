@@ -15,6 +15,7 @@ import { ToastrService } from 'ngx-toastr';
 export class OrderFormComponent implements OnInit {
   orderForm: FormGroup;
   proveedores: any[] = [];
+  productos: any[] = [];
 
   paymentMethods = [
     { value: 'bancolombia', display: 'Bancolombia' },
@@ -95,11 +96,18 @@ export class OrderFormComponent implements OnInit {
     this.onAbonoChange();
     this.loadClientId();
     this.cargarProveedores();
+    this.cargarProductos();
   }
 
   cargarProveedores(): void {
     this.apiService.obtenerProveedores().subscribe((data) => {
       this.proveedores = data;
+    });
+  }
+
+  cargarProductos(): void {
+    this.apiService.obtenerProductos().subscribe((data) => {
+      this.productos = data;
     });
   }
 

@@ -7,6 +7,8 @@ import { GastoListComponent } from './gasto/gasto-list.component';
 import { GastoFormComponent } from './gasto/gasto-form.component';
 import { ProveedorListComponent } from './proveedor/proveedor-list.component';
 import { ProveedorFormComponent } from './proveedor/proveedor-form.component';
+import { ProductoFormComponent } from './productos/producto-form.component';
+import { ProductoListComponent } from './productos/producto-list.component';
 import { EstadisticasComponent } from './gasto/Estadisticas/estadisticas.component';
 import { LoginComponent } from './components/login/login.component';
 import { AuthGuard } from './guards/auth.guard';
@@ -59,6 +61,21 @@ const routes: Routes = [
   {
     path: 'proveedor/editar/:id',
     component: ProveedorFormComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'productos',
+    component: ProductoListComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'productos/nuevo',
+    component: ProductoFormComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'productos/editar/:id',
+    component: ProductoFormComponent,
     canActivate: [AuthGuard]
   },
   {
