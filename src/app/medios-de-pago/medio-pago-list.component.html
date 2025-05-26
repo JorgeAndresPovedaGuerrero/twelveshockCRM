@@ -1,0 +1,26 @@
+<div class="container">
+  <div class="header">
+    <h2>Lista de Medios de Pago</h2>
+    <a routerLink="/medios-pago/nuevo" class="btn btn-primary">Agregar Medio de Pago</a>
+  </div>
+
+  <table class="table table-striped table-custom">
+    <thead>
+      <tr>
+        <th>Nombre</th>
+        <th>Tipo</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let medio of mediosPago">
+        <td>{{ medio.nombre }}</td>
+        <td>{{ medio.codigo }}</td>
+        <td>
+          <a [routerLink]="['/medios-pago/editar', medio.id]" class="btn btn-warning">Editar</a>
+          <button (click)="eliminarMedioPago(medio.id)" class="btn btn-danger">Eliminar</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

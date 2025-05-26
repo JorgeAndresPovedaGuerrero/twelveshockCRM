@@ -1,6 +1,6 @@
 export interface Producto {
   id?: string;
   fechaCreacion: string;
-  codigo: string;
+  codigo: number;
   nombre: string;
 }

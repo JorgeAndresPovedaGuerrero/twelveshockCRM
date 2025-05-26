@@ -9,6 +9,8 @@ import { ProveedorListComponent } from './proveedor/proveedor-list.component';
 import { ProveedorFormComponent } from './proveedor/proveedor-form.component';
 import { ProductoFormComponent } from './productos/producto-form.component';
 import { ProductoListComponent } from './productos/producto-list.component';
+import { MedioPagoFormComponent } from './medios-de-pago/medio-pago-form.component';
+import { MedioPagoListComponent } from './medios-de-pago/medio-pago-list.component';
 import { EstadisticasComponent } from './gasto/Estadisticas/estadisticas.component';
 import { LoginComponent } from './components/login/login.component';
 import { AuthGuard } from './guards/auth.guard';
@@ -83,6 +85,9 @@ const routes: Routes = [
     component: EstadisticasComponent,
     canActivate: [AuthGuard]
   },
+  { path: 'medios-pago', component: MedioPagoListComponent, canActivate: [AuthGuard] },
+  { path: 'medios-pago/nuevo', component: MedioPagoFormComponent, canActivate: [AuthGuard] },
+  { path: 'medios-pago/editar/:id', component: MedioPagoFormComponent, canActivate: [AuthGuard] },
      // Nuevas rutas para el checklist
   { path: 'checklist', component: ChecklistComponent, canActivate: [AuthGuard] },
   { path: 'checklist/tareas', component: TareaListComponent, canActivate: [AuthGuard] },

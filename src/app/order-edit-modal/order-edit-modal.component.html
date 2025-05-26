@@ -197,66 +197,78 @@
             </div>
           </div>
 
-          <!-- Productos -->
-          <div formArrayName="line_items" class="line-items-container">
-            <div *ngFor="let item of lineItems.controls; let i = index" [formGroupName]="i" class="line-item">
-              <h3>Producto {{ i + 1 }}</h3>
-              <div class="mb-3">
-                <label for="line_item_name_{{i}}" class="form-label">Nombre Producto</label>
-                <input id="line_item_name_{{i}}" formControlName="name" type="text" class="form-control" />
-              </div>
-              <div class="mb-3">
-                <label for="line_item_product_id_{{i}}" class="form-label">ID de producto</label>
-                <input id="line_item_product_id_{{i}}" formControlName="product_id" type="number"
-                  class="form-control" />
-              </div>
-              <!-- Imagen del Producto -->
-              <div class="mb-3">
-                <label class="form-label">Imagen del Producto</label>
+      <!-- Productos -->
+      <div formArrayName="line_items" class="line-items-container">
+        <div *ngFor="let item of lineItems.controls; let i = index" [formGroupName]="i" class="line-item">
+          <h3>Producto {{ i + 1 }}</h3>
 
-                <!-- Previsualización de la imagen existente -->
-                <div class="image-preview-container">
-                  <img *ngIf="lineItems.at(i).get('imagen')?.value" [src]="lineItems.at(i).get('imagen')?.value"
-                    alt="Imagen del Producto" class="image-preview" (click)="openImageModal(i)" />
-                </div>
-
-                <!-- Input para cargar nueva imagen -->
-                <input type="file" id="line_item_image_{{i}}" class="form-control" (change)="onImageUpload($event, i)"
-                  accept=".jpg,.jpeg,.png" />
-              </div>
-              <!-- Modal para imagen ampliada -->
-              <div *ngIf="selectedImageIndex !== null" class="image-modal">
-                <div class="image-modal-content">
-                  <span class="close-button" (click)="closeImageModal()">&times;</span>
-                  <img [src]="lineItems.at(selectedImageIndex).get('imagen')?.value" alt="Imagen Ampliada"
-                    class="expanded-image" />
-                </div>
-              </div>
-              <div class="mb-3">
-                <label for="line_item_quantity_{{i}}" class="form-label">Cantidad</label>
-                <input id="line_item_quantity_{{i}}" formControlName="quantity" type="number" class="form-control" />
-              </div>
-              <div class="mb-3">
-                <label for="line_item_subtotal_{{i}}" class="form-label">Precio</label>
-                <input id="line_item_subtotal_{{i}}" formControlName="subtotal" type="number" class="form-control" />
-              </div>
-              <div class="mb-3">
-                <label for="line_item_total_{{i}}" class="form-label">Total</label>
-                <input id="line_item_total_{{i}}" formControlName="total" type="number" class="form-control" />
-              </div>
-              <label for="line_item_codigoProveedor_{{i}}" class="form-label">
-                Codigo Proveedor:
-                <select formControlName="codigoProveedor"> <!-- Cambiado de codigo_proveedor a codigoProveedor -->
-                  <option value="">Seleccione un proveedor</option>
-                  <option *ngFor="let proveedor of proveedores" [ngValue]="proveedor.codigo">
-                    {{ proveedor.codigo }}
-                  </option>
-                </select>
-              </label>
-              <button type="button" class="btn btn-danger" (click)="removeLineItem(i)">Eliminar Producto</button>
-            </div>
-            <button type="button" class="btn btn-primary" (click)="addLineItem()">Agregar Producto</button>
+          <div class="mb-3">
+            <label for="line_item_name_{{i}}" class="form-label">Nombre Producto</label>
+            <input id="line_item_name_{{i}}" formControlName="name" type="text" class="form-control" />
           </div>
+
+          <div class="mb-3">
+            <label for="line_item_product_id_{{i}}" class="form-label">ID de producto</label>
+            <select id="line_item_product_id_{{i}}" formControlName="product_id" class="form-select">
+              <option value="">Seleccione un producto</option>
+              <option *ngFor="let producto of productos" [value]="producto.codigo">
+                {{ producto.codigo }}
+              </option>
+            </select>
+          </div>
+
+          <!-- Imagen del Producto -->
+          <div class="mb-3">
+            <label class="form-label">Imagen del Producto</label>
+
+            <div class="image-preview-container">
+              <img *ngIf="lineItems.at(i).get('imagen')?.value" [src]="lineItems.at(i).get('imagen')?.value"
+                alt="Imagen del Producto" class="image-preview" (click)="openImageModal(i)" />
+            </div>
+
+            <input type="file" id="line_item_image_{{i}}" class="form-control" (change)="onImageUpload($event, i)"
+              accept=".jpg,.jpeg,.png" />
+          </div>
+
+          <!-- Modal para imagen ampliada -->
+          <div *ngIf="selectedImageIndex !== null" class="image-modal">
+            <div class="image-modal-content">
+              <span class="close-button" (click)="closeImageModal()">&times;</span>
+              <img [src]="lineItems.at(selectedImageIndex).get('imagen')?.value" alt="Imagen Ampliada"
+                class="expanded-image" />
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label for="line_item_quantity_{{i}}" class="form-label">Cantidad</label>
+            <input id="line_item_quantity_{{i}}" formControlName="quantity" type="number" class="form-control" />
+          </div>
+
+          <div class="mb-3">
+            <label for="line_item_subtotal_{{i}}" class="form-label">Precio</label>
+            <input id="line_item_subtotal_{{i}}" formControlName="subtotal" type="number" class="form-control" />
+          </div>
+
+          <div class="mb-3">
+            <label for="line_item_total_{{i}}" class="form-label">Total</label>
+            <input id="line_item_total_{{i}}" formControlName="total" type="number" class="form-control" />
+          </div>
+
+          <div class="mb-3">
+            <label for="line_item_codigoProveedor_{{i}}" class="form-label">Código Proveedor</label>
+            <select id="line_item_codigoProveedor_{{i}}" formControlName="codigoProveedor" class="form-select">
+              <option value="">Seleccione un proveedor</option>
+              <option *ngFor="let proveedor of proveedores" [value]="proveedor.codigo">
+                {{ proveedor.codigo }}
+              </option>
+            </select>
+          </div>
+
+          <button type="button" class="btn btn-danger" (click)="removeLineItem(i)">Eliminar Producto</button>
+        </div>
+
+        <button type="button" class="btn btn-primary" (click)="addLineItem()">Agregar Producto</button>
+      </div>
 
           <div class="modal-footer">
             <button type="button" class="btn btn-primary" (click)="saveChanges()">Save changes</button>

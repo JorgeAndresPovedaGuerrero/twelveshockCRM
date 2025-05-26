@@ -7,6 +7,7 @@ import { catchError, tap } from 'rxjs/operators';
 import { Gasto } from '../models/gasto';
 import { Proveedor } from '../models/proveedor';
 import { Producto } from '../models/producto';
+import { MedioPago } from '../models/medio-pago';
 import { Tarea, ProgresoTarea, ResumenProgreso } from '../models/checklist.model';
 
 
@@ -14,17 +15,23 @@ import { Tarea, ProgresoTarea, ResumenProgreso } from '../models/checklist.model
   providedIn: 'root'
 })
 export class ApiService {
-  private baseUrl = 'http://localhost:8080/data/orders';
-  private baseUrlLogs = 'http://localhost:8080/api/logs/order/';
-  private baseUrlGastos = 'http://localhost:8080/gastos';
-  private baseUrlProveedor = 'http://localhost:8080/proveedor';
-  private baseUrlProducto = 'http://localhost:8080/productos';
-  //private baseUrl = 'https://twelveshockcrmb.onrender.com/data/orders';
-  //private baseUrlLogs = 'https://twelveshockcrmb.onrender.com/api/logs/order';
-  //private baseUrlGastos = 'https://twelveshockcrmb.onrender.com/gastos';
-  //private baseUrlProveedor = 'https://twelveshockcrmb.onrender.com/proveedor';
-  private baseUrlTareas = 'http://localhost:8080/tareas';
-  private baseUrlChecklist = 'http://localhost:8080/checklist';
+  //private baseUrl = 'http://localhost:8080/data/orders';
+  //private baseUrlLogs = 'http://localhost:8080/api/logs/order/';
+  //private baseUrlGastos = 'http://localhost:8080/gastos';
+  //private baseUrlProveedor = 'http://localhost:8080/proveedor';
+  //private baseUrlProducto = 'http://localhost:8080/productos';
+  //private baseUrlMedioPago = 'http://localhost:8080/medios-pago';
+  //private baseUrlTareas = 'http://localhost:8080/tareas';
+  //private baseUrlChecklist = 'http://localhost:8080/checklist';
+  // URL base para la API PROD.
+  private baseUrl = 'https://twelveshockcrmb.onrender.com/data/orders';
+  private baseUrlLogs = 'https://twelveshockcrmb.onrender.com/api/logs/order';
+  private baseUrlGastos = 'https://twelveshockcrmb.onrender.com/gastos';
+  private baseUrlProveedor = 'https://twelveshockcrmb.onrender.com/proveedor';
+  private baseUrlProducto = 'https://twelveshockcrmb.onrender.com/productos';
+  private baseUrlMedioPago = 'https://twelveshockcrmb.onrender.com/medios-pago';
+  private baseUrlTareas = 'https://twelveshockcrmb.onrender.com/tareas';
+  private baseUrlChecklist = 'https://twelveshockcrmb.onrender.com/checklist';
 
   private tareaActualizadaSubject = new Subject<void>();
 
@@ -210,6 +217,45 @@ obtenerProductos(): Observable<any> {
     return this.http.get<Producto[]>(this.baseUrlProducto + '/buscar', { params })
       .pipe(catchError(this.handleError));
   }
+    // ||------------------------- ||
+    // MEDIOS DE PAGO
+    // ||------------------------- ||
+
+    obtenerMediosPago(): Observable<MedioPago[]> {
+      return this.http.get<MedioPago[]>(this.baseUrlMedioPago).pipe(
+        catchError(error => {
+          console.error('Error obteniendo medios de pago:', error);
+          return throwError(() => new Error(`Error al obtener medios de pago: ${error.message || error.statusText}`));
+        })
+      );
+    }
+
+    guardarMedioPago(medio: MedioPago): Observable<MedioPago> {
+      return this.http.post<MedioPago>(this.baseUrlMedioPago, medio).pipe(
+        catchError(error => {
+          console.error('Error guardando medio de pago:', error);
+          return throwError(() => error);
+        })
+      );
+    }
+
+    actualizarMedioPago(id: string, medio: MedioPago): Observable<MedioPago> {
+      return this.http.put<MedioPago>(`${this.baseUrlMedioPago}/${id}`, medio).pipe(
+        catchError(error => {
+          console.error('Error actualizando medio de pago:', error);
+          return throwError(() => error);
+        })
+      );
+    }
+
+    eliminarMedioPago(id: string): Observable<void> {
+      return this.http.delete<void>(`${this.baseUrlMedioPago}/${id}`).pipe(
+        catchError(error => {
+          console.error('Error eliminando medio de pago:', error);
+          return throwError(() => error);
+        })
+      );
+    }
 
     // ||------------------------- ||
   // Metodos para el apartado de Checklist

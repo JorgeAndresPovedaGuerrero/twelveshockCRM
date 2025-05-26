@@ -17,19 +17,7 @@ export class OrderFormComponent implements OnInit {
   proveedores: any[] = [];
   productos: any[] = [];
 
-  paymentMethods = [
-    { value: 'bancolombia', display: 'Bancolombia' },
-    { value: 'nequi', display: 'Nequi' },
-    { value: 'daviplata', display: 'Daviplata' },
-    { value: 'pagina_web', display: 'Página Web' },
-    { value: 'wompi', display: 'Wompi' },
-    { value: 'payu', display: 'Payu' },
-    { value: 'efectivo', display: 'Efectivo' },
-    { value: 'efecty', display: 'Efecty' },
-    { value: 'paga_todo', display: 'Paga Todo' },
-    { value: 'gana', display: 'Gana' },
-    { value: 'otro', display: 'Otro' }
-  ];
+  paymentMethods: { value: string, display: string }[] = [];
 
   statusOptions = [
     { value: 'processing', display: 'En proceso' },
@@ -97,6 +85,7 @@ export class OrderFormComponent implements OnInit {
     this.loadClientId();
     this.cargarProveedores();
     this.cargarProductos();
+    this.getPaymentMethods();
   }
 
   cargarProveedores(): void {
@@ -104,6 +93,21 @@ export class OrderFormComponent implements OnInit {
       this.proveedores = data;
     });
   }
+
+  getPaymentMethods(): void {
+  this.apiService.obtenerMediosPago().subscribe({
+    next: (methods: any[]) => {
+      this.paymentMethods = methods.map(method => ({
+        value: method.codigo,
+        display: method.nombre
+      }));
+    },
+    error: err => {
+      this.toastr.error('No se pudieron cargar los métodos de pago');
+      console.error(err);
+    }
+  });
+}
 
   cargarProductos(): void {
     this.apiService.obtenerProductos().subscribe((data) => {

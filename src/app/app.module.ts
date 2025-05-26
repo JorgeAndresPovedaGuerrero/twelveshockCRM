@@ -28,6 +28,8 @@ import { TareaFormComponent } from './tarea-list/tarea-form.component';
 import { ChecklistComponent } from './tarea-list/checklist.component';
 import { ProductoFormComponent } from './productos/producto-form.component';
 import { ProductoListComponent } from './productos/producto-list.component';
+import { MedioPagoListComponent } from './medios-de-pago/medio-pago-list.component';
+import { MedioPagoFormComponent } from './medios-de-pago/medio-pago-form.component';
 
 // Services
 import { ApiService } from './services/api.service';
@@ -51,6 +53,8 @@ import { AuthInterceptor } from './interceptors/auth.interceptor';
     ProveedorListComponent,
     ProductoFormComponent,
     ProductoListComponent,
+    MedioPagoListComponent,
+    MedioPagoFormComponent,
     OrderEditModalComponent,
     EstadisticasComponent,
     GastoChartComponent,

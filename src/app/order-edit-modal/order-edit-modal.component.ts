@@ -3,6 +3,7 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
 import { ApiService } from '../services/api.service';
 import { Order } from '../models/order';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-order-edit-modal',
@@ -15,20 +16,9 @@ export class OrderEditModalComponent implements OnInit {
   @Input() orderId: number | undefined;
   editOrderForm: FormGroup;
   proveedores: any[] = [];
+  productos: any[] = [];
 
-  paymentMethods = [
-    { value: 'bancolombia', display: 'Bancolombia' },
-    { value: 'nequi', display: 'Nequi' },
-    { value: 'daviplata', display: 'Daviplata' },
-    { value: 'pagina_web', display: 'Página Web' },
-    { value: 'wompi', display: 'Wompi' },
-    { value: 'payu', display: 'Payu' },
-    { value: 'efectivo', display: 'Efectivo' },
-    { value: 'efecty', display: 'Efecty' },
-    { value: 'paga_todo', display: 'Paga Todo' },
-    { value: 'gana', display: 'Gana' },
-    { value: 'otro', display: 'Otro' }
-  ];
+  paymentMethods: { value: string, display: string }[] = [];
 
   statusOptions = [
     { value: 'processing', display: 'En proceso' },
@@ -41,6 +31,7 @@ export class OrderEditModalComponent implements OnInit {
   constructor(
     public activeModal: NgbActiveModal,
     private fb: FormBuilder,
+    private toastr: ToastrService,
     private apiService: ApiService
   ) {
     this.editOrderForm = this.fb.group({
@@ -87,6 +78,8 @@ export class OrderEditModalComponent implements OnInit {
     });
 
     this.obtenerProveedores();
+    this.obtenerProductos();
+    this.obtenerMediosPago();
   }
 
   ngOnInit(): void {
@@ -145,6 +138,44 @@ export class OrderEditModalComponent implements OnInit {
     });
   }
 
+  obtenerProductos(): void {
+    this.apiService.obtenerProductos().subscribe((data) => {
+      this.productos = data;
+    });
+  }
+
+  obtenerMediosPago(): void {
+    this.apiService.obtenerMediosPago().subscribe({
+      next: (methods: any[]) => {
+        this.paymentMethods = methods.map(method => ({
+          value: method.codigo,
+          display: method.nombre
+        }));
+        console.log('Medios de pago cargados:', this.paymentMethods);
+      },
+      error: (err) => {
+        this.toastr.error('No se pudieron cargar los métodos de pago');
+        console.error('Error al cargar medios de pago:', err);
+
+        // Fallback: usar medios de pago por defecto
+        this.paymentMethods = [
+          { value: 'bancolombia', display: 'Bancolombia' },
+          { value: 'nequi', display: 'Nequi' },
+          { value: 'daviplata', display: 'Daviplata' },
+          { value: 'pagina_web', display: 'Página Web' },
+          { value: 'wompi', display: 'Wompi' },
+          { value: 'payu', display: 'Payu' },
+          { value: 'efectivo', display: 'Efectivo' },
+          { value: 'efecty', display: 'Efecty' },
+          { value: 'paga_todo', display: 'Paga Todo' },
+          { value: 'gana', display: 'Gana' },
+          { value: 'otro', display: 'Otro' }
+        ];
+      }
+    });
+  }
+
+
   updateBalance() {
     const total = this.editOrderForm.get('total')?.value || 0;
     const downPayment = this.editOrderForm.get('down_payment')?.value || 0;
@@ -155,7 +186,7 @@ export class OrderEditModalComponent implements OnInit {
   createLineItem(item?: any): FormGroup {
     return this.fb.group({
       name: [item?.name || ''],
-      product_id: [item?.product_id || ''],
+      product_id: [item?.product_id || 0],
       quantity: [item?.quantity || ''],
       subtotal: [item?.subtotal || ''],
       total: [item?.total || ''],

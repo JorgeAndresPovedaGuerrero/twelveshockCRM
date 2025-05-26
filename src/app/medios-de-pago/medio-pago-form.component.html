@@ -1,0 +1,17 @@
+<div class="form-container">
+  <h2>{{ isEditing ? 'Editar Medio de Pago' : 'Agregar Medio de Pago' }}</h2>
+  <form (ngSubmit)="guardarMedioPago()">
+    <div class="form-group">
+      <label for="nombre">Nombre:</label>
+      <input type="text" id="nombre" [(ngModel)]="medioPago.nombre" name="nombre" required>
+    </div>
+    <div class="form-group">
+      <label for="codigo">Código:</label>
+      <input type="text" id="codigo" [(ngModel)]="medioPago.codigo" name="codigo" required>
+    </div>
+    <div class="button-group">
+      <button class="primary-button" type="submit">{{ isEditing ? 'Actualizar' : 'Guardar' }}</button>
+      <button class="secondary-button" type="button" routerLink="/medios-pago">Cancelar</button>
+    </div>
+  </form>
+</div>

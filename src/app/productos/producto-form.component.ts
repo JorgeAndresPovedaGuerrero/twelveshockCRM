@@ -9,7 +9,7 @@ import { Producto } from '../models/producto';
   styleUrls: ['./producto-form.component.scss']
 })
 export class ProductoFormComponent implements OnInit {
-  producto: Producto = { fechaCreacion: '', codigo: '', nombre: '' };
+  producto: Producto = { fechaCreacion: '', codigo: 0, nombre: '' };
   isEditing = false;
 
   constructor(

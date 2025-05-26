@@ -215,7 +215,7 @@
       <label>
         ID de producto:
         <select formControlName="product_id">
-          <option *ngFor="let producto of productos" [value]="producto.id">
+          <option *ngFor="let producto of productos" [value]="producto.codigo">
             {{ producto.nombre }} ({{ producto.codigo }})
           </option>
         </select>
