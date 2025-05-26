@@ -179,4 +179,16 @@ button:disabled {
   transition: width 0.3s ease;
 }
 
+.app-logo {
+  color: #245283;
+  font-size: 32px;
+  font-weight: bold;
+  text-decoration: none;
+  margin-right: 20px;
+  white-space: nowrap;
+}
 
+.app-logo:hover {
+  text-decoration: underline;
+  cursor: pointer;
+}

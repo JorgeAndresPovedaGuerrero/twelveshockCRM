@@ -1,5 +1,5 @@
 <header class="app-header" *ngIf="authService.isLoggedIn; else guestHeader">
-  <h2>TwelveShock</h2>
+  <a class="app-logo" routerLink="/inicio">TwelveShock</a>
   <div class="button-group">
     <button (click)="navigateTo('orders')">Pedidos</button>
     <button (click)="navigateTo('order-form')">

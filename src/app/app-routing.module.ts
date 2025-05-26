@@ -17,6 +17,7 @@ import { AuthGuard } from './guards/auth.guard';
 import { TareaListComponent } from './tarea-list/tarea-list.component';
 import { TareaFormComponent } from './tarea-list/tarea-form.component';
 import { ChecklistComponent } from './tarea-list/checklist.component';
+import { BienvenidaComponent } from './components/bienvenida/bienvenida.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -85,6 +86,11 @@ const routes: Routes = [
     component: EstadisticasComponent,
     canActivate: [AuthGuard]
   },
+  {
+  path: 'inicio',
+  component: BienvenidaComponent,
+  canActivate: [AuthGuard]
+  },
   { path: 'medios-pago', component: MedioPagoListComponent, canActivate: [AuthGuard] },
   { path: 'medios-pago/nuevo', component: MedioPagoFormComponent, canActivate: [AuthGuard] },
   { path: 'medios-pago/editar/:id', component: MedioPagoFormComponent, canActivate: [AuthGuard] },
@@ -93,7 +99,7 @@ const routes: Routes = [
   { path: 'checklist/tareas', component: TareaListComponent, canActivate: [AuthGuard] },
   { path: 'checklist/tareas/nuevo', component: TareaFormComponent, canActivate: [AuthGuard] },
   { path: 'checklist/tareas/editar/:id', component: TareaFormComponent, canActivate: [AuthGuard] },
-  { path: '', redirectTo: '/login', pathMatch: 'full' },
+  { path: '', redirectTo: '/inicio', pathMatch: 'full' },
   { path: '**', redirectTo: '/login' }
 ];
 

@@ -1,0 +1,89 @@
+.banner {
+  background-image: url('https://twelveshock.com/wp-content/uploads/2024/07/Banner1b.webp');
+  background-size: cover;
+  background-position: center;
+  height: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  text-shadow: 1px 1px 4px rgba(0,0,0,0.6);
+}
+
+.banner-text h1 {
+  font-size: 2.5rem;
+  text-align: center;
+  padding: 0 1rem;
+}
+
+.quick-links {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  padding: 2rem;
+}
+
+.card {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  padding: 1.5rem;
+  text-align: center;
+  text-decoration: none;
+  color: inherit;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  }
+
+  .icon {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+  }
+
+  h3 {
+    margin: 0.5rem 0;
+  }
+
+  p {
+    font-size: 0.95rem;
+    color: #666;
+  }
+}
+
+.footer {
+  background-color: #f8f9fc;
+  padding: 20px 40px;
+  border-top: 1px solid #ddd;
+  font-size: 14px;
+  color: #555;
+}
+
+.footer-content {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.footer-left p {
+  margin: 0;
+}
+
+.footer-right a {
+  color: #2b5c90;
+  text-decoration: none;
+  margin: 0 8px;
+}
+
+.footer-right a:hover {
+  text-decoration: underline;
+}
+
+.quick-links .icon {
+  font-size: 2.5rem;
+  color: #2b5c90;
+  margin-bottom: 10px;
+}
