@@ -30,6 +30,7 @@ import { ProductoFormComponent } from './productos/producto-form.component';
 import { ProductoListComponent } from './productos/producto-list.component';
 import { MedioPagoListComponent } from './medios-de-pago/medio-pago-list.component';
 import { MedioPagoFormComponent } from './medios-de-pago/medio-pago-form.component';
+import { ContraentregaListComponent } from './contraentrega/contraentrega-list.component';
 
 // Services
 import { ApiService } from './services/api.service';
@@ -55,6 +56,7 @@ import { AuthInterceptor } from './interceptors/auth.interceptor';
     ProductoListComponent,
     MedioPagoListComponent,
     MedioPagoFormComponent,
+    ContraentregaListComponent,
     OrderEditModalComponent,
     EstadisticasComponent,
     GastoChartComponent,
@@ -73,6 +75,7 @@ import { AuthInterceptor } from './interceptors/auth.interceptor';
     NgbModule,
     TooltipModule.forRoot(),
     ToastrModule.forRoot(),
+    ToastrModule,
   ],
   providers: [
     ApiService,

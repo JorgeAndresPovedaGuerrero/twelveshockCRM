@@ -11,6 +11,7 @@ import { ProductoFormComponent } from './productos/producto-form.component';
 import { ProductoListComponent } from './productos/producto-list.component';
 import { MedioPagoFormComponent } from './medios-de-pago/medio-pago-form.component';
 import { MedioPagoListComponent } from './medios-de-pago/medio-pago-list.component';
+import { ContraentregaListComponent } from './contraentrega/contraentrega-list.component';
 import { EstadisticasComponent } from './gasto/Estadisticas/estadisticas.component';
 import { LoginComponent } from './components/login/login.component';
 import { AuthGuard } from './guards/auth.guard';
@@ -87,6 +88,11 @@ const routes: Routes = [
     canActivate: [AuthGuard]
   },
   {
+    path: 'contraentrega',
+    component: ContraentregaListComponent,
+    canActivate: [AuthGuard]
+  },
+  {
   path: 'inicio',
   component: BienvenidaComponent,
   canActivate: [AuthGuard]
@@ -99,7 +105,7 @@ const routes: Routes = [
   { path: 'checklist/tareas', component: TareaListComponent, canActivate: [AuthGuard] },
   { path: 'checklist/tareas/nuevo', component: TareaFormComponent, canActivate: [AuthGuard] },
   { path: 'checklist/tareas/editar/:id', component: TareaFormComponent, canActivate: [AuthGuard] },
-  { path: '', redirectTo: '/inicio', pathMatch: 'full' },
+  { path: '', redirectTo: '/login', pathMatch: 'full' },
   { path: '**', redirectTo: '/login' }
 ];
 

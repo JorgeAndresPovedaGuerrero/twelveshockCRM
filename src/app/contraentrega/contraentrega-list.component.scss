@@ -1,0 +1,512 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+
+// Variables
+$primary-color: #2561a1;
+$danger-color: #dc3545;
+$success-color: #198754;
+$warning-color: #ffc107;
+$secondary-color: #6c757d;
+
+body {
+  font-family: 'Roboto', sans-serif;
+  background-color: #f4f7f9;
+}
+
+.container {
+  width: 100%;
+  max-width: 100%;
+  padding: 0 20px; // Simplificado padding horizontal
+  box-sizing: border-box; // Asegurar que el padding esté incluido en el ancho
+}
+
+.container2 {
+  width: 100%;
+  max-width: 100%;
+  padding-left: -20px;
+  padding-right: -20px;
+}
+
+// Header
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+
+  h2 {
+    margin: 0;
+    color: $primary-color;
+    font-weight: 500;
+  }
+
+  .btn {
+    background-color: $primary-color;
+    color: white;
+    font-weight: 500;
+    padding: 10px 20px;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    &:hover:not(:disabled) {
+      background-color: darken($primary-color, 10%);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+  }
+}
+
+// Filtros
+.filtros {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+
+.filtros-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: flex-end;
+
+  .filtro-item {
+    min-width: 200px;
+    flex: 1 1 calc(33.33% - 1rem); // Ajusta según el espacio disponible
+  }
+
+  .filtro-btn {
+    flex: 0 0 auto;
+    margin-left: 1.5rem;
+  }
+}
+
+  .filtro-item {
+    flex: 1 1 200px;
+
+    label {
+      font-weight: 500;
+      color: $primary-color;
+      margin-bottom: 8px;
+      display: block;
+    }
+
+    select,
+    input {
+      width: 100%;
+      padding: 8px 12px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      font-family: 'Roboto', sans-serif;
+      transition: all 0.3s ease;
+
+      &:focus {
+        border-color: $primary-color;
+        box-shadow: 0 0 0 0.2rem rgba(37, 97, 161, 0.25);
+        outline: none;
+      }
+    }
+  }
+
+  .filtro-btn {
+    flex: 0 0 auto;
+
+    button {
+      padding: 10px 20px;
+      font-weight: 500;
+      border-radius: 5px;
+      transition: all 0.3s ease;
+      white-space: nowrap;
+      height: 38px;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .filtros .filtros-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .filtros .filtro-btn button {
+    width: 100%;
+  }
+}
+
+// Cards estadísticas
+.stats-cards {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+
+  .card {
+    flex: 1;
+    min-width: 200px;
+    border: none;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+    background-color: #fff;
+    transition: transform 0.2s ease;
+
+    &:hover {
+      transform: translateY(-1px);
+    }
+
+    .card-body {
+      padding: 0.75rem;
+      text-align: center;
+      min-height: 80px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .card-title {
+      font-size: 1.1rem;
+      font-weight: bold;
+      color: $primary-color;
+      margin-bottom: 0.25rem;
+    }
+
+    .card-text {
+      color: #666;
+      font-size: 0.85rem;
+      margin-bottom: 0;
+    }
+  }
+}
+
+// Tabla
+.table-responsive {
+  width: 100%;
+  max-width: 100%; // Asegurar que no exceda el contenedor
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  overflow-x: auto;
+  box-sizing: border-box; // Incluir bordes en el cálculo del ancho
+}
+
+.table {
+  width: 100%; // Cambiar de 98% a 100%
+  table-layout: fixed;
+  margin-bottom: 0;
+
+  th, td {
+    padding: 12px;
+    vertical-align: middle;
+    text-align: center;
+    border: 1px solid #ddd;
+  }
+
+  th {
+    background-color: $primary-color;
+    color: white;
+    font-weight: 500;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+  }
+
+  tbody tr {
+    &:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+
+    &:hover {
+      background-color: lighten($primary-color, 40%);
+    }
+  }
+
+  .badge {
+    padding: 0.5em 0.75em;
+    border-radius: 0.5rem;
+    font-size: 0.85rem;
+
+    &.badge-pendiente {
+      background-color: $warning-color;
+      color: #212529;
+    }
+
+    &.badge-verificado {
+      background-color: $success-color;
+      color: white;
+    }
+
+    &.badge-cancelado {
+      background-color: $danger-color;
+      color: white;
+    }
+  }
+
+  .btn-group {
+    display: flex;
+    gap: 0.25rem;
+  }
+
+  .btn {
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-weight: 500;
+    font-size: 0.85rem;
+    transition: all 0.3s ease;
+
+    &.btn-success {
+      background-color: $success-color;
+      color: white;
+      border: none;
+
+      &:hover:not(:disabled) {
+        background-color: darken($success-color, 10%);
+      }
+    }
+
+    &.btn-danger {
+      background-color: $danger-color;
+      color: white;
+      border: none;
+
+      &:hover:not(:disabled) {
+        background-color: darken($danger-color, 10%);
+      }
+    }
+
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+  }
+}
+
+// Alertas
+.alert {
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+  &.alert-danger {
+    background-color: lighten($danger-color, 40%);
+    border-color: lighten($danger-color, 30%);
+    color: darken($danger-color, 20%);
+  }
+
+  &.alert-info {
+    background-color: lighten($primary-color, 40%);
+    border-color: lighten($primary-color, 30%);
+    color: darken($primary-color, 20%);
+  }
+}
+
+// Loading
+.spinner-border {
+  width: 3rem;
+  height: 3rem;
+  border-width: 0.3em;
+}
+
+// Modales - CONFIGURACIÓN COMPLETA PARA SOBREPONER
+::ng-deep {
+  // Forzar el backdrop a aparecer correctamente
+  .modal-backdrop {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    z-index: 1040 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    background-color: rgba(0, 0, 0, 0.7) !important; // Fondo más oscuro
+    opacity: 1 !important;
+    display: block !important;
+  }
+
+  // Modal principal
+  .modal {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    z-index: 1050 !important;
+    width: 100% !important;
+    height: 100% !important;
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+    outline: 0 !important;
+    display: block !important;
+  }
+
+  // Cuando el modal está activo
+  .modal.show {
+    display: block !important;
+  }
+
+  // Contenedor del modal
+  .modal-dialog {
+    position: relative !important;
+    width: auto !important;
+    margin: 1.75rem !important;
+    pointer-events: none !important;
+    z-index: 1051 !important;
+  }
+
+  .modal-dialog-centered {
+    display: flex !important;
+    align-items: center !important;
+    min-height: calc(100% - 3.5rem) !important;
+  }
+
+  // Contenido del modal
+  .modal-content {
+    position: relative !important;
+    display: flex !important;
+    flex-direction: column !important;
+    width: 100% !important;
+    pointer-events: auto !important;
+    background-color: #fff !important;
+    background-clip: padding-box !important;
+    border: 1px solid rgba(0, 0, 0, 0.2) !important;
+    border-radius: 8px !important;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.5) !important;
+    outline: 0 !important;
+    z-index: 1052 !important;
+  }
+
+  // Asegurar que esté visible
+  .modal.fade .modal-dialog {
+    transition: transform 0.3s ease-out !important;
+    transform: translate(0, -50px) !important;
+  }
+
+  .modal.show .modal-dialog {
+    transform: none !important;
+  }
+
+  // Headers específicos de los modales
+  .modal-header {
+    &.bg-success {
+      background-color: $success-color !important;
+      border-bottom: 1px solid darken($success-color, 10%) !important;
+    }
+
+    &.bg-danger {
+      background-color: $danger-color !important;
+      border-bottom: 1px solid darken($danger-color, 10%) !important;
+    }
+
+    .btn-close-white {
+      filter: brightness(0) invert(1) !important;
+    }
+  }
+
+  // Botones del modal
+  .modal-footer {
+    border-top: 1px solid #dee2e6 !important;
+    padding: 1rem !important;
+
+    .btn {
+      margin-left: 0.5rem !important;
+
+      &:first-child {
+        margin-left: 0 !important;
+      }
+    }
+  }
+
+  // Formularios dentro del modal
+  .modal-body {
+    .form-control {
+      border: 1px solid #ced4da !important;
+      border-radius: 4px !important;
+
+      &:focus {
+        border-color: $primary-color !important;
+        box-shadow: 0 0 0 0.2rem rgba(37, 97, 161, 0.25) !important;
+      }
+    }
+
+    .alert {
+      margin-bottom: 1rem !important;
+    }
+  }
+}
+
+// Responsive
+@media (max-width: 768px) {
+  .container {
+    padding: 0 15px; // Padding más pequeño en móviles
+    box-sizing: border-box;
+  }
+
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+
+    .btn {
+      width: 100%;
+      justify-content: center;
+    }
+  }
+
+  .stats-cards .card {
+    min-width: 100%;
+  }
+
+  .table {
+    font-size: 0.9rem;
+
+    th, td {
+      padding: 8px;
+    }
+  }
+
+  // Modales responsive
+  ::ng-deep {
+    .modal-dialog {
+      margin: 0.5rem !important;
+      width: calc(100% - 1rem) !important;
+      max-width: none !important;
+    }
+  }
+}
+
+// Prevenir scroll del body cuando el modal está abierto
+body.modal-open {
+  overflow: hidden !important;
+}
+
+// Estilos adicionales para mejorar la visibilidad
+::ng-deep {
+  // Animación suave para la apertura del modal
+  .modal.fade .modal-dialog {
+    transition: transform 0.3s ease-out !important;
+    transform: translate(0, -50px) !important;
+  }
+
+  .modal.show .modal-dialog {
+    transform: none !important;
+  }
+
+  // Asegurar que no haya elementos que interfieran
+  .modal-backdrop + .modal {
+    z-index: 10050 !important;
+  }
+}
+
+// Forzar modal por encima de todo (agregar al final del archivo)
+body.modal-open {
+  overflow: hidden !important;
+
+  .modal {
+    z-index: 9999 !important;
+  }
+
+  .modal-backdrop {
+    z-index: 9998 !important;
+  }
+}

@@ -79,15 +79,21 @@ export class OrderFormComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void {
-    this.getNextOrderId();
-    this.onAbonoChange();
-    this.loadClientId();
-    this.cargarProveedores();
-    this.cargarProductos();
-    this.getPaymentMethods();
-  }
+ngOnInit(): void {
+  this.getNextOrderId();
+  this.onAbonoChange();
+  this.loadClientId();
+  this.cargarProveedores();
+  this.cargarProductos();
+  this.getPaymentMethods();
 
+  this.orderForm.get('means_of_payment_2')?.valueChanges.subscribe((value) => {
+    const shippingControl = this.orderForm.get('shipping.price_shipping');
+    if (value === 'contraentrega' && shippingControl?.value <= 0) {
+      this.toastr.warning('Debe ingresar un valor de envío para contraentrega', 'Advertencia');
+    }
+  });
+}
   cargarProveedores(): void {
     this.apiService.obtenerProveedores().subscribe((data) => {
       this.proveedores = data;
@@ -98,7 +104,7 @@ export class OrderFormComponent implements OnInit {
   this.apiService.obtenerMediosPago().subscribe({
     next: (methods: any[]) => {
       this.paymentMethods = methods.map(method => ({
-        value: method.codigo,
+        value: method.nombre.toLowerCase(),
         display: method.nombre
       }));
     },
@@ -155,31 +161,66 @@ export class OrderFormComponent implements OnInit {
     this.lineItems.removeAt(index);
   }
 
-  onSubmit(): void {
-    if (this.orderForm.valid) {
-      const orderData: Order = this.orderForm.value;
-      console.log('Form Data:', orderData); // Añade este log
-      console.log('Line Items:', orderData.line_items); // Y este
-      this.apiService.createOrder(orderData).subscribe({
-        next: (data) => {
-          this.toastr.success('El pedido fue creado correctamente', 'Éxito');
-          console.log('Order created:', data);
-          setTimeout(() => {
-            this.router.navigate(['/orders']);
-          }, 2000); // Espera 2 segundos antes de navegar
+onSubmit(): void {
+  const formValue = this.orderForm.value;
+
+  const isContraentrega = formValue.means_of_payment_2 === 'contraentrega';
+  const hasShippingCost = formValue.shipping?.price_shipping > 0;
+
+  if (isContraentrega && !hasShippingCost) {
+    this.toastr.error('Debe ingresar un valor de envío para contraentrega', 'Error');
+    return;
+  }
+
+  if (this.orderForm.valid) {
+    const orderData: Order = this.orderForm.value;
+
+    // Si es contraentrega, primero creamos la verificación enviando la orden completa
+    if (isContraentrega) {
+      this.apiService.crearContraentrega(orderData).subscribe({
+        next: () => {
+          this.toastr.success('Verificación de contraentrega creada correctamente', 'Éxito');
+          this.crearPedido(orderData); // crea el pedido después de contraentrega
         },
         error: (error) => {
-          this.toastr.error('Error creando el pedido', 'Error');
-          console.error('Error creating order:', error);
+          this.toastr.error('Error creando la contraentrega', 'Error');
+          console.error('Error creando contraentrega:', error);
         }
       });
     } else {
-      this.toastr.error('Formulario inválido', 'Error');
-      this.markAllAsTouched();
-      this.logValidationErrors();
-      console.error('Form is invalid', this.orderForm);
+      this.crearPedido(orderData); // pedido sin contraentrega
     }
+  } else {
+    this.toastr.error('Formulario inválido', 'Error');
+    this.markFormGroupTouched(this.orderForm);
   }
+}
+
+markFormGroupTouched(formGroup: FormGroup) {
+  Object.values(formGroup.controls).forEach(control => {
+    control.markAsTouched();
+
+    if ((control as FormGroup).controls) {
+      this.markFormGroupTouched(control as FormGroup);
+    }
+  });
+}
+
+private crearPedido(orderData: Order): void {
+  this.apiService.createOrder(orderData).subscribe({
+    next: (data) => {
+      this.toastr.success('El pedido fue creado correctamente', 'Éxito');
+      console.log('Order created:', data);
+      setTimeout(() => {
+        this.router.navigate(['/orders']);
+      }, 2000);
+    },
+    error: (error) => {
+      this.toastr.error('Error creando el pedido', 'Error');
+      console.error('Error creating order:', error);
+    }
+  });
+}
 
   markAllAsTouched(): void {
     this.orderForm.markAllAsTouched();

@@ -31,7 +31,7 @@ export class LoginComponent {
 
       this.authService.login(this.loginForm.value).subscribe({
         next: () => {
-          this.router.navigate(['/']); // Redirigir a la página principal o a donde necesites
+          this.router.navigate(['/inicio']);
         },
         error: (error) => {
           this.error = error.error.message || 'Error al iniciar sesión';

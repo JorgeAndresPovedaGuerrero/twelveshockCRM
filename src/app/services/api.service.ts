@@ -9,7 +9,7 @@ import { Proveedor } from '../models/proveedor';
 import { Producto } from '../models/producto';
 import { MedioPago } from '../models/medio-pago';
 import { Tarea, ProgresoTarea, ResumenProgreso } from '../models/checklist.model';
-
+import { VerificacionContraentrega } from '../models/verificacionContraentrega.model';
 
 @Injectable({
   providedIn: 'root'
@@ -23,6 +23,7 @@ export class ApiService {
   private baseUrlMedioPago = 'http://localhost:8080/medios-pago';
   private baseUrlTareas = 'http://localhost:8080/tareas';
   private baseUrlChecklist = 'http://localhost:8080/checklist';
+  private baseUrlContraentrega = 'http://localhost:8080/contraentrega';
   // URL base para la API PROD.
   //private baseUrl = 'https://twelveshockcrmb.onrender.com/data/orders';
   //private baseUrlLogs = 'https://twelveshockcrmb.onrender.com/api/logs/order';
@@ -32,6 +33,7 @@ export class ApiService {
   //private baseUrlMedioPago = 'https://twelveshockcrmb.onrender.com/medios-pago';
   //private baseUrlTareas = 'https://twelveshockcrmb.onrender.com/tareas';
   //private baseUrlChecklist = 'https://twelveshockcrmb.onrender.com/checklist';
+  //private baseUrlContraentrega = 'https://twelveshockcrmb.onrender.com/contraentrega';
 
   private tareaActualizadaSubject = new Subject<void>();
 
@@ -217,6 +219,7 @@ obtenerProductos(): Observable<any> {
     return this.http.get<Producto[]>(this.baseUrlProducto + '/buscar', { params })
       .pipe(catchError(this.handleError));
   }
+
     // ||------------------------- ||
     // MEDIOS DE PAGO
     // ||------------------------- ||
@@ -256,6 +259,84 @@ obtenerProductos(): Observable<any> {
         })
       );
     }
+
+
+     // ||------------------------- ||
+  // MÉTODOS PARA CONTRAENTREGA - NUEVOS
+  // ||------------------------- ||
+
+// MÉTODOS PARA CONTRAENTREGA
+
+// Crear contraentrega
+// MÉTODOS PARA CONTRAENTREGA
+crearContraentrega(orderData: Order): Observable<any> {
+  return this.http.post(`${this.baseUrlContraentrega}`, orderData)
+    .pipe(
+      tap(() => console.log('Contraentrega creada para orden:', orderData.id)),
+      catchError(error => {
+        console.error('Error creando contraentrega:', error);
+        return throwError(() => new Error(`Error al crear contraentrega: ${error.message || error.statusText}`));
+      })
+    );
+}
+obtenerContraentregasPendientes(): Observable<VerificacionContraentrega[]> {
+  return this.http.get<VerificacionContraentrega[]>(`${this.baseUrlContraentrega}/pendientes`)
+    .pipe(
+      tap(data => console.log('Contraentregas pendientes:', data)),
+      catchError(error => {
+        console.error('Error obteniendo contraentregas pendientes:', error);
+        return throwError(() => new Error(`Error al obtener contraentregas pendientes: ${error.message || error.statusText}`));
+      })
+    );
+}
+
+obtenerTodasLasContraentregas(): Observable<VerificacionContraentrega[]> {
+  return this.http.get<VerificacionContraentrega[]>(`${this.baseUrlContraentrega}`)
+    .pipe(
+      tap(data => console.log('Todas las contraentregas:', data)),
+      catchError(error => {
+        console.error('Error obteniendo todas las contraentregas:', error);
+        return throwError(() => new Error(`Error al obtener contraentregas: ${error.message || error.statusText}`));
+      })
+    );
+}
+
+obtenerContraentregasPorEstado(estado: string): Observable<VerificacionContraentrega[]> {
+    return this.http.get<VerificacionContraentrega[]>(`${this.baseUrlContraentrega}/estado/${estado}`)
+      .pipe(catchError(this.handleError));
+  }
+
+  obtenerContraentregasPorCiudad(ciudad: string): Observable<VerificacionContraentrega[]> {
+    return this.http.get<VerificacionContraentrega[]>(`${this.baseUrlContraentrega}/ciudad/${ciudad}`)
+      .pipe(catchError(this.handleError));
+  }
+
+
+  // Nuevo método para verificar/cambiar estado usando PUT
+  cambiarEstadoVerificacion(orderId: string, estado: 'VERIFICADO' | 'CANCELADO'): Observable<VerificacionContraentrega> {
+    return this.http.put<VerificacionContraentrega>(
+      `${this.baseUrlContraentrega}/${orderId}/verificar?estado=${estado}`,
+      null
+    ).pipe(catchError(this.handleError));
+  }
+
+  // Métodos legacy (mantener por compatibilidad si se necesitan)
+  marcarContraentregaComoVerificada(
+    id: string,
+    usuarioAsesor: string,
+    observaciones?: string
+  ): Observable<VerificacionContraentrega> {
+    // Ahora usa el nuevo endpoint
+    return this.cambiarEstadoVerificacion(id, 'VERIFICADO');
+  }
+
+  cancelarContraentrega(
+    id: string,
+    motivo?: string
+  ): Observable<VerificacionContraentrega> {
+    // Ahora usa el nuevo endpoint
+    return this.cambiarEstadoVerificacion(id, 'CANCELADO');
+  }
 
     // ||------------------------- ||
   // Metodos para el apartado de Checklist

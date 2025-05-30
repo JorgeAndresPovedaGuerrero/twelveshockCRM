@@ -1,0 +1,241 @@
+<div class="filtros mb-4">
+  <div class="filtros-row">
+    <div class="filtro-item">
+      <label for="filtroEstado">Estado:</label>
+      <select id="filtroEstado" [(ngModel)]="filtroEstado" (change)="onFiltroChange()" class="form-control">
+        <option value="TODOS">Todos</option>
+        <option value="PENDIENTE">Pendiente</option>
+        <option value="VERIFICADO">Verificado</option>
+        <option value="CANCELADO">Cancelado</option>
+      </select>
+    </div>
+
+    <div class="filtro-item">
+      <label for="filtroCiudad">Ciudad:</label>
+      <input id="filtroCiudad" type="text" [(ngModel)]="filtroCiudad" (input)="onFiltroChange()"
+             class="form-control" placeholder="Buscar ciudad..." />
+    </div>
+
+    <div class="filtro-btn">
+      <button (click)="limpiarFiltros()" class="btn btn-outline-secondary">
+        Limpiar filtros
+      </button>
+    </div>
+  </div>
+</div>
+
+
+<div class="container">
+  <div class="header">
+    <h2>Verificación de Contraentregas</h2>
+    <button (click)="cargarVerificaciones()" class="btn btn-primary" [disabled]="loading">
+      <span *ngIf="loading" class="spinner-border spinner-border-sm me-2"></span>
+      Actualizar
+    </button>
+  </div>
+
+  <div *ngIf="hayError()" class="alert alert-danger">
+    <strong>Error:</strong> {{ error }}
+    <button type="button" class="btn-close float-end" (click)="error = null"></button>
+  </div>
+
+  <div class="stats-cards" *ngIf="hayDatos() && !loading">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">{{ getConteoEstado('PENDIENTE') }}</h5>
+        <p class="card-text">Pendientes</p>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">{{ getConteoEstado('VERIFICADO') }}</h5>
+        <p class="card-text">Verificadas</p>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">{{ getConteoEstado('CANCELADO') }}</h5>
+        <p class="card-text">Canceladas</p>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">{{ formatCurrency(getTotalPendiente()) }}</h5>
+        <p class="card-text">Total Pendiente</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="table-responsive" *ngIf="hayDatos() && !loading">
+    <table class="table table-striped table-hover">
+      <thead class="table-dark">
+        <tr>
+          <th>Orden</th>
+          <th>Estado</th>
+          <th>Cliente</th>
+          <th>Ciudad</th>
+          <th>Saldo</th>
+          <th>Total</th>
+          <th>Fecha Creación</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let verificacion of verificaciones; trackBy: trackByVerificacion">
+          <td><strong>{{ verificacion['order_id'] }}</strong></td>
+          <td>
+            <span *ngIf="verificacion.estado" class="badge badge-{{verificacion.estado.toLowerCase()}}">
+              {{ verificacion.estado }}
+            </span>
+          </td>
+          <td>{{ verificacion['nombre_cliente'] || 'N/A' }}</td>
+          <td>{{ verificacion['ciudadEnvio'] || 'N/A' }}</td>
+          <td>{{ formatCurrency(verificacion.saldo) }}</td>
+          <td><strong>{{ formatCurrency(verificacion.total) }}</strong></td>
+          <td>{{ verificacion.fecha_creacion | date:'dd/MM/yyyy HH:mm' }}</td>
+          <td>
+            <div class="btn-group" *ngIf="verificacion.estado === 'PENDIENTE'">
+              <!-- Botón para abrir modal verificar -->
+              <button (click)="abrirModalVerificar(verificacion, modalVerificar)" class="btn btn-success btn-sm">Verificar</button>
+
+              <!-- Botón para abrir modal cancelar -->
+              <button (click)="abrirModalCancelar(verificacion, modalCancelar)" class="btn btn-danger btn-sm">Cancelar</button>
+            </div>
+            <span *ngIf="verificacion.estado !== 'PENDIENTE'" class="text-muted">
+              Sin acciones disponibles
+            </span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div *ngIf="!hayDatos() && !loading && !hayError()" class="text-center py-5">
+    <div class="alert alert-info">
+      <strong>No hay verificaciones disponibles</strong>
+      <p class="mb-0">No se encontraron contraentregas con los filtros aplicados.</p>
+    </div>
+  </div>
+
+  <div *ngIf="loading" class="text-center py-5">
+    <div class="spinner-border text-primary"></div>
+    <p class="mt-2">Cargando verificaciones...</p>
+  </div>
+</div>
+
+<!-- Modal para Verificar -->
+<ng-template #modalVerificar let-modal>
+  <div class="modal-header bg-success text-white">
+    <h5 class="modal-title">
+      <i class="fas fa-check-circle me-2"></i>
+      Verificar Contraentrega
+    </h5>
+    <button type="button" class="btn-close btn-close-white" (click)="modal.dismiss()"></button>
+  </div>
+
+  <div class="modal-body">
+    <div class="alert alert-info" *ngIf="verificacionSeleccionada">
+      <div class="row">
+        <div class="col-6">
+          <strong>Orden:</strong> {{ verificacionSeleccionada['order_id'] }}
+        </div>
+        <div class="col-6">
+          <strong>Cliente:</strong> {{ verificacionSeleccionada['nombre_cliente'] }}
+        </div>
+        <div class="col-12 mt-2">
+          <strong>Total:</strong> {{ formatCurrency(verificacionSeleccionada.total) }}
+        </div>
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label for="usuarioAsesor" class="form-label">
+        <i class="fas fa-user me-1"></i>
+        Nombre o ID del Asesor <span class="text-danger">*</span>
+      </label>
+      <input
+        type="text"
+        class="form-control"
+        id="usuarioAsesor"
+        [(ngModel)]="usuarioAsesor"
+        placeholder="Ingrese su nombre o ID"
+        maxlength="100"
+        required>
+    </div>
+
+    <div class="mb-3">
+      <label for="observaciones" class="form-label">
+        <i class="fas fa-comment me-1"></i>
+        Observaciones (Opcional)
+      </label>
+      <textarea
+        class="form-control"
+        id="observaciones"
+        [(ngModel)]="observaciones"
+        rows="3"
+        placeholder="Agregue observaciones si es necesario..."
+        maxlength="500"></textarea>
+      <div class="form-text">{{ observaciones.length }}/500 caracteres</div>
+    </div>
+  </div>
+
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="modal.dismiss()" [disabled]="loading">
+      <i class="fas fa-times me-1"></i>
+      Cancelar
+    </button>
+    <button type="button" class="btn btn-success" (click)="confirmarVerificacion(); modal.close()" [disabled]="loading || !usuarioAsesor.trim()">
+      <span *ngIf="loading" class="spinner-border spinner-border-sm me-2"></span>
+      <i *ngIf="!loading" class="fas fa-check me-1"></i>
+      Confirmar Verificación
+    </button>
+  </div>
+</ng-template>
+
+<!-- Modal para Cancelar -->
+<ng-template #modalCancelar let-modal>
+  <div class="modal-header bg-danger text-white">
+    <h5 class="modal-title">
+      <i class="fas fa-exclamation-triangle me-2"></i>
+      Cancelar Verificación
+    </h5>
+    <button type="button" class="btn-close btn-close-white" (click)="modal.dismiss()"></button>
+  </div>
+
+  <div class="modal-body">
+    <div class="alert alert-warning" *ngIf="verificacionSeleccionada">
+      <strong>¿Está seguro de cancelar esta verificación?</strong>
+      <br><br>
+      <strong>Orden:</strong> {{ verificacionSeleccionada.order_id }}<br>
+      <strong>Cliente:</strong> {{ verificacionSeleccionada.nombre_cliente }}<br>
+      <strong>Total:</strong> {{ formatCurrency(verificacionSeleccionada.total) }}
+    </div>
+
+    <div class="mb-3">
+      <label for="motivoCancelacion" class="form-label">
+        <i class="fas fa-comment-alt me-1"></i>
+        Motivo de Cancelación (Opcional)
+      </label>
+      <textarea
+        class="form-control"
+        id="motivoCancelacion"
+        [(ngModel)]="motivoCancelacion"
+        rows="3"
+        placeholder="Describa el motivo de la cancelación..."
+        maxlength="500"></textarea>
+      <div class="form-text">{{ motivoCancelacion.length }}/500 caracteres</div>
+    </div>
+  </div>
+
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="modal.dismiss()" [disabled]="loading">
+      <i class="fas fa-arrow-left me-1"></i>
+      Volver
+    </button>
+    <button type="button" class="btn btn-danger" (click)="confirmarCancelacion(); modal.close()" [disabled]="loading">
+      <span *ngIf="loading" class="spinner-border spinner-border-sm me-2"></span>
+      <i *ngIf="!loading" class="fas fa-times me-1"></i>
+      Confirmar Cancelación
+    </button>
+  </div>
+</ng-template>
